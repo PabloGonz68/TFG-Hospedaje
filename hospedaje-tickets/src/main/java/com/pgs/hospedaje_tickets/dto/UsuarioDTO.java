@@ -15,5 +15,6 @@ public class UsuarioDTO {
     private String fotoPerfil;
     private LocalDateTime fechaRegistro;
     private String rol;
+    private String password;
 }
 
