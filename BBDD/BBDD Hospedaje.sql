@@ -69,7 +69,7 @@ CREATE TABLE reservas_usuarios (
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
 );
 
-CREATE TABLE historial_transacciones (
+CREATE TABLE transacciones (
     id_transaccion INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NOT NULL,
     id_conversion INT,
@@ -91,29 +91,6 @@ CREATE TABLE opiniones_hospedajes (
     FOREIGN KEY (id_reserva) REFERENCES reservas(id_reserva) ON DELETE CASCADE,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
     FOREIGN KEY (id_hospedaje) REFERENCES hospedajes(id_hospedaje) ON DELETE CASCADE
-);
-
-CREATE TABLE opiniones_usuarios (
-    id_opinion INT AUTO_INCREMENT PRIMARY KEY,
-    id_reserva INT NOT NULL,
-    id_revisor INT NOT NULL, -- Usuario que deja la opinión
-    id_revisado INT NOT NULL, -- Usuario que recibe la opinión (puede ser anfitrión o huésped)
-    puntuacion INT CHECK (puntuacion BETWEEN 1 AND 5),
-    comentario TEXT,
-    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_reserva) REFERENCES reservas(id_reserva) ON DELETE CASCADE,
-    FOREIGN KEY (id_revisor) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
-    FOREIGN KEY (id_revisado) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
-);
-
-CREATE TABLE penalizaciones (
-    id_penalizacion INT AUTO_INCREMENT PRIMARY KEY,
-    id_usuario INT NOT NULL,
-    motivo ENUM('cancelación_frecuente', 'comportamiento_inapropiado', 'falsificación_check-in', 'no_se_presentó'),
-    fecha_inicio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    fecha_fin TIMESTAMP NULL, -- Puede ser NULL si la penalización es indefinida
-    detalles TEXT, -- Explicación más detallada del problema
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
 );
 
 
