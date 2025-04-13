@@ -39,11 +39,11 @@ public class Hospedaje {
     @Column(nullable = false, length = 100)
     private String pais;
 
-    @Column(nullable = false, precision = 9, scale = 6)
-    private Double latitud;
+    @Column(nullable = false)
+    private double latitud;
 
-    @Column(nullable = false, precision = 9, scale = 6)
-    private Double longitud;
+    @Column(nullable = false)
+    private double longitud;
 
     @Column(nullable = false)
     private Integer capacidad;
@@ -52,13 +52,13 @@ public class Hospedaje {
     @Column(nullable = false)
     private TipoZona tipoZona;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "descripcion")
     private String descripcion;
 
     @Column(nullable = false)
     private Boolean visible = true;
 
-    @Column(name = "fecha_creacion", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
 
     @PrePersist

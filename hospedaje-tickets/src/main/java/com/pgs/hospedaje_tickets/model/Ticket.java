@@ -29,7 +29,7 @@ public class Ticket {
         PUEBLO, CIUDAD
     }
 
-    @Column(name = "fecha_generacion", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "fecha_generacion")
     private LocalDateTime fecha_generacion;
 
     @PrePersist

@@ -36,7 +36,7 @@ public class Transaccion {
         CONVERSION
     }
 
-    @Column(name = "fecha_transaccion", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "fecha_transaccion")
     private LocalDateTime fecha;
 
     @PrePersist

@@ -1,7 +1,9 @@
 package com.pgs.hospedaje_tickets.service;
 
 import com.pgs.hospedaje_tickets.dto.UsuarioDTO;
+import com.pgs.hospedaje_tickets.dto.UsuarioPasswordUpdateDTO;
 import com.pgs.hospedaje_tickets.dto.UsuarioRegisterDTO;
+import com.pgs.hospedaje_tickets.dto.UsuarioUpdateDTO;
 import com.pgs.hospedaje_tickets.model.Usuario;
 import com.pgs.hospedaje_tickets.repository.UsuarioRepository;
 import com.pgs.hospedaje_tickets.utils.Mapper;
@@ -12,6 +14,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -19,7 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UsuarioService {
+public class UsuarioService implements UserDetailsService {
 
     @Autowired
     private Validator validator;
@@ -27,23 +32,25 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
     @Autowired
     private Mapper mapper;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
 
     //Login
-    public UserDetails loadUserByEmail(String email) {
-        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("El usuario no existe."));
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("El usuario no existe."));
 
         List<GrantedAuthority> authorities = Arrays.stream(usuario.getRol().toString().split(","))
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.trim()))
                 .collect(Collectors.toList());
 
-        UserDetails userDetails = User.builder()
-                .username(email)
+        return User.builder()
+                .username(usuario.getEmail()) // se usa como username
                 .password(usuario.getPassword())
                 .authorities(authorities)
                 .build();
-
-        return userDetails;
-
     }
 
     //Register
@@ -53,20 +60,77 @@ public class UsuarioService {
     String rol = "USUARIO";
 
         if ("admin@dominio.com".equals(user.getEmail())) {
-            rol = "admin";  // Asignar "admin" a un correo especial
+            rol = "ADMIN";  // Asignar "admin" a un correo especial
         }
 
         Usuario usuario = new Usuario();
         usuario.setNombre(user.getNombre());
         usuario.setApellidos(user.getApellidos());
         usuario.setEmail(user.getEmail());
-        usuario.setPassword(user.getPassword());
+        usuario.setPassword(passwordEncoder.encode(user.getPassword()));
         usuario.setRol(Usuario.Rol.valueOf(rol));
         usuarioRepository.save(usuario);
         return user;
     }
 
-    public UsuarioDTO update(String id, UsuarioDTO user) {
+    public UsuarioDTO getUserById(String id) {
+        Long idLong = StringToLong.StringToLong(id);
+        if (idLong == null || idLong <= 0) {
+            throw new RuntimeException("El id de usuario es inválido.");
+        }
+        Usuario usuario = usuarioRepository.findById(idLong)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
+        return mapper.toUsuarioDTO(usuario);
+    }
+
+    public List<UsuarioDTO> getAllUsers() {
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        if (usuarios.isEmpty()) {
+            throw new RuntimeException("No se encontraron usuarios.");
+        }
+        return usuarios.stream().map(mapper::toUsuarioDTO).collect(Collectors.toList());
+    }
+
+    //Update
+    public UsuarioDTO updateProfile(String id, UsuarioUpdateDTO user) {
+        Long idLong = StringToLong.StringToLong(id);
+        if (idLong == null || idLong <= 0) {
+            throw new RuntimeException("El id de usuario es inválido.");
+        }
+
+        validator.validateUserUpdate(user);
+        Usuario usuario = usuarioRepository.findById(idLong).orElseThrow(() ->
+                new RuntimeException("Usuario no encontrado"));
+
+        usuario.setNombre(user.getNombre());
+        usuario.setApellidos(user.getApellidos());
+        usuario.setFotoPerfil(user.getFotoPerfil());
+
+        usuarioRepository.save(usuario);
+        return mapper.toUsuarioDTO(usuario);
+    }
+
+    //Change Password
+    public void changePassword(String id, UsuarioPasswordUpdateDTO user) {
+        Long idLong = StringToLong.StringToLong(id);
+        if (idLong == null || idLong <= 0) {
+            throw new RuntimeException("El id de usuario es inválido.");
+        }
+
+        Usuario usuario = usuarioRepository.findById(idLong).orElseThrow(() ->
+                new RuntimeException("Usuario no encontrado"));
+
+        validator.validateUserPassword(user);
+        if (!passwordEncoder.matches(user.getCurrentPassword(), usuario.getPassword())) {
+            throw new RuntimeException("La contraseña actual es incorrecta.");
+        }
+
+       usuario.setPassword(passwordEncoder.encode(user.getNewPassword()));
+       usuarioRepository.save(usuario);
+    }
+
+
+    /*public UsuarioDTO updateAdmin(String id, UsuarioDTO user) {
         Long idLong = StringToLong.StringToLong(id);
         if (idLong == null || idLong <= 0) {
             throw new RuntimeException("El id de usuario es inválido.");
@@ -82,13 +146,15 @@ public class UsuarioService {
         existingUser.setNombre(user.getNombre());
         existingUser.setApellidos(user.getApellidos());
         existingUser.setEmail(user.getEmail());
-        existingUser.setPassword(user.getPassword());
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         existingUser.setFotoPerfil(user.getFotoPerfil());
         existingUser.setRol(Usuario.Rol.valueOf(user.getRol()));
         usuarioRepository.save(existingUser);
 
         return mapper.toUsuarioDTO(existingUser);
-    }
+    }*/
 
 
 

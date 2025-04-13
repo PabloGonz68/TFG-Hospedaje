@@ -32,7 +32,7 @@ public class Conversion {
     @Column(name = "cantidad_tickets", nullable = false)
     private int cantidad;
 
-    @Column(name = "fecha", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "fecha")
     private LocalDateTime fecha;
 
     @PrePersist

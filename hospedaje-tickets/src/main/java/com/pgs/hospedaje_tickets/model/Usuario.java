@@ -34,7 +34,7 @@ public class Usuario {
     @Column(name = "foto_perfil")
     private String fotoPerfil;
 
-    @Column(name = "fecha_registro", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro;
 
     @PrePersist

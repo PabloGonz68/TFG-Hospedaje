@@ -1,7 +1,9 @@
 package com.pgs.hospedaje_tickets.utils;
 
 import com.pgs.hospedaje_tickets.dto.UsuarioDTO;
+import com.pgs.hospedaje_tickets.dto.UsuarioPasswordUpdateDTO;
 import com.pgs.hospedaje_tickets.dto.UsuarioRegisterDTO;
+import com.pgs.hospedaje_tickets.dto.UsuarioUpdateDTO;
 import com.pgs.hospedaje_tickets.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,11 +25,6 @@ public class Validator {
 
         if (userDTO.getEmail() == null || userDTO.getEmail().isEmpty()) {
             throw new RuntimeException("El email es obligatorio");
-        }
-
-        if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
-            throw new RuntimeException("La contraseña es obligatoria");
-
         }
     }
 
@@ -75,6 +72,32 @@ public class Validator {
             throw new RuntimeException("La contraseña debe contener al menos un número");
         }
 
+    }
+
+    public void validateUserUpdate(UsuarioUpdateDTO userUpdateDTO) {
+
+        if (userUpdateDTO.getNombre() == null || userUpdateDTO.getNombre().isEmpty()) {
+            throw new RuntimeException("El nombre es obligatorio");
+        }
+
+        if (userUpdateDTO.getApellidos() == null || userUpdateDTO.getApellidos().isEmpty()) {
+            throw new RuntimeException("Los apellidos son obligatorios");
+        }
+
+    }
+
+    public void validateUserPassword(UsuarioPasswordUpdateDTO user) {
+        if (user.getCurrentPassword() == null || user.getNewPassword() == null) {
+            throw new IllegalArgumentException("Las contraseñas no pueden ser nulas.");
+        }
+
+        if (user.getCurrentPassword().isBlank() || user.getNewPassword().isBlank()) {
+            throw new IllegalArgumentException("Las contraseñas no pueden estar vacias.");
+        }
+
+        if (user.getCurrentPassword().equals(user.getNewPassword())) {
+            throw new RuntimeException("La nueva contraseña debe ser diferente a la actual.");
+        }
     }
 
 

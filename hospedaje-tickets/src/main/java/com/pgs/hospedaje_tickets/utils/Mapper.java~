@@ -31,6 +31,13 @@ public class Mapper {
         return usuario;
     }
 
+    public UsuarioUpdateDTO toUsuarioUpdateDTO(Usuario usuario) {
+        UsuarioUpdateDTO usuarioDTO = new UsuarioUpdateDTO();
+        usuarioDTO.setNombre(usuario.getNombre());
+        usuarioDTO.setApellidos(usuario.getApellidos());
+        usuarioDTO.setFotoPerfil(usuario.getFotoPerfil());
+        return usuarioUpdateDTO;
+    }
 
 
 

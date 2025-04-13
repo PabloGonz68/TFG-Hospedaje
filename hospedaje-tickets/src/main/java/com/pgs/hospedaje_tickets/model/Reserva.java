@@ -37,7 +37,7 @@ public class Reserva {
         PENDIENTE, CONFIRMADA, COMPLETADA, CANCELADA
     }
 
-    @Column(name = "fecha_creacion", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
 
     @PrePersist

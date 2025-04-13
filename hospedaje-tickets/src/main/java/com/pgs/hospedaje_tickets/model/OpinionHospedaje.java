@@ -33,10 +33,10 @@ public class OpinionHospedaje {
     @Column(nullable = false)
     private int calificacion;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "comentario")
     private String comentario;
 
-    @Column(name = "fecha", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "fecha")
     private LocalDateTime fecha;
 
     @PrePersist
