@@ -1,9 +1,7 @@
 package com.pgs.hospedaje_tickets.utils;
 
-import com.pgs.hospedaje_tickets.dto.User.UsuarioDTO;
-import com.pgs.hospedaje_tickets.dto.User.UsuarioPasswordUpdateDTO;
-import com.pgs.hospedaje_tickets.dto.User.UsuarioRegisterDTO;
-import com.pgs.hospedaje_tickets.dto.User.UsuarioUpdateDTO;
+import com.pgs.hospedaje_tickets.dto.User.*;
+import com.pgs.hospedaje_tickets.error.exceptions.ConflictException;
 import com.pgs.hospedaje_tickets.error.exceptions.ValidationException;
 import com.pgs.hospedaje_tickets.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,7 @@ public class Validator {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public void validateUser(UsuarioDTO userDTO) {
+    public void validateUserAdmin(UsuarioAdminDTO userDTO) {
         if (userDTO.getNombre() == null || userDTO.getNombre().isEmpty()) {
             throw new ValidationException("El nombre es obligatorio");
         }
@@ -27,6 +25,11 @@ public class Validator {
         if (userDTO.getEmail() == null || userDTO.getEmail().isEmpty()) {
             throw new ValidationException("El email es obligatorio");
         }
+
+        if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
+            throw new ValidationException("La contraseña es obligatoria");
+        }
+
     }
 
     public void validateUserRegister(UsuarioRegisterDTO userRegisterDTO) {
@@ -51,7 +54,7 @@ public class Validator {
         }
 
         if (usuarioRepository.findByEmail(userRegisterDTO.getEmail()).isPresent()) {
-            throw new ValidationException("El usuario ya existe");
+            throw new ConflictException("El usuario ya existe");
         }
 
         if (!userRegisterDTO.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {

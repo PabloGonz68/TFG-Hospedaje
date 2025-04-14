@@ -1,10 +1,9 @@
 package com.pgs.hospedaje_tickets.service;
 
-import com.pgs.hospedaje_tickets.dto.User.UsuarioDTO;
-import com.pgs.hospedaje_tickets.dto.User.UsuarioPasswordUpdateDTO;
-import com.pgs.hospedaje_tickets.dto.User.UsuarioRegisterDTO;
-import com.pgs.hospedaje_tickets.dto.User.UsuarioUpdateDTO;
+import com.nimbusds.jose.proc.SecurityContext;
+import com.pgs.hospedaje_tickets.dto.User.*;
 import com.pgs.hospedaje_tickets.error.exceptions.BadRequestException;
+import com.pgs.hospedaje_tickets.error.exceptions.ForbiddenException;
 import com.pgs.hospedaje_tickets.error.exceptions.ResourceNotFoundException;
 import com.pgs.hospedaje_tickets.model.Usuario;
 import com.pgs.hospedaje_tickets.repository.UsuarioRepository;
@@ -14,6 +13,7 @@ import com.pgs.hospedaje_tickets.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -61,7 +61,7 @@ public class UsuarioService implements UserDetailsService {
 
     String rol = "USUARIO";
 
-        if ("admin@dominio.com".equals(user.getEmail())) {
+        if ("pablo@gmail.com".equals(user.getEmail())) {
             rol = "ADMIN";  // Asignar "admin" a un correo especial
         }
 
@@ -89,6 +89,11 @@ public class UsuarioService implements UserDetailsService {
         List<Usuario> usuarios = usuarioRepository.findAll();
         if (usuarios.isEmpty()) {
             throw new ResourceNotFoundException("No se encontraron usuarios.");
+        }
+        String emailAutenticado = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailAutenticado).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado."));
+        if (!usuarioAutenticado.getRol().equals(Usuario.Rol.ADMIN)) {
+            throw new ForbiddenException("No tienes permiso para acceder a esta información.");
         }
         return usuarios.stream().map(mapper::toUsuarioDTO).collect(Collectors.toList());
     }
@@ -132,17 +137,22 @@ public class UsuarioService implements UserDetailsService {
     }
 
 
-    /*public UsuarioDTO updateAdmin(String id, UsuarioDTO user) {
+    public UsuarioDTO updateAdmin(String id, UsuarioAdminDTO user) {
         Long idLong = StringToLong.StringToLong(id);
         if (idLong == null || idLong <= 0) {
-            throw new RuntimeException("El id de usuario es inválido.");
+            throw new BadRequestException("El id de usuario es inválido.");
+        }
+        String emailAutenticado = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailAutenticado).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado."));
+        if (!usuarioAutenticado.getRol().equals(Usuario.Rol.ADMIN)) {
+            throw new ForbiddenException("No tienes permiso para acceder a esta información.");
         }
 
-        validator.validateUser(user);
+        validator.validateUserAdmin(user);
 
         Usuario existingUser = usuarioRepository.findById(idLong).orElse(null);
         if (existingUser == null) {
-            throw new RuntimeException("El usuario no existe.");
+            throw new ResourceNotFoundException("El usuario no existe.");
         }
 
         existingUser.setNombre(user.getNombre());
@@ -156,7 +166,16 @@ public class UsuarioService implements UserDetailsService {
         usuarioRepository.save(existingUser);
 
         return mapper.toUsuarioDTO(existingUser);
-    }*/
+    }
+
+    public void delete(String id) {
+        Long idLong = StringToLong.StringToLong(id);
+        if (idLong == null || idLong <= 0) {
+            throw new BadRequestException("El id de usuario es inválido.");
+        }
+        Usuario usuario = usuarioRepository.findById(idLong).orElseThrow(() -> new ResourceNotFoundException("El usuario no existe."));
+        usuarioRepository.deleteById(idLong);
+    }
 
 
 

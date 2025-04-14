@@ -50,27 +50,37 @@ public class UsuarioController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/admin/getAll")
     public ResponseEntity<?> getAllUsers() {
         return new ResponseEntity<>(usuarioService.getAllUsers(), HttpStatus.OK);
     }
 
+    //Update para Cliente
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody UsuarioUpdateDTO user) {
-        UsuarioDTO updatedUser = usuarioService.updateProfile(id.toString(), user);
+    public ResponseEntity<?> update(@PathVariable String id, @RequestBody UsuarioUpdateDTO user) {
+        UsuarioDTO updatedUser = usuarioService.updateProfile(id, user);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
+
+    //Update para Admin
+    @PutMapping("/admin/update/{id}")
+    public ResponseEntity<?> update(@PathVariable String id, @RequestBody UsuarioAdminDTO user) {
+        UsuarioDTO updatedUser = usuarioService.updateAdmin(id, user);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     @PutMapping("/changePassword/{id}")
-    public ResponseEntity<?> changePassword(@PathVariable Long id, @RequestBody UsuarioPasswordUpdateDTO user) {
-        usuarioService.changePassword(id.toString(), user);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> changePassword(@PathVariable String id, @RequestBody UsuarioPasswordUpdateDTO user) {
+        usuarioService.changePassword(id, user);
+        return new ResponseEntity<>("Contraseña actualizada correctamente", HttpStatus.OK);
     }
 
-   /* @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody UsuarioDTO user) {
-        UsuarioDTO updatedUser = usuarioService.update(id.toString(), user);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-    }*/
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable String id) {
+        usuarioService.delete(id);
+        return new ResponseEntity<>("Usuario eliminado correctamente", HttpStatus.OK);
+    }
+
+
 
 }
