@@ -1,9 +1,11 @@
 package com.pgs.hospedaje_tickets.service;
 
-import com.pgs.hospedaje_tickets.dto.UsuarioDTO;
-import com.pgs.hospedaje_tickets.dto.UsuarioPasswordUpdateDTO;
-import com.pgs.hospedaje_tickets.dto.UsuarioRegisterDTO;
-import com.pgs.hospedaje_tickets.dto.UsuarioUpdateDTO;
+import com.pgs.hospedaje_tickets.dto.User.UsuarioDTO;
+import com.pgs.hospedaje_tickets.dto.User.UsuarioPasswordUpdateDTO;
+import com.pgs.hospedaje_tickets.dto.User.UsuarioRegisterDTO;
+import com.pgs.hospedaje_tickets.dto.User.UsuarioUpdateDTO;
+import com.pgs.hospedaje_tickets.error.exceptions.BadRequestException;
+import com.pgs.hospedaje_tickets.error.exceptions.ResourceNotFoundException;
 import com.pgs.hospedaje_tickets.model.Usuario;
 import com.pgs.hospedaje_tickets.repository.UsuarioRepository;
 import com.pgs.hospedaje_tickets.utils.Mapper;
@@ -76,17 +78,17 @@ public class UsuarioService implements UserDetailsService {
     public UsuarioDTO getUserById(String id) {
         Long idLong = StringToLong.StringToLong(id);
         if (idLong == null || idLong <= 0) {
-            throw new RuntimeException("El id de usuario es inválido.");
+            throw new BadRequestException("El id de usuario es inválido.");
         }
         Usuario usuario = usuarioRepository.findById(idLong)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado."));
         return mapper.toUsuarioDTO(usuario);
     }
 
     public List<UsuarioDTO> getAllUsers() {
         List<Usuario> usuarios = usuarioRepository.findAll();
         if (usuarios.isEmpty()) {
-            throw new RuntimeException("No se encontraron usuarios.");
+            throw new ResourceNotFoundException("No se encontraron usuarios.");
         }
         return usuarios.stream().map(mapper::toUsuarioDTO).collect(Collectors.toList());
     }
@@ -95,12 +97,12 @@ public class UsuarioService implements UserDetailsService {
     public UsuarioDTO updateProfile(String id, UsuarioUpdateDTO user) {
         Long idLong = StringToLong.StringToLong(id);
         if (idLong == null || idLong <= 0) {
-            throw new RuntimeException("El id de usuario es inválido.");
+            throw new BadRequestException("El id de usuario es inválido.");
         }
 
         validator.validateUserUpdate(user);
         Usuario usuario = usuarioRepository.findById(idLong).orElseThrow(() ->
-                new RuntimeException("Usuario no encontrado"));
+                new ResourceNotFoundException("Usuario no encontrado"));
 
         usuario.setNombre(user.getNombre());
         usuario.setApellidos(user.getApellidos());
@@ -114,16 +116,16 @@ public class UsuarioService implements UserDetailsService {
     public void changePassword(String id, UsuarioPasswordUpdateDTO user) {
         Long idLong = StringToLong.StringToLong(id);
         if (idLong == null || idLong <= 0) {
-            throw new RuntimeException("El id de usuario es inválido.");
+            throw new BadRequestException("El id de usuario es inválido.");
         }
 
         Usuario usuario = usuarioRepository.findById(idLong).orElseThrow(() ->
-                new RuntimeException("Usuario no encontrado"));
+                new ResourceNotFoundException("Usuario no encontrado"));
 
-        validator.validateUserPassword(user);
         if (!passwordEncoder.matches(user.getCurrentPassword(), usuario.getPassword())) {
-            throw new RuntimeException("La contraseña actual es incorrecta.");
+            throw new BadRequestException("La contraseña actual es incorrecta.");
         }
+        validator.validateUserPassword(user);
 
        usuario.setPassword(passwordEncoder.encode(user.getNewPassword()));
        usuarioRepository.save(usuario);

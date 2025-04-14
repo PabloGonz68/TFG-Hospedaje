@@ -1,8 +1,7 @@
 package com.pgs.hospedaje_tickets.utils;
 
-import com.pgs.hospedaje_tickets.dto.UsuarioDTO;
-import com.pgs.hospedaje_tickets.dto.UsuarioRegisterDTO;
-import com.pgs.hospedaje_tickets.dto.UsuarioUpdateDTO;
+import com.pgs.hospedaje_tickets.dto.User.UsuarioDTO;
+import com.pgs.hospedaje_tickets.dto.User.UsuarioRegisterDTO;
 import com.pgs.hospedaje_tickets.model.Usuario;
 import org.springframework.stereotype.Component;
 
