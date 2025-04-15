@@ -59,9 +59,9 @@ public class SecurityConfig {
                         //Puedes ver la informacion de cualquier perfil
                         .requestMatchers(HttpMethod.GET, "/usuario/get/{id}").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/usuario/delete/{id}").access(getUserIdManager())
-                        //Funciones Admin Usuario
-                        .requestMatchers(HttpMethod.PUT, "/usuario/admin/update/{id}").authenticated()//admin
-                        .requestMatchers(HttpMethod.GET, "/usuario/admin/getAll").authenticated()//admin
+                        //Funciones Admin
+                        .requestMatchers(HttpMethod.PUT, "/usuario/admin/update/{id}").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/usuario/admin/getAll").authenticated()
                         //Cualquier otra petición debe estar autenticada
                         .anyRequest().authenticated()
 
