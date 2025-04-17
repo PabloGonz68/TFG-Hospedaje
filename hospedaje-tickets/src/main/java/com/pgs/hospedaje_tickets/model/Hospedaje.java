@@ -39,14 +39,14 @@ public class Hospedaje {
     @Column(nullable = false, length = 100)
     private String pais;
 
-    @Column(nullable = false)
+    @Column(name = "latitud")
     private double latitud;
 
-    @Column(nullable = false)
+    @Column(name = "longitud")
     private double longitud;
 
     @Column(nullable = false)
-    private Integer capacidad;
+    private int capacidad;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -54,6 +54,9 @@ public class Hospedaje {
 
     @Column(name = "descripcion")
     private String descripcion;
+
+    @Column(name = "ubicacion")
+    private String ubicacion;
 
     @Column(nullable = false)
     private Boolean visible = true;

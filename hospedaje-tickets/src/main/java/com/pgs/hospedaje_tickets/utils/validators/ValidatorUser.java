@@ -1,4 +1,4 @@
-package com.pgs.hospedaje_tickets.utils;
+package com.pgs.hospedaje_tickets.utils.validators;
 
 import com.pgs.hospedaje_tickets.dto.User.*;
 import com.pgs.hospedaje_tickets.error.exceptions.ConflictException;
@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Validator {
+public class ValidatorUser {
 
     @Autowired
     private UsuarioRepository usuarioRepository;

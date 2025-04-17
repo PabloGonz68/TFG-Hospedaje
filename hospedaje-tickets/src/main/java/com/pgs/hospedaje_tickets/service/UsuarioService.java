@@ -1,6 +1,5 @@
 package com.pgs.hospedaje_tickets.service;
 
-import com.nimbusds.jose.proc.SecurityContext;
 import com.pgs.hospedaje_tickets.dto.User.*;
 import com.pgs.hospedaje_tickets.error.exceptions.BadRequestException;
 import com.pgs.hospedaje_tickets.error.exceptions.ForbiddenException;
@@ -9,7 +8,7 @@ import com.pgs.hospedaje_tickets.model.Usuario;
 import com.pgs.hospedaje_tickets.repository.UsuarioRepository;
 import com.pgs.hospedaje_tickets.utils.Mapper;
 import com.pgs.hospedaje_tickets.utils.StringToLong;
-import com.pgs.hospedaje_tickets.utils.Validator;
+import com.pgs.hospedaje_tickets.utils.validators.ValidatorUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,7 +28,7 @@ import java.util.stream.Collectors;
 public class UsuarioService implements UserDetailsService {
 
     @Autowired
-    private Validator validator;
+    private ValidatorUser validatorUser;
     @Autowired
     private UsuarioRepository usuarioRepository;
     @Autowired
@@ -57,7 +56,7 @@ public class UsuarioService implements UserDetailsService {
 
     //Register
     public UsuarioRegisterDTO register(UsuarioRegisterDTO user) {
-    validator.validateUserRegister(user);
+    validatorUser.validateUserRegister(user);
 
     String rol = "USUARIO";
 
@@ -105,7 +104,7 @@ public class UsuarioService implements UserDetailsService {
             throw new BadRequestException("El id de usuario es inválido.");
         }
 
-        validator.validateUserUpdate(user);
+        validatorUser.validateUserUpdate(user);
         Usuario usuario = usuarioRepository.findById(idLong).orElseThrow(() ->
                 new ResourceNotFoundException("Usuario no encontrado"));
 
@@ -130,7 +129,7 @@ public class UsuarioService implements UserDetailsService {
         if (!passwordEncoder.matches(user.getCurrentPassword(), usuario.getPassword())) {
             throw new BadRequestException("La contraseña actual es incorrecta.");
         }
-        validator.validateUserPassword(user);
+        validatorUser.validateUserPassword(user);
 
        usuario.setPassword(passwordEncoder.encode(user.getNewPassword()));
        usuarioRepository.save(usuario);
@@ -148,7 +147,7 @@ public class UsuarioService implements UserDetailsService {
             throw new ForbiddenException("No tienes permiso para acceder a esta información.");
         }
 
-        validator.validateUserAdmin(user);
+        validatorUser.validateUserAdmin(user);
 
         Usuario existingUser = usuarioRepository.findById(idLong).orElse(null);
         if (existingUser == null) {
