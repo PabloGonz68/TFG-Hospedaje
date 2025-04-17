@@ -7,19 +7,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class HospedajeDTO {
+public class HospedajeResponseDTO {
+    private Long id;
     private String nombre;
     private String direccion;
-    private String codigoPostal;
     private String ciudad;
     private String pais;
-    private double latitud;
-    private double longitud;
     private int capacidad;
     private String tipoZona;
-    
     private String descripcion;
+    private boolean visible;
     private String ubicacion;
-    private Long anfitrionId;
 
 }

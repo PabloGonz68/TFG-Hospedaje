@@ -44,26 +44,26 @@ public class UsuarioController {
     return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable String id) {
         UsuarioDTO user = usuarioService.getUserById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping("/admin/getAll")
+    @GetMapping("/admin")
     public ResponseEntity<?> getAllUsers() {
         return new ResponseEntity<>(usuarioService.getAllUsers(), HttpStatus.OK);
     }
 
     //Update para Cliente
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable String id, @RequestBody UsuarioUpdateDTO user) {
         UsuarioDTO updatedUser = usuarioService.updateProfile(id, user);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     //Update para Admin
-    @PutMapping("/admin/update/{id}")
+    @PutMapping("/admin/{id}")
     public ResponseEntity<?> update(@PathVariable String id, @RequestBody UsuarioAdminDTO user) {
         UsuarioDTO updatedUser = usuarioService.updateAdmin(id, user);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
@@ -75,7 +75,7 @@ public class UsuarioController {
         return new ResponseEntity<>("Contraseña actualizada correctamente", HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable String id) {
         usuarioService.delete(id);
         return new ResponseEntity<>("Usuario eliminado correctamente", HttpStatus.OK);

@@ -59,7 +59,7 @@ public class Hospedaje {
     private String ubicacion;
 
     @Column(nullable = false)
-    private Boolean visible = true;
+    private boolean visible = true;
 
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;

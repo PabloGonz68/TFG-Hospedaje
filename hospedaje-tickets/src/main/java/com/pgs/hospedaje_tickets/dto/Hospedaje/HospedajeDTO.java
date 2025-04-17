@@ -18,5 +18,6 @@ public class HospedajeDTO {
     private String descripcion;
     private String ubicacion;
     private Long anfitrionId;
+    private boolean visible;
 
 }

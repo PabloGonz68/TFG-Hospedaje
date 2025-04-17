@@ -54,14 +54,21 @@ public class SecurityConfig {
                         //Funciones Usuario
                         .requestMatchers(HttpMethod.POST, "/usuario/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuario/register").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/usuario/update/{id}").access(getUserIdManager())
+                        .requestMatchers(HttpMethod.PUT, "/usuario/{id}").access(getUserIdManager())
                         .requestMatchers(HttpMethod.PUT, "/usuario/changePassword/{id}").access(getUserIdManager())
-                        //Puedes ver la informacion de cualquier perfil
-                        .requestMatchers(HttpMethod.GET, "/usuario/get/{id}").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/usuario/delete/{id}").access(getUserIdManager())
+                        //Puedes ver la informacion de cualquier perfil de otro usuario
+                        .requestMatchers(HttpMethod.GET, "/usuario/{id}").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/usuario/{id}").access(getUserIdManager())
                         //Funciones Admin Usuario
-                        .requestMatchers(HttpMethod.PUT, "/usuario/admin/update/{id}").authenticated()//admin
-                        .requestMatchers(HttpMethod.GET, "/usuario/admin/getAll").authenticated()//admin
+                        .requestMatchers(HttpMethod.PUT, "/usuario/admin/{id}").authenticated()//admin update
+                        .requestMatchers(HttpMethod.GET, "/usuario/admin/").authenticated()//admin get all
+
+                        //Funciones Hospedaje
+                        .requestMatchers(HttpMethod.GET, "/hospedaje/{id}").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/hospedaje/").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/hospedaje/create").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/hospedaje/{id}").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/hospedaje/{id}").authenticated()
                         //Cualquier otra petición debe estar autenticada
                         .anyRequest().authenticated()
 
