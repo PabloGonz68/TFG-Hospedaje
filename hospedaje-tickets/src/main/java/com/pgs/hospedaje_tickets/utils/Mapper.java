@@ -43,7 +43,7 @@ public class Mapper {
         hospedajeDTO.setCapacidad(hospedaje.getCapacidad());
         hospedajeDTO.setDescripcion(hospedaje.getDescripcion());
         hospedajeDTO.setUbicacion(hospedaje.getUbicacion());
-        hospedajeDTO.setAnfitrionId(hospedaje.getAnfitrion().getId_usuario());
+        hospedajeDTO.setVisible(hospedaje.isVisible());
         return hospedajeDTO;
     }
 

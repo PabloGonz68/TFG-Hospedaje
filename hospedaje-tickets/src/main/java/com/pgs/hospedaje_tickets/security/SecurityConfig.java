@@ -9,7 +9,9 @@ import com.nimbusds.jose.proc.SecurityContext;
 import com.pgs.hospedaje_tickets.error.exceptions.BadRequestException;
 import com.pgs.hospedaje_tickets.error.exceptions.InternalServerErrorException;
 import com.pgs.hospedaje_tickets.error.exceptions.ResourceNotFoundException;
+import com.pgs.hospedaje_tickets.model.Hospedaje;
 import com.pgs.hospedaje_tickets.model.Usuario;
+import com.pgs.hospedaje_tickets.repository.HospedajeRepository;
 import com.pgs.hospedaje_tickets.repository.UsuarioRepository;
 import com.pgs.hospedaje_tickets.utils.StringToLong;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,8 @@ public class SecurityConfig {
     private RsaKeyProperties keyProperties;
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private HospedajeRepository hospedajeRepository;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -67,8 +71,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/hospedaje/{id}").authenticated()
                         .requestMatchers(HttpMethod.GET, "/hospedaje/").authenticated()
                         .requestMatchers(HttpMethod.POST, "/hospedaje/create").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/hospedaje/{id}").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/hospedaje/{id}").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/hospedaje/{id}").access(getHospedajeIdManager())
+                        .requestMatchers(HttpMethod.DELETE, "/hospedaje/{id}").access(getHospedajeIdManager())
+
+                        //Funciones Admin Hospedaje
+                        .requestMatchers(HttpMethod.GET, "/hospedaje/admin/").authenticated()
                         //Cualquier otra petición debe estar autenticada
                         .anyRequest().authenticated()
 
@@ -113,6 +120,47 @@ public class SecurityConfig {
             }
 
             if (!usuario.getEmail().equals(auth.getName())) {
+                return new AuthorizationDecision(false);
+            }
+
+            return new AuthorizationDecision(true);
+        };
+    }
+
+    public AuthorizationManager<RequestAuthorizationContext> getHospedajeIdManager() {
+        //El autenticador se encarga de extraer el id del token y el object es el request
+        return (authentication, object) -> {
+            Authentication auth = authentication.get();
+
+            if (auth==null || !auth.isAuthenticated()) {
+                return new AuthorizationDecision(false);
+            }
+
+            boolean isAdmin = auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+            if (isAdmin) {  //Si el usuario es admin
+                return new AuthorizationDecision(true);
+            }
+
+            String path = object.getRequest().getRequestURI();
+            String idString = path.substring(path.lastIndexOf("/") + 1);
+            Long id = StringToLong.StringToLong(idString);
+
+            if (id == null || id <= 0) {
+                return new AuthorizationDecision(false);
+            }
+
+            Hospedaje hospedaje = null;
+            try{
+                hospedaje = hospedajeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El hospedaje no existe."));
+            } catch (InternalServerErrorException e) {
+                throw new InternalServerErrorException("Error al obtener el hospedaje. "+e.getMessage());
+            }
+
+            if (hospedaje == null) {
+                return new AuthorizationDecision(false);
+            }
+
+            if (!hospedaje.getAnfitrion().getEmail().equals(auth.getName())) {
                 return new AuthorizationDecision(false);
             }
 

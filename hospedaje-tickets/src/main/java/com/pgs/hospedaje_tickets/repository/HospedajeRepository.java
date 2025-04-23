@@ -9,10 +9,12 @@ import java.util.Optional;
 
 @Repository
 public interface HospedajeRepository extends JpaRepository<Hospedaje, Long> {
+List<Hospedaje> findByAnfitrionEmailOrVisibleIsTrue(String email);
 List<Hospedaje> findByAnfitrionEmail(String email);
-List<Hospedaje> findByCiudad(String ciudad);
-List<Hospedaje> findByPais(String pais);
-List<Hospedaje> findByTipoZona(Hospedaje.TipoZona tipoZona);
-List<Hospedaje> findByCapacidad(int capacidad);
+List<Hospedaje> findByCiudadAndVisibleIsTrue(String ciudad);
+List<Hospedaje> findByPaisAndVisibleIsTrue(String pais);
+List<Hospedaje> findByTipoZonaAndVisibleIsTrue(Hospedaje.TipoZona tipoZona);
+List<Hospedaje> findByCapacidadAndVisibleIsTrue(int capacidad);
+List<Hospedaje> findByVisible(boolean visible);
 
 }

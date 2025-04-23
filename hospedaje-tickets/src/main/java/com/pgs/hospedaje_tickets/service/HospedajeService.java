@@ -3,6 +3,7 @@ package com.pgs.hospedaje_tickets.service;
 import com.pgs.hospedaje_tickets.dto.Hospedaje.HospedajeDTO;
 import com.pgs.hospedaje_tickets.dto.Hospedaje.HospedajeResponseDTO;
 import com.pgs.hospedaje_tickets.error.exceptions.BadRequestException;
+import com.pgs.hospedaje_tickets.error.exceptions.ForbiddenException;
 import com.pgs.hospedaje_tickets.error.exceptions.ResourceNotFoundException;
 import com.pgs.hospedaje_tickets.model.Hospedaje;
 import com.pgs.hospedaje_tickets.model.Usuario;
@@ -12,6 +13,8 @@ import com.pgs.hospedaje_tickets.utils.Mapper;
 import com.pgs.hospedaje_tickets.utils.StringToLong;
 import com.pgs.hospedaje_tickets.utils.validators.ValidatorHospedaje;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -36,11 +39,15 @@ public class HospedajeService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public HospedajeResponseDTO createHospedaje(HospedajeDTO dto) {
+    public HospedajeResponseDTO createHospedaje(HospedajeDTO dto, Authentication auth) {
         validatorHospedaje.validateHospedaje(dto);
 
-        Usuario anfitrion = usuarioRepository.findById(dto.getAnfitrionId()).orElseThrow(()
-                -> new ResourceNotFoundException("El anfitrión no existe."));
+       if (auth==null || !auth.isAuthenticated()) {
+            throw new BadRequestException("El usuario no está autenticado.");
+        }
+
+       String email = auth.getName();
+        Usuario anfitrion = usuarioRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("El usuario no existe."));
 
         Hospedaje hospedaje = new Hospedaje();
         hospedaje.setAnfitrion(anfitrion);
@@ -85,15 +92,27 @@ public class HospedajeService {
     }
 
     public List<HospedajeDTO> getAllHospedajes(){
-    List<Hospedaje> hospedajes = hospedajeRepository.findAll();
+    List<Hospedaje> hospedajes = hospedajeRepository.findByVisible(true);
     if (hospedajes.isEmpty()){
         throw new ResourceNotFoundException("No se encontraron hospedajes");
     }
         return hospedajes.stream().map(mapper::toHospedajeDTO).collect(Collectors.toList());
     }
+    public List<HospedajeDTO> getAllAdminHospedajes(){
+        String emailAutenticado = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailAutenticado).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado."));
+        if (!usuarioAutenticado.getRol().equals(Usuario.Rol.ADMIN)) {
+            throw new ForbiddenException("No tienes permiso para acceder a esta información.");
+        }
+        List<Hospedaje> hospedajes = hospedajeRepository.findAll();
+        if (hospedajes.isEmpty()){
+            throw new ResourceNotFoundException("No se encontraron hospedajes");
+        }
+        return hospedajes.stream().map(mapper::toHospedajeDTO).collect(Collectors.toList());
+    }
     //Filtros
     public List<HospedajeDTO> getHospedajesByAnfitrion(String email){
-        List<Hospedaje> hospedajes = hospedajeRepository.findByAnfitrionEmail(email);
+        List<Hospedaje> hospedajes = hospedajeRepository.findByAnfitrionEmailOrVisibleIsTrue(email);
         if (hospedajes.isEmpty()){
             throw new ResourceNotFoundException("No se encontraron hospedajes");
         }
@@ -101,7 +120,7 @@ public class HospedajeService {
     }
 
     public List<HospedajeDTO> getHospedajesByCiudad(String ciudad){
-        List<Hospedaje> hospedajes = hospedajeRepository.findByCiudad(ciudad);
+        List<Hospedaje> hospedajes = hospedajeRepository.findByCiudadAndVisibleIsTrue(ciudad);
         if (hospedajes.isEmpty()){
             throw new ResourceNotFoundException("No se encontraron hospedajes");
         }
@@ -109,7 +128,7 @@ public class HospedajeService {
     }
 
     public List<HospedajeDTO> getHospedajesByPais(String pais){
-        List<Hospedaje> hospedajes = hospedajeRepository.findByPais(pais);
+        List<Hospedaje> hospedajes = hospedajeRepository.findByPaisAndVisibleIsTrue(pais);
         if (hospedajes.isEmpty()){
             throw new ResourceNotFoundException("No se encontraron hospedajes");
         }
@@ -117,7 +136,7 @@ public class HospedajeService {
     }
 
     public List<HospedajeDTO> getHospedajesByTipoZona(String tipoZona){
-        List<Hospedaje> hospedajes = hospedajeRepository.findByTipoZona(Hospedaje.TipoZona.valueOf(tipoZona));
+        List<Hospedaje> hospedajes = hospedajeRepository.findByTipoZonaAndVisibleIsTrue(Hospedaje.TipoZona.valueOf(tipoZona));
         if (hospedajes.isEmpty()){
             throw new ResourceNotFoundException("No se encontraron hospedajes");
         }
@@ -125,7 +144,7 @@ public class HospedajeService {
     }
 
     public List<HospedajeDTO> getHospedajesByCapacidad(int capacidad){
-        List<Hospedaje> hospedajes = hospedajeRepository.findByCapacidad(capacidad);
+        List<Hospedaje> hospedajes = hospedajeRepository.findByCapacidadAndVisibleIsTrue(capacidad);
         if (hospedajes.isEmpty()){
             throw new ResourceNotFoundException("No se encontraron hospedajes");
         }

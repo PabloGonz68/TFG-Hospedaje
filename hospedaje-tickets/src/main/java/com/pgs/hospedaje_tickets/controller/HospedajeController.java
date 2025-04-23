@@ -5,6 +5,7 @@ import com.pgs.hospedaje_tickets.service.HospedajeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,14 +16,19 @@ public class HospedajeController {
     private HospedajeService hospedajeService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createHospedaje(@RequestBody HospedajeDTO dto) {
-        return new ResponseEntity<>(hospedajeService.createHospedaje(dto), HttpStatus.CREATED);
+    public ResponseEntity<?> createHospedaje(@RequestBody HospedajeDTO dto, Authentication auth) {
+        return new ResponseEntity<>(hospedajeService.createHospedaje(dto, auth), HttpStatus.CREATED);
 
     }
 
     @GetMapping("/")
     public ResponseEntity<?> getAllHospedajes() {
         return new ResponseEntity<>(hospedajeService.getAllHospedajes(), HttpStatus.OK);
+    }
+
+    @GetMapping("/admin")
+    public ResponseEntity<?> getAllAdminHospedajes() {
+        return new ResponseEntity<>(hospedajeService.getAllAdminHospedajes(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

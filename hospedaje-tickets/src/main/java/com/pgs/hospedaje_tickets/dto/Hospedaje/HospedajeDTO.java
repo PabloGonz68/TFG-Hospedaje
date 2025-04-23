@@ -17,7 +17,6 @@ public class HospedajeDTO {
     private String tipoZona;
     private String descripcion;
     private String ubicacion;
-    private Long anfitrionId;
     private boolean visible;
 
 }

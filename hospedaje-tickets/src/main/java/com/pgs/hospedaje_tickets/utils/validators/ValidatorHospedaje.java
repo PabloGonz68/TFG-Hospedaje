@@ -49,10 +49,6 @@ public class ValidatorHospedaje {
         if (dto.getUbicacion() == null || dto.getUbicacion().isEmpty()) {
             throw new ValidationException("La ubicacion es obligatoria");
         }
-
-        if (dto.getAnfitrionId() == null || dto.getAnfitrionId() <= 0) {
-            throw new ValidationException("El anfitrion es obligatorio");
-        }
     }
 
 }
