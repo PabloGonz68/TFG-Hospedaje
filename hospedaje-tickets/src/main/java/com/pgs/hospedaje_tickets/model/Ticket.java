@@ -25,7 +25,7 @@ public class Ticket {
     @Column(nullable = false)
     private TipoTicket tipoTicket;
 
-    private enum TipoTicket {
+    public enum TipoTicket {
         PUEBLO, CIUDAD
     }
 

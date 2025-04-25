@@ -49,7 +49,7 @@ public class HospedajeService {
        String email = auth.getName();
         Usuario anfitrion = usuarioRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("El usuario no existe."));
 
-        Hospedaje hospedaje = new Hospedaje();
+       /* Hospedaje hospedaje = new Hospedaje();
         hospedaje.setAnfitrion(anfitrion);
         hospedaje.setNombre(dto.getNombre());
         hospedaje.setDireccion(dto.getDireccion());
@@ -61,6 +61,11 @@ public class HospedajeService {
         hospedaje.setDescripcion(dto.getDescripcion());
         hospedaje.setUbicacion(dto.getUbicacion());
         hospedaje.setVisible(dto.isVisible());
+        hospedaje.setFechaCreacion(LocalDateTime.now());
+        hospedajeRepository.save(hospedaje);*/
+
+        Hospedaje hospedaje = mapper.toHospedaje(dto);
+        hospedaje.setAnfitrion(anfitrion);
         hospedaje.setFechaCreacion(LocalDateTime.now());
         hospedajeRepository.save(hospedaje);
 

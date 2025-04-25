@@ -1,9 +1,11 @@
 package com.pgs.hospedaje_tickets.utils;
 
 import com.pgs.hospedaje_tickets.dto.Hospedaje.HospedajeDTO;
+import com.pgs.hospedaje_tickets.dto.Ticket.TicketDTO;
 import com.pgs.hospedaje_tickets.dto.User.UsuarioDTO;
 import com.pgs.hospedaje_tickets.dto.User.UsuarioRegisterDTO;
 import com.pgs.hospedaje_tickets.model.Hospedaje;
+import com.pgs.hospedaje_tickets.model.Ticket;
 import com.pgs.hospedaje_tickets.model.Usuario;
 import org.springframework.stereotype.Component;
 
@@ -45,6 +47,35 @@ public class Mapper {
         hospedajeDTO.setUbicacion(hospedaje.getUbicacion());
         hospedajeDTO.setVisible(hospedaje.isVisible());
         return hospedajeDTO;
+    }
+
+    public Hospedaje toHospedaje(HospedajeDTO hospedajeDTO){
+        Hospedaje hospedaje = new Hospedaje();
+        hospedaje.setNombre(hospedajeDTO.getNombre());
+        hospedaje.setDireccion(hospedajeDTO.getDireccion());
+        hospedaje.setCodigoPostal(hospedajeDTO.getCodigoPostal());
+        hospedaje.setCiudad(hospedajeDTO.getCiudad());
+        hospedaje.setPais(hospedajeDTO.getPais());
+        hospedaje.setTipoZona(Hospedaje.TipoZona.valueOf(hospedajeDTO.getTipoZona()));
+        hospedaje.setCapacidad(hospedajeDTO.getCapacidad());
+        hospedaje.setDescripcion(hospedajeDTO.getDescripcion());
+        hospedaje.setUbicacion(hospedajeDTO.getUbicacion());
+        hospedaje.setVisible(hospedajeDTO.isVisible());
+        return hospedaje;
+    }
+
+    public TicketDTO toTicketDTO(Ticket ticket){
+        TicketDTO ticketDTO = new TicketDTO();
+        ticketDTO.setTipoTicket(ticket.getTipoTicket().toString());
+        ticketDTO.setPropietario(ticket.getPropietario());
+        return ticketDTO;
+    }
+
+    public Ticket toTicket(TicketDTO ticketDTO){
+        Ticket ticket = new Ticket();
+        ticket.setTipoTicket(Ticket.TipoTicket.valueOf(ticketDTO.getTipoTicket()));
+        ticket.setPropietario(ticketDTO.getPropietario());
+        return ticket;
     }
 
 

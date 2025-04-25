@@ -75,7 +75,20 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/hospedaje/{id}").access(getHospedajeIdManager())
 
                         //Funciones Admin Hospedaje
-                        .requestMatchers(HttpMethod.GET, "/hospedaje/admin/").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/hospedaje/admin").authenticated()
+
+                        //Funciones Ticket
+                        .requestMatchers(HttpMethod.GET, "/ticket/{id}").authenticated()
+
+                        //Funciones Admin Ticket
+                        .requestMatchers(HttpMethod.GET, "/ticket/all").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/ticket/{id}/admin").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/ticket/create").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/ticket/{id}").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/ticket/{id}").authenticated()
+
+
+
                         //Cualquier otra petición debe estar autenticada
                         .anyRequest().authenticated()
 
