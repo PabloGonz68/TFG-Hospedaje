@@ -1,13 +1,15 @@
 package com.pgs.hospedaje_tickets.utils;
 
 import com.pgs.hospedaje_tickets.dto.Hospedaje.HospedajeDTO;
+import com.pgs.hospedaje_tickets.dto.Reserva.GrupoViajeDTO;
+import com.pgs.hospedaje_tickets.dto.Reserva.MiembroGrupoDTO;
 import com.pgs.hospedaje_tickets.dto.Ticket.TicketDTO;
 import com.pgs.hospedaje_tickets.dto.User.UsuarioDTO;
 import com.pgs.hospedaje_tickets.dto.User.UsuarioRegisterDTO;
-import com.pgs.hospedaje_tickets.model.Hospedaje;
-import com.pgs.hospedaje_tickets.model.Ticket;
-import com.pgs.hospedaje_tickets.model.Usuario;
+import com.pgs.hospedaje_tickets.model.*;
 import org.springframework.stereotype.Component;
+
+import java.util.stream.Collectors;
 
 @Component
 public class Mapper {
@@ -77,6 +79,26 @@ public class Mapper {
         ticket.setPropietario(ticketDTO.getPropietario());
         return ticket;
     }
+    public MiembroGrupoDTO toMiembroGrupoDTO(MiembroGrupo miembroGrupo) {
+        MiembroGrupoDTO miembroGrupoDTO = new MiembroGrupoDTO();
+        miembroGrupoDTO.setId(miembroGrupo.getId());
+        miembroGrupoDTO.setIdUsuario(miembroGrupo.getUsuario().getId_usuario());
+        miembroGrupoDTO.setTicketsAportados(miembroGrupo.getTicketsAportados());
+        return miembroGrupoDTO;
+    }
+
+    public GrupoViajeDTO toGrupoViajeDTO(GrupoViaje grupoViaje) {
+        GrupoViajeDTO grupoViajeDTO = new GrupoViajeDTO();
+        grupoViajeDTO.setId(grupoViaje.getId());
+        grupoViajeDTO.setIdCreador(grupoViaje.getCreador().getId_usuario());
+        grupoViajeDTO.setMiembros(grupoViaje.getMiembros().stream()
+                .map(this::toMiembroGrupoDTO)
+                .collect(Collectors.toList()));
+        grupoViajeDTO.setFechaCreacion(grupoViaje.getFechaCreacion());
+        return grupoViajeDTO;
+    }
+
+
 
 
 
