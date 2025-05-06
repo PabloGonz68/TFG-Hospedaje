@@ -28,7 +28,7 @@ public class ReservaUsuario {
     @Column(nullable = false)
     private RolUsuario rol;
 
-    private enum RolUsuario {
+    public enum RolUsuario {
         ORGANIZADOR, PARTICIPANTE
     }
 

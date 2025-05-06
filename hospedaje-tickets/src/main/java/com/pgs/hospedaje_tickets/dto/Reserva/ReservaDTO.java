@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -11,8 +12,8 @@ import java.time.LocalDateTime;
 @Data
 public class ReservaDTO {
     private Long id_hospedaje;
-    private LocalDateTime fecha_inicio;
-    private LocalDateTime fecha_fin;
+    private LocalDate fecha_inicio;
+    private LocalDate fecha_fin;
     private String estado;
 
 }

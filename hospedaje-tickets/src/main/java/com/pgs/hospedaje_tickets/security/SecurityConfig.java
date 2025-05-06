@@ -87,6 +87,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/ticket/{id}").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/ticket/{id}").authenticated()
 
+                        //Funciones GrupoViaje
+                        .requestMatchers(HttpMethod.POST, "/grupo-viaje/create").authenticated()
+
+                        //Funciones Reserva
+                        .requestMatchers(HttpMethod.POST, "/reservas/con-grupo").authenticated()
+
 
 
                         //Cualquier otra petición debe estar autenticada

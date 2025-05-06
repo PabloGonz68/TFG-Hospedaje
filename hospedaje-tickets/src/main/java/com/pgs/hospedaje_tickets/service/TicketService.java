@@ -54,6 +54,21 @@ public class TicketService {
         return tickets.stream().map(mapper::toTicketDTO).collect(Collectors.toList());
     }
 
+    public TicketDTO createTicketRegister(TicketDTO ticketDTO, Usuario usuario) {
+        validatorTicket.validateTicket(ticketDTO);
+
+        Usuario usuarioAutenticado = usuarioRepository.findByEmail(usuario.getEmail()).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado."));
+
+        Ticket ticket = mapper.toTicket(ticketDTO);
+        if (ticketDTO.getPropietario() != null && ticketDTO.getPropietario().getId_usuario() != null) {
+            Usuario propietario = usuarioRepository.findById(ticketDTO.getPropietario().getId_usuario())
+                    .orElseThrow(() -> new ResourceNotFoundException("Propietario no encontrado."));
+            ticket.setPropietario(propietario);
+        }
+        //ticket.setPropietario(usuarioAutenticado);
+        return mapper.toTicketDTO(ticketRepository.save(ticket));
+    }
+
     //------    ADMIN   -------//
 
     public TicketDTO createTicket(TicketDTO ticketDTO) {
@@ -66,6 +81,11 @@ public class TicketService {
         }
 
         Ticket ticket = mapper.toTicket(ticketDTO);
+        if (ticketDTO.getPropietario() != null && ticketDTO.getPropietario().getId_usuario() != null) {
+            Usuario propietario = usuarioRepository.findById(ticketDTO.getPropietario().getId_usuario())
+                    .orElseThrow(() -> new ResourceNotFoundException("Propietario no encontrado."));
+            ticket.setPropietario(propietario);
+        }
         //ticket.setPropietario(usuarioAutenticado);
         return mapper.toTicketDTO(ticketRepository.save(ticket));
     }

@@ -1,4 +1,0 @@
-package com.pgs.hospedaje_tickets.repository;
-
-public interface MiembroGrupoRepository {
-}

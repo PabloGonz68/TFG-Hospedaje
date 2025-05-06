@@ -10,4 +10,6 @@ public class CrearReservaConGrupo {
     private Long idHospedaje;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
+    private String estado;
+    private Long idUsuario;
 }

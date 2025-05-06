@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,16 +25,16 @@ public class Reserva {
     private Hospedaje hospedaje;
 
     @Column(nullable = false)
-    private LocalDateTime fecha_inicio;
+    private LocalDate fecha_inicio;
 
     @Column(nullable = false)
-    private LocalDateTime fecha_fin;
+    private LocalDate fecha_fin;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EstadoReserva estado_reserva;
 
-    private enum EstadoReserva {
+    public enum EstadoReserva {
         PENDIENTE, CONFIRMADA, COMPLETADA, CANCELADA
     }
 

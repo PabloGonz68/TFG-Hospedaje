@@ -1,9 +1,11 @@
 package com.pgs.hospedaje_tickets.service;
 
+import com.pgs.hospedaje_tickets.dto.Ticket.TicketDTO;
 import com.pgs.hospedaje_tickets.dto.User.*;
 import com.pgs.hospedaje_tickets.error.exceptions.BadRequestException;
 import com.pgs.hospedaje_tickets.error.exceptions.ForbiddenException;
 import com.pgs.hospedaje_tickets.error.exceptions.ResourceNotFoundException;
+import com.pgs.hospedaje_tickets.model.Ticket;
 import com.pgs.hospedaje_tickets.model.Usuario;
 import com.pgs.hospedaje_tickets.repository.UsuarioRepository;
 import com.pgs.hospedaje_tickets.utils.Mapper;
@@ -35,6 +37,8 @@ public class UsuarioService implements UserDetailsService {
     private Mapper mapper;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private TicketService ticketService;
 
 
     //Login
@@ -71,6 +75,12 @@ public class UsuarioService implements UserDetailsService {
         usuario.setPassword(passwordEncoder.encode(user.getPassword()));
         usuario.setRol(Usuario.Rol.valueOf(rol));
         usuarioRepository.save(usuario);
+
+        TicketDTO ticketDTO = new TicketDTO();
+        ticketDTO.setPropietario(usuario);
+        ticketDTO.setTipoTicket(Ticket.TipoTicket.CIUDAD.toString());
+        ticketService.createTicketRegister(ticketDTO, usuario);
+
         return user;
     }
 
