@@ -24,7 +24,10 @@ public class GrupoViaje {
     @JoinColumn(name = "id_creador", nullable = false)
     private Usuario creador;
 
-    @OneToMany(mappedBy = "grupoViaje", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(nullable = false)
+    private int cantidadTicketsCreador;
+
+    @OneToMany(mappedBy = "grupoViaje", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<MiembroGrupo> miembros = new ArrayList<>();
 
     @Column(name = "fecha_creacion")

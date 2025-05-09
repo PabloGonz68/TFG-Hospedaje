@@ -8,6 +8,7 @@ import java.util.List;
 public class CrearGrupoViajeDTO {
 
     public Long idCreador;
+    public int cantidadTicketsCreador;
     public List<MiembroGrupoDTO> miembros;
 
     @Data

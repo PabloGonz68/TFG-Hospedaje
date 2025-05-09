@@ -9,9 +9,13 @@ import com.nimbusds.jose.proc.SecurityContext;
 import com.pgs.hospedaje_tickets.error.exceptions.BadRequestException;
 import com.pgs.hospedaje_tickets.error.exceptions.InternalServerErrorException;
 import com.pgs.hospedaje_tickets.error.exceptions.ResourceNotFoundException;
+import com.pgs.hospedaje_tickets.model.GrupoViaje;
 import com.pgs.hospedaje_tickets.model.Hospedaje;
+import com.pgs.hospedaje_tickets.model.MiembroGrupo;
 import com.pgs.hospedaje_tickets.model.Usuario;
+import com.pgs.hospedaje_tickets.repository.GrupoViajeRepository;
 import com.pgs.hospedaje_tickets.repository.HospedajeRepository;
+import com.pgs.hospedaje_tickets.repository.MiembroGrupoRepository;
 import com.pgs.hospedaje_tickets.repository.UsuarioRepository;
 import com.pgs.hospedaje_tickets.utils.StringToLong;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +53,10 @@ public class SecurityConfig {
     private UsuarioRepository usuarioRepository;
     @Autowired
     private HospedajeRepository hospedajeRepository;
+    @Autowired
+    private GrupoViajeRepository grupoViajeRepository;
+    @Autowired
+    private MiembroGrupoRepository miembroGrupoRepository;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -89,6 +97,13 @@ public class SecurityConfig {
 
                         //Funciones GrupoViaje
                         .requestMatchers(HttpMethod.POST, "/grupo-viaje/create").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/grupo-viaje/{id}").access(getGrupoViajeIdManager())
+                        .requestMatchers(HttpMethod.GET, "/grupo-viaje/miembro/{email}").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/grupo-viaje/{id}").access(getGrupoViajeIdManager())
+                        .requestMatchers(HttpMethod.DELETE, "/grupo-viaje/{id}").access(getGrupoViajeIdManager())
+
+                        //Funciones Admin GrupoViaje
+                        .requestMatchers(HttpMethod.GET, "/grupo-viaje/admin").authenticated()
 
                         //Funciones Reserva
                         .requestMatchers(HttpMethod.POST, "/reservas/con-grupo").authenticated()
@@ -180,6 +195,62 @@ public class SecurityConfig {
             }
 
             if (!hospedaje.getAnfitrion().getEmail().equals(auth.getName())) {
+                return new AuthorizationDecision(false);
+            }
+
+            return new AuthorizationDecision(true);
+        };
+    }
+
+    public AuthorizationManager<RequestAuthorizationContext> getGrupoViajeIdManager() {
+        return(authentication, object) -> {
+            Authentication auth = authentication.get();
+
+            if (auth==null || !auth.isAuthenticated()) {
+                return new AuthorizationDecision(false);
+            }
+
+
+
+            boolean isAdmin = auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+            if (isAdmin) {  //Si el usuario es admin
+                return new AuthorizationDecision(true);
+            }
+
+            String path = object.getRequest().getRequestURI();
+            String idString = path.substring(path.lastIndexOf("/") + 1);
+            Long id = StringToLong.StringToLong(idString);
+
+            if (id == null || id <= 0) {
+                return new AuthorizationDecision(false);
+            }
+
+            Usuario usuario = null;
+            try{
+                usuario = usuarioRepository.findByEmail(auth.getName()).orElseThrow(() -> new ResourceNotFoundException("El usuario no existe."));
+                Long idUsuario = usuario.getId_usuario();
+            } catch (InternalServerErrorException e) {
+                throw new InternalServerErrorException("Error al obtener el usuario. "+e.getMessage());
+            }
+
+            if (usuario == null) {
+                return new AuthorizationDecision(false);
+            }
+            Long idUsuario = usuario.getId_usuario();
+
+
+            GrupoViaje grupoViaje = null;
+            try{
+                grupoViaje = grupoViajeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El grupo de viaje no existe."));
+            } catch (InternalServerErrorException e) {
+                throw new InternalServerErrorException("Error al obtener el grupo de viaje. "+e.getMessage());
+            }
+
+            if (grupoViaje == null) {
+                return new AuthorizationDecision(false);
+            }
+            //Si el usuario no pertenece al grupo
+            if (!grupoViaje.getMiembros().stream().anyMatch(m -> m.getUsuario().getId_usuario().equals(idUsuario))) {
                 return new AuthorizationDecision(false);
             }
 
