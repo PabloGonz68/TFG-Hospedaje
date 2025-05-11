@@ -64,6 +64,7 @@ public class ReservaService {
         System.out.println(costeTotal);
 
         int totalTicketsAportados = 0;
+        List<MiembroGrupo> miembrosValidos = new ArrayList<>();
         for (MiembroGrupo miembro : miembros) {
             Usuario usuario = miembro.getUsuario();
             int ticketsAportadosPorMiembro = miembro.getTicketsAportados();
@@ -76,98 +77,39 @@ public class ReservaService {
             }
 
             totalTicketsAportados += ticketsAportadosPorMiembro;
+            miembrosValidos.add(miembro);
+        }
+        //Validamos
+        if (totalTicketsAportados < costeTotal) {
+            throw new BadRequestException("Los miembros del grupo no aportan suficientes tickets para la reserva");
+        }
+
+        if (totalTicketsAportados != costeTotal) {
+            throw new BadRequestException("La suma de los tickets aportados debe ser exactamente igual al coste de la reserva");
+        }
+
+        for (MiembroGrupo miembro : miembrosValidos) {
+            Usuario usuario = miembro.getUsuario();
+            int ticketsAportadosPorMiembro = miembro.getTicketsAportados();
+            List<Ticket> disponibles = ticketRepository.findByPropietario(usuario);
             //Consumimos los tickets
             List<Ticket> usados = new ArrayList<>();
             double aRestar = ticketsAportadosPorMiembro;
             for (Ticket ticket : disponibles) {
                 double valorTicket = getValorTicket(ticket, tipoTicket);
-                if (aRestar<=0) break;
+                if (aRestar <= 0) break;
                 usados.add(ticket);
-                aRestar-=valorTicket;
+                aRestar -= valorTicket;
             }
-
-
-
-            ticketRepository.deleteAll(usados);
+            ticketRepository.deleteAll(usados);//Ejecutamos si paso todos los filtros
         }
+
+
+
+
         System.out.println("Total tickets aportados: " + totalTicketsAportados);
         System.out.println("Coste total: " + costeTotal);
-        if (totalTicketsAportados < costeTotal) {
-            throw new BadRequestException("Los miembros del grupo no aportan suficientes tickets para la reserva");
-        }
-        /*
-        long totalEquivalentes = 0;
 
-        for(MiembroGrupo miembro : miembros) {
-            Usuario usuario = miembro.getUsuario();
-            int ticketsAportadosPorMiembro = miembro.getTicketsAportados();
-
-            //Calcular cuantos tickets del tipo requerido tiene el usuario
-            long cantidadTipoRequerido = ticketRepository.findByPropietarioAndTipoTicket(usuario, tipoTicket).size();
-            long cantidadOtroTipo = ticketRepository.findByPropietarioAndTipoTicket(usuario,
-                    tipoTicket == Ticket.TipoTicket.CIUDAD? Ticket.TipoTicket.PUEBLO: Ticket.TipoTicket.CIUDAD).size();
-
-            long ticketsEquivalentes = cantidadTipoRequerido;
-            if (tipoTicket == Ticket.TipoTicket.CIUDAD) {
-                ticketsEquivalentes += cantidadOtroTipo / 2;
-            } else {
-                ticketsEquivalentes += cantidadOtroTipo * 2;
-            }
-
-            if(ticketsEquivalentes < ticketsAportadosPorMiembro) {
-                throw new BadRequestException("El usuario " + usuario.getEmail() + " no tiene suficientes tickets disponibles");
-            }
-            //Sumo el total
-            if(tipoTicket == Ticket.TipoTicket.CIUDAD) {
-                totalEquivalentes +=  cantidadTipoRequerido + (cantidadOtroTipo / 2);
-            } else {
-                totalEquivalentes +=  cantidadTipoRequerido + (cantidadOtroTipo * 2);
-            }
-        }
-
-        if (totalAportados < costeTotal) {
-            throw new BadRequestException("Los miembros del grupo no aportan suficientes tickets para la reserva");
-        }
-
-        for (MiembroGrupo miembro : miembros) {
-            Usuario usuario = miembro.getUsuario();
-            double aRestar = miembro.getTicketsAportados();
-
-            List<Ticket> ticketsUsuario = ticketRepository.findByPropietario(usuario);
-
-            List<Ticket> ticketsUsados = new ArrayList<>();
-            // 1º: Intentar usar tickets del tipo requerido
-            for (Ticket ticket : ticketsUsuario) {
-                if(aRestar <= 0.0001) break;
-                if (ticket.getTipoTicket().equals(tipoTicket)) {
-                    ticketsUsados.add(ticket);
-                    aRestar--;
-                }
-            }
-
-            // 2º: Si no alcanzan, usar tickets del otro tipo con conversión
-            if (aRestar > 0.0001){
-                for (Ticket ticket : ticketsUsuario) {
-                    if(aRestar <= 0.0001) break;
-                    if (ticket.getTipoTicket()!=tipoTicket){
-                        if (tipoTicket == Ticket.TipoTicket.CIUDAD) {
-                            // 2 PUEBLO = 1 CIUDAD → cada  uno de pueblo vale 0.5 de ciudad
-                            ticketsUsados.add(ticket);
-                            aRestar-=0.5;
-                        } else if (tipoTicket == Ticket.TipoTicket.PUEBLO) {
-                            // 1 CIUDAD = 2 PUEBLO → cada uno de ciudad vale 2 de pueblos
-                            ticketsUsados.add(ticket);
-                            aRestar-=2;
-                        }else {
-                            throw new ResourceNotFoundException("Tipo de ticket inválido.");
-                        }
-                    }
-
-                }
-            }
-            ticketRepository.deleteAll(ticketsUsados);
-        }
-*/
         //Crear la reserva
         Reserva reserva = new Reserva();
         reserva.setHospedaje(hospedaje);
