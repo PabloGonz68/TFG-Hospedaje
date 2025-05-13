@@ -107,6 +107,7 @@ public class Mapper {
         reservaDTO.setFecha_inicio(reserva.getFecha_inicio());
         reservaDTO.setFecha_fin(reserva.getFecha_fin());
         reservaDTO.setEstado(reserva.getEstado_reserva().toString());
+        reservaDTO.setCosteTotalTickets(reserva.getCosteTotalTickets());
         return reservaDTO;
     }
 

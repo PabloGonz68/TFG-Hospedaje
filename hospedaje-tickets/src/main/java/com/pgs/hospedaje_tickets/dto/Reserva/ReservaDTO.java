@@ -15,5 +15,8 @@ public class ReservaDTO {
     private LocalDate fecha_inicio;
     private LocalDate fecha_fin;
     private String estado;
+    private int costeTotalTickets;
+
+
 
 }

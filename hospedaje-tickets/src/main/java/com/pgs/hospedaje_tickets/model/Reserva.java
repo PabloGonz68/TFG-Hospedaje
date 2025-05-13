@@ -38,6 +38,10 @@ public class Reserva {
         PENDIENTE, CONFIRMADA, COMPLETADA, CANCELADA
     }
 
+    @Column(name = "coste_total_tickets")
+    private int costeTotalTickets;
+
+
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
 

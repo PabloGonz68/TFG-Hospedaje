@@ -14,5 +14,4 @@ public class CrearReservaConGrupoDTO {
     private LocalDate fechaFin;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String estado = "PENDIENTE";
-    private Long idOrganizador;
 }

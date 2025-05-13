@@ -4,6 +4,7 @@ import com.pgs.hospedaje_tickets.dto.Reserva.CrearReservaConGrupoDTO;
 import com.pgs.hospedaje_tickets.dto.Reserva.CrearReservaIndividualDTO;
 import com.pgs.hospedaje_tickets.dto.Reserva.ReservaDTO;
 import com.pgs.hospedaje_tickets.error.exceptions.BadRequestException;
+import com.pgs.hospedaje_tickets.error.exceptions.ForbiddenException;
 import com.pgs.hospedaje_tickets.model.*;
 import com.pgs.hospedaje_tickets.repository.*;
 import com.pgs.hospedaje_tickets.utils.Mapper;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,12 +61,26 @@ public class ReservaService {
         Ticket.TipoTicket tipoTicket = Ticket.TipoTicket.valueOf(hospedaje.getTipoZona().name());
         List<Ticket> ticketsUsuario = ticketRepository.findByPropietario(usuarioAutenticado);
         double ticketsEquivalentes = ticketsUsuario.stream().mapToDouble(ticket -> getValorTicket(ticket, tipoTicket)).sum();
-        if (ticketsEquivalentes < 1.0) {
-            throw new BadRequestException("No tienes suficientes tickets para realizar esta reserva.");
+        //Validamos que la reserva tenga al menos una noche
+        long noches = ChronoUnit.DAYS.between(dto.getFechaInicio(), dto.getFechaFin());
+        if (noches < 1) {
+            throw new BadRequestException("La reserva debe tener al menos una noche.");
         }
 
+        double costeTotal = noches * 1.0;
+
+        if (ticketsEquivalentes < costeTotal) {
+            double faltan = Math.ceil(costeTotal - ticketsEquivalentes);
+            throw new BadRequestException(
+                    "No tienes suficientes tickets para realizar esta reserva. Necesitas " +
+                            costeTotal + " tickets, pero solo tienes " + ticketsEquivalentes +
+                            ". Te faltan aproximadamente " + faltan + " tickets."
+            );
+        }
+
+
         List<Ticket> ticketsUsados = new ArrayList<>();
-        double aRestar = 1.0;
+        double aRestar = costeTotal;
         for (Ticket ticket : ticketsUsuario) {
             if (aRestar <= 0) break;
             ticketsUsados.add(ticket);
@@ -79,6 +95,7 @@ public class ReservaService {
         reserva.setFecha_inicio(dto.getFechaInicio());
         reserva.setFecha_fin(dto.getFechaFin());
         reserva.setEstado_reserva(Reserva.EstadoReserva.PENDIENTE);
+        reserva.setCosteTotalTickets((int) costeTotal);
         reserva = reservaRepository.save(reserva);
        // Relación usuario - reserva
         ReservaUsuario reservaUsuario = new ReservaUsuario();
@@ -99,16 +116,28 @@ public class ReservaService {
         List<MiembroGrupo> miembros = miembroGrupoRepository.findByGrupoViaje(grupoViaje);
         //Validas la reserva
         validatorReserva.validateReservaGrupo(dto);
+        //Validamos si el usuario es el Organizador
+        Usuario usuarioAutenticado = usuarioRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(() -> new RuntimeException("El usuario no existe."));
+        boolean isCreador = grupoViaje.getCreador().getId_usuario().equals(usuarioAutenticado.getId_usuario());
+        boolean isAdmin = usuarioAutenticado.getRol().equals(Usuario.Rol.ADMIN);
 
-        boolean isOrganizadorEnGrupo = miembros.stream().anyMatch(miembro -> miembro.getUsuario().getId_usuario().equals(dto.getIdOrganizador()));
+        if (!isCreador && !isAdmin) {
+            throw new ForbiddenException("Solo el creador del grupo o un administrador puede realizar la reserva.");
+        }
+
+        /*boolean isOrganizadorEnGrupo = miembros.stream().anyMatch(miembro -> miembro.getUsuario().getId_usuario().equals(dto.getIdOrganizador()));
         if (!isOrganizadorEnGrupo) {
             throw new BadRequestException("El organizador no pertenece al grupo de viaje.");
-        }
+        }*/
 
         // Calcular el coste total de la reserva
         Ticket.TipoTicket tipoTicket = Ticket.TipoTicket.valueOf(hospedaje.getTipoZona().name());
-        int costeTotal = miembros.size();
-        System.out.println(costeTotal);
+        long noches = ChronoUnit.DAYS.between(dto.getFechaInicio(), dto.getFechaFin());
+        if (noches < 1) {
+            throw new BadRequestException("La reserva debe tener al menos una noche.");
+        }
+        int costeTotal = (int) noches * miembros.size();
+        System.out.println("Coste total (tickets): " + costeTotal);
 
         int totalTicketsAportados = 0;
         List<MiembroGrupo> miembrosValidos = new ArrayList<>();
@@ -128,8 +157,10 @@ public class ReservaService {
         }
         //Validamos
         if (totalTicketsAportados < costeTotal) {
-            throw new BadRequestException("Los miembros del grupo no aportan suficientes tickets para la reserva");
+            int faltan = costeTotal - totalTicketsAportados;
+            throw new BadRequestException("Los miembros del grupo no aportan suficientes tickets. Se requieren " + costeTotal + " tickets, pero solo se han aportado " + totalTicketsAportados + ". Faltan " + faltan + " tickets.");
         }
+
 
         if (totalTicketsAportados != costeTotal) {
             throw new BadRequestException("La suma de los tickets aportados debe ser exactamente igual al coste de la reserva");
@@ -163,6 +194,7 @@ public class ReservaService {
         reserva.setFecha_inicio(dto.getFechaInicio());
         reserva.setFecha_fin(dto.getFechaFin());
         reserva.setEstado_reserva(Reserva.EstadoReserva.PENDIENTE);
+        reserva.setCosteTotalTickets(costeTotal);
         reservaRepository.save(reserva);
 
         //Crear relacion entre la reserva y los miembros del grupo
@@ -171,7 +203,7 @@ public class ReservaService {
             ReservaUsuario reservaUsuario = new ReservaUsuario();
             reservaUsuario.setReserva(reserva);
             reservaUsuario.setUsuario(miembro.getUsuario());
-            if (miembro.getUsuario().getId_usuario().equals(dto.getIdOrganizador())) {
+            if (miembro.getUsuario().getId_usuario().equals(grupoViaje.getCreador().getId_usuario())) {
                 reservaUsuario.setRol(ReservaUsuario.RolUsuario.ORGANIZADOR);
             }else {
                 reservaUsuario.setRol(ReservaUsuario.RolUsuario.PARTICIPANTE);
