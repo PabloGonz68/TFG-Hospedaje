@@ -1,6 +1,7 @@
 package com.pgs.hospedaje_tickets.service;
 
 import com.pgs.hospedaje_tickets.dto.Reserva.CrearReservaConGrupoDTO;
+import com.pgs.hospedaje_tickets.dto.Reserva.CrearReservaIndividualDTO;
 import com.pgs.hospedaje_tickets.dto.Reserva.ReservaDTO;
 import com.pgs.hospedaje_tickets.error.exceptions.BadRequestException;
 import com.pgs.hospedaje_tickets.model.*;
@@ -8,6 +9,7 @@ import com.pgs.hospedaje_tickets.repository.*;
 import com.pgs.hospedaje_tickets.utils.Mapper;
 import com.pgs.hospedaje_tickets.utils.validators.ValidatorReserva;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -44,6 +46,51 @@ public class ReservaService {
     @Autowired
     private ReservaUsuarioRepository reservaUsuarioRepository;
 
+    public ReservaDTO createRerservaIndividual(CrearReservaIndividualDTO dto) {
+        //Busca el usuario desde el token
+        String emailAutenticado = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailAutenticado).orElseThrow(() -> new RuntimeException("El usuario no existe."));
+        //Busca el hospedaje
+        Hospedaje hospedaje = hospedajeRepository.findById(dto.getIdHospedaje()).orElseThrow(() -> new RuntimeException("El hospedaje no existe."));
+
+        //Validas la reserva
+        validatorReserva.validateReservaIndividual(dto);
+    //Obtenemos el tipo de ticket y calculamos el coste
+        Ticket.TipoTicket tipoTicket = Ticket.TipoTicket.valueOf(hospedaje.getTipoZona().name());
+        List<Ticket> ticketsUsuario = ticketRepository.findByPropietario(usuarioAutenticado);
+        double ticketsEquivalentes = ticketsUsuario.stream().mapToDouble(ticket -> getValorTicket(ticket, tipoTicket)).sum();
+        if (ticketsEquivalentes < 1.0) {
+            throw new BadRequestException("No tienes suficientes tickets para realizar esta reserva.");
+        }
+
+        List<Ticket> ticketsUsados = new ArrayList<>();
+        double aRestar = 1.0;
+        for (Ticket ticket : ticketsUsuario) {
+            if (aRestar <= 0) break;
+            ticketsUsados.add(ticket);
+            aRestar -= getValorTicket(ticket, tipoTicket);
+        }
+
+        //Ahora eliminamos los tickets usados
+        ticketRepository.deleteAll(ticketsUsados);
+        //Creamos la reserva
+        Reserva reserva = new Reserva();
+        reserva.setHospedaje(hospedaje);
+        reserva.setFecha_inicio(dto.getFechaInicio());
+        reserva.setFecha_fin(dto.getFechaFin());
+        reserva.setEstado_reserva(Reserva.EstadoReserva.PENDIENTE);
+        reserva = reservaRepository.save(reserva);
+       // Relación usuario - reserva
+        ReservaUsuario reservaUsuario = new ReservaUsuario();
+        reservaUsuario.setReserva(reserva);
+        reservaUsuario.setUsuario(usuarioAutenticado);
+        reservaUsuario.setRol(ReservaUsuario.RolUsuario.ORGANIZADOR);
+        reservaUsuarioRepository.save(reservaUsuario);
+
+        return mapper.toReservaDTO(reserva);
+
+    }
+
     public ReservaDTO createReservaConGrupo(CrearReservaConGrupoDTO dto) {
         //Busca el hospedaje
         Hospedaje hospedaje = hospedajeRepository.findById(dto.getIdHospedaje()).orElseThrow(() -> new RuntimeException("El hospedaje no existe."));
@@ -51,7 +98,7 @@ public class ReservaService {
         GrupoViaje grupoViaje = grupoViajeRepository.findById(dto.getIdGrupo()).orElseThrow(() -> new RuntimeException("El grupo de viaje no existe."));
         List<MiembroGrupo> miembros = miembroGrupoRepository.findByGrupoViaje(grupoViaje);
         //Validas la reserva
-        validatorReserva.validateReserva(dto);
+        validatorReserva.validateReservaGrupo(dto);
 
         boolean isOrganizadorEnGrupo = miembros.stream().anyMatch(miembro -> miembro.getUsuario().getId_usuario().equals(dto.getIdOrganizador()));
         if (!isOrganizadorEnGrupo) {

@@ -107,6 +107,9 @@ public class SecurityConfig {
 
                         //Funciones Reserva
                         .requestMatchers(HttpMethod.POST, "/reservas/con-grupo").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/reservas/individual").authenticated(
+
+                        )
 
 
 
