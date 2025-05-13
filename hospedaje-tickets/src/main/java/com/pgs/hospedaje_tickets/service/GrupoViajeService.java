@@ -3,6 +3,7 @@ package com.pgs.hospedaje_tickets.service;
 import com.pgs.hospedaje_tickets.dto.Reserva.CrearGrupoViajeDTO;
 import com.pgs.hospedaje_tickets.dto.Reserva.GrupoViajeDTO;
 import com.pgs.hospedaje_tickets.error.exceptions.BadRequestException;
+import com.pgs.hospedaje_tickets.error.exceptions.ConflictException;
 import com.pgs.hospedaje_tickets.error.exceptions.ForbiddenException;
 import com.pgs.hospedaje_tickets.error.exceptions.ResourceNotFoundException;
 import com.pgs.hospedaje_tickets.model.GrupoViaje;
@@ -18,9 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -46,17 +45,25 @@ public class GrupoViajeService {
 
 
         List<MiembroGrupo> miembros = new ArrayList<>();//Se hace una lista de miembros
+        Set<Long> idsUsuarioAgregados = new HashSet<>();//Se hace un set para evitar duplicados
         //Se añade al creador
         MiembroGrupo miembroCreador = new MiembroGrupo();
         miembroCreador.setGrupoViaje(grupo);
         miembroCreador.setUsuario(creador);
         miembroCreador.setTicketsAportados(dto.getCantidadTicketsCreador());
         miembros.add(miembroCreador);
+        idsUsuarioAgregados.add(creador.getId_usuario());
 
 
 //Se añaden los miembros al grupo
         for (CrearGrupoViajeDTO.MiembroGrupoDTO miembro : dto.getMiembros()) {
-            Usuario usuario = usuarioRepository.findById(miembro.getIdUsuario()).orElseThrow(() -> new ResourceNotFoundException("El usuario no existe."));
+            Long idUsuario = miembro.getIdUsuario();
+
+            if (idsUsuarioAgregados.contains(idUsuario)) {
+                throw new ConflictException("El usuario con ID " + idUsuario + " ya está incluido en el grupo.");
+            }
+
+            Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(() -> new ResourceNotFoundException("El usuario con ID " + idUsuario + " no existe."));
 
             MiembroGrupo miembroGrupo = new MiembroGrupo();
             miembroGrupo.setGrupoViaje(grupo);
@@ -64,6 +71,7 @@ public class GrupoViajeService {
             miembroGrupo.setTicketsAportados(miembro.getTicketsAportados());
 
             miembros.add(miembroGrupo);
+            idsUsuarioAgregados.add(idUsuario);
         }
         //Asignan los miembros al grupo
         grupo.setMiembros(miembros);

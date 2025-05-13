@@ -21,7 +21,7 @@ public class ReservaController {
 
     @PostMapping("/individual")
     public ResponseEntity<?> createReserva(@RequestBody CrearReservaIndividualDTO dto) {
-        ReservaDTO reservaDTO = reservaService.createRerservaIndividual(dto);
+        ReservaDTO reservaDTO = reservaService.createReservaIndividual(dto);
         return new ResponseEntity<>(reservaDTO, HttpStatus.CREATED);
     }
 

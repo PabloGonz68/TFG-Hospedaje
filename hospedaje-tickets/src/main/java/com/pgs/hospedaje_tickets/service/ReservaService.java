@@ -48,7 +48,7 @@ public class ReservaService {
     @Autowired
     private ReservaUsuarioRepository reservaUsuarioRepository;
 
-    public ReservaDTO createRerservaIndividual(CrearReservaIndividualDTO dto) {
+    public ReservaDTO createReservaIndividual(CrearReservaIndividualDTO dto) {
         //Busca el usuario desde el token
         String emailAutenticado = SecurityContextHolder.getContext().getAuthentication().getName();
         Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailAutenticado).orElseThrow(() -> new RuntimeException("El usuario no existe."));
@@ -103,6 +103,9 @@ public class ReservaService {
         reservaUsuario.setUsuario(usuarioAutenticado);
         reservaUsuario.setRol(ReservaUsuario.RolUsuario.ORGANIZADOR);
         reservaUsuarioRepository.save(reservaUsuario);
+        //Le damos los tickets al propietario
+        Usuario propietarioHospedaje = hospedaje.getAnfitrion();
+        recompensarPropietario(propietarioHospedaje, (int) costeTotal, tipoTicket);
 
         return mapper.toReservaDTO(reserva);
 
@@ -125,10 +128,6 @@ public class ReservaService {
             throw new ForbiddenException("Solo el creador del grupo o un administrador puede realizar la reserva.");
         }
 
-        /*boolean isOrganizadorEnGrupo = miembros.stream().anyMatch(miembro -> miembro.getUsuario().getId_usuario().equals(dto.getIdOrganizador()));
-        if (!isOrganizadorEnGrupo) {
-            throw new BadRequestException("El organizador no pertenece al grupo de viaje.");
-        }*/
 
         // Calcular el coste total de la reserva
         Ticket.TipoTicket tipoTicket = Ticket.TipoTicket.valueOf(hospedaje.getTipoZona().name());
@@ -149,7 +148,8 @@ public class ReservaService {
             double disponiblesEquivalentes = disponibles.stream().mapToDouble(ticket -> getValorTicket(ticket, tipoTicket)).sum();
 
             if (disponiblesEquivalentes < ticketsAportadosPorMiembro) {
-                throw new BadRequestException("El usuario con email:" + usuario.getEmail() + ", no tiene suficientes tickets disponibles");
+                throw new BadRequestException("El usuario " + usuario.getNombre() + " no tiene suficientes tickets para aportar los " + ticketsAportadosPorMiembro + " requeridos."
+                );
             }
 
             totalTicketsAportados += ticketsAportadosPorMiembro;
@@ -213,6 +213,9 @@ public class ReservaService {
         }
         reservaUsuarioRepository.saveAll(reservasUsuarios);
 
+        Usuario propietarioHospedaje = hospedaje.getAnfitrion();
+        recompensarPropietario(propietarioHospedaje, costeTotal, tipoTicket);
+
 
         return mapper.toReservaDTO(reserva);
     }
@@ -222,6 +225,17 @@ public class ReservaService {
         if (tipoRequerido == Ticket.TipoTicket.CIUDAD) return 0.5;
         if (tipoRequerido == Ticket.TipoTicket.PUEBLO) return 2.0;
         throw new IllegalArgumentException("Tipo de ticket inválido");
+    }
+
+    private void recompensarPropietario(Usuario propietario, int cantidadTickets, Ticket.TipoTicket tipoTicket) {
+        List<Ticket> ticketsARecompensar = new ArrayList<>();
+        for (int i = 0; i < cantidadTickets; i++) {
+            Ticket nuevoTicket = new Ticket();
+            nuevoTicket.setPropietario(propietario);
+            nuevoTicket.setTipoTicket(tipoTicket);
+            ticketsARecompensar.add(nuevoTicket);
+        }
+        ticketRepository.saveAll(ticketsARecompensar);
     }
 
 
