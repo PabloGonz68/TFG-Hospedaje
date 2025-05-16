@@ -9,14 +9,8 @@ import com.nimbusds.jose.proc.SecurityContext;
 import com.pgs.hospedaje_tickets.error.exceptions.BadRequestException;
 import com.pgs.hospedaje_tickets.error.exceptions.InternalServerErrorException;
 import com.pgs.hospedaje_tickets.error.exceptions.ResourceNotFoundException;
-import com.pgs.hospedaje_tickets.model.GrupoViaje;
-import com.pgs.hospedaje_tickets.model.Hospedaje;
-import com.pgs.hospedaje_tickets.model.MiembroGrupo;
-import com.pgs.hospedaje_tickets.model.Usuario;
-import com.pgs.hospedaje_tickets.repository.GrupoViajeRepository;
-import com.pgs.hospedaje_tickets.repository.HospedajeRepository;
-import com.pgs.hospedaje_tickets.repository.MiembroGrupoRepository;
-import com.pgs.hospedaje_tickets.repository.UsuarioRepository;
+import com.pgs.hospedaje_tickets.model.*;
+import com.pgs.hospedaje_tickets.repository.*;
 import com.pgs.hospedaje_tickets.utils.StringToLong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -57,6 +51,8 @@ public class SecurityConfig {
     private GrupoViajeRepository grupoViajeRepository;
     @Autowired
     private MiembroGrupoRepository miembroGrupoRepository;
+    @Autowired
+    private ReservaRepository reservaRepository;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -107,10 +103,17 @@ public class SecurityConfig {
 
                         //Funciones Reserva
                         .requestMatchers(HttpMethod.POST, "/reservas/con-grupo").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/reservas/individual").authenticated(
+                        .requestMatchers(HttpMethod.POST, "/reservas/individual").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/reservas/").authenticated()//Todas las del usuario actual
+                        .requestMatchers(HttpMethod.GET, "/reservas/propietario").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/reservas/estado/{id}").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/reservas/cancelar/{id}").authenticated()
 
-                        )
-
+                        //Funciones Admin Reserva
+                        .requestMatchers(HttpMethod.GET, "/reservas/admin").authenticated()//Todas en general
+                        .requestMatchers(HttpMethod.GET, "/reservas/{id}").authenticated()
+                        //.requestMatchers(HttpMethod.PUT, "/reservas/{id}").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/reservas/{id}").authenticated()
 
 
                         //Cualquier otra petición debe estar autenticada
@@ -256,6 +259,93 @@ public class SecurityConfig {
             if (!grupoViaje.getMiembros().stream().anyMatch(m -> m.getUsuario().getId_usuario().equals(idUsuario))) {
                 return new AuthorizationDecision(false);
             }
+
+            return new AuthorizationDecision(true);
+        };
+    }
+
+    public AuthorizationManager<RequestAuthorizationContext> getReservaIdManager() {
+        return(authentication, object) -> {
+            Authentication auth = authentication.get();
+
+            if (auth==null || !auth.isAuthenticated()) {
+                return new AuthorizationDecision(false);
+            }
+
+            boolean isAdmin = auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+            if (isAdmin) {  //Si el usuario es admin
+                return new AuthorizationDecision(true);
+            }
+
+            String path = object.getRequest().getRequestURI();
+            String idString = path.substring(path.lastIndexOf("/") + 1);
+            Long id = StringToLong.StringToLong(idString);
+
+            if (id == null || id <= 0) {
+                return new AuthorizationDecision(false);
+            }
+
+            Reserva reserva = null;
+            try{
+                reserva = reservaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("La reserva no existe."));
+            } catch (InternalServerErrorException e) {
+                throw new InternalServerErrorException("Error al obtener la reserva. "+e.getMessage());
+            }
+
+            if (reserva == null) {
+                return new AuthorizationDecision(false);
+            }
+            //Solo el anfitrion de la casa puede actualizar o cancelar la reserva
+            if (!reserva.getHospedaje().getAnfitrion().getEmail().equals(auth.getName())) {
+                return new AuthorizationDecision(false);
+            }
+
+
+            //Para que solo los miembros del grupo puedan acceder la reserva
+            if (!reserva.getReservasUsuarios().stream().anyMatch(ru -> ru.getUsuario().getEmail().equals(auth.getName()))) {
+                return new AuthorizationDecision(false);
+            }
+
+            return new AuthorizationDecision(true);
+        };
+    }
+
+    public AuthorizationManager<RequestAuthorizationContext> getReservaEstadoManager() {
+        return(authentication, object) -> {
+            Authentication auth = authentication.get();
+
+            if (auth==null || !auth.isAuthenticated()) {
+                return new AuthorizationDecision(false);
+            }
+
+            boolean isAdmin = auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+            if (isAdmin) {  //Si el usuario es admin
+                return new AuthorizationDecision(true);
+            }
+
+            String path = object.getRequest().getRequestURI();
+            String idString = path.substring(path.lastIndexOf("/") + 1);
+            Long id = StringToLong.StringToLong(idString);
+
+            if (id == null || id <= 0) {
+                return new AuthorizationDecision(false);
+            }
+
+            Reserva reserva = null;
+            try{
+                reserva = reservaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("La reserva no existe."));
+            } catch (InternalServerErrorException e) {
+                throw new InternalServerErrorException("Error al obtener la reserva. "+e.getMessage());
+            }
+
+            if (reserva == null) {
+                return new AuthorizationDecision(false);
+            }
+            //Solo el anfitrion de la casa puede actualizar o cancelar la reserva
+            if (!reserva.getHospedaje().getAnfitrion().getEmail().equals(auth.getName())) {
+                return new AuthorizationDecision(false);
+            }
+
 
             return new AuthorizationDecision(true);
         };

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,6 +17,8 @@ public class ReservaDTO {
     private LocalDate fecha_fin;
     private String estado;
     private int costeTotalTickets;
+    private int numPersonas;
+    private List<ReservaUsuarioDTO> reservasUsuarios;
 
 
 

@@ -45,6 +45,9 @@ public class Reserva {
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
 
+    @Column(nullable = false)
+    private int numPersonas;
+
     @PrePersist
     protected void onCreate() {
         this.fechaCreacion = LocalDateTime.now();

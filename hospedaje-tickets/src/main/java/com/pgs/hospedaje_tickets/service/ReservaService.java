@@ -3,11 +3,14 @@ package com.pgs.hospedaje_tickets.service;
 import com.pgs.hospedaje_tickets.dto.Reserva.CrearReservaConGrupoDTO;
 import com.pgs.hospedaje_tickets.dto.Reserva.CrearReservaIndividualDTO;
 import com.pgs.hospedaje_tickets.dto.Reserva.ReservaDTO;
+import com.pgs.hospedaje_tickets.dto.Reserva.ReservaEstadoDTO;
 import com.pgs.hospedaje_tickets.error.exceptions.BadRequestException;
 import com.pgs.hospedaje_tickets.error.exceptions.ForbiddenException;
+import com.pgs.hospedaje_tickets.error.exceptions.ResourceNotFoundException;
 import com.pgs.hospedaje_tickets.model.*;
 import com.pgs.hospedaje_tickets.repository.*;
 import com.pgs.hospedaje_tickets.utils.Mapper;
+import com.pgs.hospedaje_tickets.utils.StringToLong;
 import com.pgs.hospedaje_tickets.utils.validators.ValidatorReserva;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservaService {
@@ -28,9 +32,6 @@ public class ReservaService {
 
     @Autowired
     HospedajeRepository hospedajeRepository;
-
-    @Autowired
-    UsuarioReservaRepository usuarioReservaRepository;
 
     @Autowired
     GrupoViajeRepository grupoViajeRepository;
@@ -54,6 +55,16 @@ public class ReservaService {
         Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailAutenticado).orElseThrow(() -> new RuntimeException("El usuario no existe."));
         //Busca el hospedaje
         Hospedaje hospedaje = hospedajeRepository.findById(dto.getIdHospedaje()).orElseThrow(() -> new RuntimeException("El hospedaje no existe."));
+        //Validar que no se reserve su propio hospedaje
+        Usuario propietarioHospedaje = hospedaje.getAnfitrion();
+        if (propietarioHospedaje.getId_usuario().equals(usuarioAutenticado.getId_usuario())) {
+            throw new BadRequestException("No puedes reservar tu propio hospedaje.");
+        }
+        //Validar que no este duplicada
+        List<Reserva> reservasEnConflicto = reservaRepository.findReservasEnRango(hospedaje.getId_hospedaje(), dto.getFechaInicio(), dto.getFechaFin());
+        if (!reservasEnConflicto.isEmpty()) {
+            throw new BadRequestException("No se puede crear la reserva. Ya existe una reserva confirmada para este hospedaje en esas fechas.");
+        }
 
         //Validas la reserva
         validatorReserva.validateReservaIndividual(dto);
@@ -104,8 +115,10 @@ public class ReservaService {
         reservaUsuario.setRol(ReservaUsuario.RolUsuario.ORGANIZADOR);
         reservaUsuarioRepository.save(reservaUsuario);
         //Le damos los tickets al propietario
-        Usuario propietarioHospedaje = hospedaje.getAnfitrion();
         recompensarPropietario(propietarioHospedaje, (int) costeTotal, tipoTicket);
+
+        int numPersonas = reservaUsuarioRepository.countByReserva(reserva);
+        reserva.setNumPersonas(numPersonas);
 
         return mapper.toReservaDTO(reserva);
 
@@ -114,9 +127,20 @@ public class ReservaService {
     public ReservaDTO createReservaConGrupo(CrearReservaConGrupoDTO dto) {
         //Busca el hospedaje
         Hospedaje hospedaje = hospedajeRepository.findById(dto.getIdHospedaje()).orElseThrow(() -> new RuntimeException("El hospedaje no existe."));
+        //Validar que no este duplicada
+        List<Reserva> reservasEnConflicto = reservaRepository.findReservasEnRango(hospedaje.getId_hospedaje(), dto.getFechaInicio(), dto.getFechaFin());
+        if (!reservasEnConflicto.isEmpty()) {
+            throw new BadRequestException("No se puede crear la reserva. Ya existe una reserva confirmada para este hospedaje en esas fechas.");
+        }
         //Busca el grupo de viaje y sus miembros
         GrupoViaje grupoViaje = grupoViajeRepository.findById(dto.getIdGrupo()).orElseThrow(() -> new RuntimeException("El grupo de viaje no existe."));
         List<MiembroGrupo> miembros = miembroGrupoRepository.findByGrupoViaje(grupoViaje);
+
+            Usuario propietarioHospedaje = hospedaje.getAnfitrion();
+            boolean propietarioEnGrupo = miembros.stream().anyMatch(miembro -> miembro.getUsuario().getId_usuario().equals(propietarioHospedaje.getId_usuario()));
+            if (propietarioEnGrupo) {
+                throw new ForbiddenException("El propietario del hospedaje no puede ser parte del grupo de reserva.");
+            }
         //Validas la reserva
         validatorReserva.validateReservaGrupo(dto);
         //Validamos si el usuario es el Organizador
@@ -212,9 +236,10 @@ public class ReservaService {
 
         }
         reservaUsuarioRepository.saveAll(reservasUsuarios);
-
-        Usuario propietarioHospedaje = hospedaje.getAnfitrion();
         recompensarPropietario(propietarioHospedaje, costeTotal, tipoTicket);
+
+        int numPersonas = reservaUsuarioRepository.countByReserva(reserva);
+        reserva.setNumPersonas(numPersonas);
 
 
         return mapper.toReservaDTO(reserva);
@@ -237,6 +262,109 @@ public class ReservaService {
         }
         ticketRepository.saveAll(ticketsARecompensar);
     }
+
+    public List<ReservaDTO> getReservasDelUsuario() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        List<Reserva> reservas = reservaUsuarioRepository.findReservasByUsuario(usuario);
+        if (reservas.isEmpty()) {
+            throw new ResourceNotFoundException("No se encontraron reservas");
+        }
+        return reservas.stream().map(mapper::toReservaDTO).collect(Collectors.toList());
+    }
+
+    public List<ReservaDTO> getReservasDelPropietario() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario propietario = usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        List<Reserva> reservas = reservaRepository.findByHospedajeAnfitrion(propietario);
+        if (reservas.isEmpty()) {
+            throw new ResourceNotFoundException("No se encontraron reservas");
+        }
+        return reservas.stream().map(mapper::toReservaDTO).collect(Collectors.toList());
+    }
+
+
+    public ReservaDTO actualizarEstadoReserva(String id, ReservaEstadoDTO nuevoEstado) {
+        String emailAutenticado = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailAutenticado).orElseThrow(() -> new RuntimeException("El usuario no existe."));
+        Long idReservaLong = StringToLong.StringToLong(id);
+        if (idReservaLong == null) {
+            throw new BadRequestException("El id de la reserva es incorrecto.");
+        }
+        Reserva reserva = reservaRepository.findById(idReservaLong).orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada"));
+        if (!usuarioAutenticado.getId_usuario().equals(reserva.getHospedaje().getAnfitrion().getId_usuario())) {
+            throw new BadRequestException("No tienes permiso para actualizar el estado de la reserva.");
+        }
+
+        reserva.setEstado_reserva(nuevoEstado.getEstado());
+        reservaRepository.save(reserva);
+        return mapper.toReservaDTO(reserva);
+    }
+
+    public ReservaDTO cancelarReserva(String id) {
+
+        Long idReservaLong = StringToLong.StringToLong(id);
+        if (idReservaLong == null) {
+            throw new BadRequestException("El id de la reserva es incorrecto.");
+        }
+        Reserva reserva = reservaRepository.findById(idReservaLong)
+                .orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada"));
+
+        if (reserva.getEstado_reserva() == Reserva.EstadoReserva.CANCELADA) {
+            throw new BadRequestException("La reserva ya está cancelada.");
+        }
+
+        String emailAutenticado = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailAutenticado).orElseThrow(() -> new RuntimeException("El usuario no existe."));
+        boolean isMiembro = reserva.getReservasUsuarios().stream().anyMatch(m -> m.getUsuario().getId_usuario().equals(usuarioAutenticado.getId_usuario()));
+
+        boolean isAdmin = usuarioAutenticado.getRol().equals(Usuario.Rol.ADMIN);
+        boolean isPropietario = usuarioAutenticado.getId_usuario().equals(reserva.getHospedaje().getAnfitrion().getId_usuario());
+        if (isAdmin || isPropietario || isMiembro) {
+            reserva.setEstado_reserva(Reserva.EstadoReserva.CANCELADA);
+            reservaRepository.save(reserva);
+            if (reserva.getEstado_reserva() != Reserva.EstadoReserva.CANCELADA) {
+                throw new BadRequestException("No se pudo cancelar la reserva.");
+            }
+            return mapper.toReservaDTO(reserva);
+        }else {
+            throw new ForbiddenException("No tienes permiso para acceder a esta información.");
+        }
+    }
+    //----------ADMIN----------
+    public ReservaDTO getReservaById(String idReserva) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        if(!usuario.getRol().equals(Usuario.Rol.ADMIN)) throw new ForbiddenException("No tienes permiso para acceder a esta información.");
+        Long idReservaLong = StringToLong.StringToLong(idReserva);
+        if (idReservaLong == null) {
+            throw new BadRequestException("El id de la reserva es incorrecto.");
+        }
+        Reserva reserva = reservaRepository.findById(idReservaLong)
+                .orElseThrow(() -> new ResourceNotFoundException("La reserva no existe."));
+        return mapper.toReservaDTO(reserva);
+    }
+
+    public List<ReservaDTO> getAllReservas() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        if(!usuario.getRol().equals(Usuario.Rol.ADMIN)) throw new ForbiddenException("No tienes permiso para acceder a esta información.");
+        List<Reserva> reservas = reservaRepository.findAll();
+        return reservas.stream().map(mapper::toReservaDTO).collect(Collectors.toList());
+    }
+
+    public void deleteReserva(String idReserva) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        if(!usuario.getRol().equals(Usuario.Rol.ADMIN)) throw new ForbiddenException("No tienes permiso para acceder a esta información.");
+        Long idReservaLong = StringToLong.StringToLong(idReserva);
+        if (idReservaLong == null) {
+            throw new BadRequestException("El id de la reserva es incorrecto.");
+        }
+        reservaRepository.deleteById(idReservaLong);
+    }
+
+
 
 
 

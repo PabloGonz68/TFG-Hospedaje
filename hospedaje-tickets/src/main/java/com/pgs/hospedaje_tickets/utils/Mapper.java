@@ -4,6 +4,7 @@ import com.pgs.hospedaje_tickets.dto.Hospedaje.HospedajeDTO;
 import com.pgs.hospedaje_tickets.dto.Reserva.GrupoViajeDTO;
 import com.pgs.hospedaje_tickets.dto.Reserva.MiembroGrupoDTO;
 import com.pgs.hospedaje_tickets.dto.Reserva.ReservaDTO;
+import com.pgs.hospedaje_tickets.dto.Reserva.ReservaUsuarioDTO;
 import com.pgs.hospedaje_tickets.dto.Ticket.TicketDTO;
 import com.pgs.hospedaje_tickets.dto.User.UsuarioDTO;
 import com.pgs.hospedaje_tickets.dto.User.UsuarioRegisterDTO;
@@ -12,6 +13,7 @@ import com.pgs.hospedaje_tickets.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -108,6 +110,17 @@ public class Mapper {
         reservaDTO.setFecha_fin(reserva.getFecha_fin());
         reservaDTO.setEstado(reserva.getEstado_reserva().toString());
         reservaDTO.setCosteTotalTickets(reserva.getCosteTotalTickets());
+        reservaDTO.setNumPersonas(reserva.getNumPersonas());
+
+        List<ReservaUsuarioDTO> usuariosDTO = reserva.getReservasUsuarios().stream().map(ru -> {
+            ReservaUsuarioDTO ruDto = new ReservaUsuarioDTO();
+            ruDto.setId_usuario(ru.getUsuario().getId_usuario());
+            ruDto.setNombre_usuario(ru.getUsuario().getNombre());
+            ruDto.setRol(ru.getRol().name());
+            return ruDto;
+        }).toList();
+
+        reservaDTO.setReservasUsuarios(usuariosDTO);
         return reservaDTO;
     }
 
