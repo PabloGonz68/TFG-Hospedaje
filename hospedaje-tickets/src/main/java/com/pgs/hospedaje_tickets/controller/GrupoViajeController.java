@@ -25,7 +25,7 @@ public class GrupoViajeController {
         return new ResponseEntity<>(grupoViajeService.getGrupoViaje(id), HttpStatus.OK);
     }
 
-    @GetMapping("/")
+    @GetMapping("/admin")
     public ResponseEntity<?> getGruposViaje() {
         return new ResponseEntity<>(grupoViajeService.getGruposViaje(), HttpStatus.OK);
     }

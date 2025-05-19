@@ -117,7 +117,7 @@ public class SecurityConfig {
 
 
                         //Cualquier otra petición debe estar autenticada
-                        //.anyRequest().authenticated()
+                        .anyRequest().authenticated()
 
                 )
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
