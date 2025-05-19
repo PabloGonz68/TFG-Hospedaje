@@ -136,10 +136,12 @@ public class UsuarioService implements UserDetailsService {
         Usuario usuario = usuarioRepository.findById(idLong).orElseThrow(() ->
                 new ResourceNotFoundException("Usuario no encontrado"));
 
+        validatorUser.validateUserPassword(user);
+
         if (!passwordEncoder.matches(user.getCurrentPassword(), usuario.getPassword())) {
             throw new BadRequestException("La contraseña actual es incorrecta.");
         }
-        validatorUser.validateUserPassword(user);
+
 
        usuario.setPassword(passwordEncoder.encode(user.getNewPassword()));
        usuarioRepository.save(usuario);

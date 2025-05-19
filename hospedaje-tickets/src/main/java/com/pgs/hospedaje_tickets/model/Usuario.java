@@ -50,8 +50,8 @@ public class Usuario {
         USUARIO, ADMIN
     }
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Transaccion> transacciones = new ArrayList<>();
+    @OneToMany(mappedBy = "propietario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ticket> tickets = new ArrayList<>();
 
     @OneToMany(mappedBy = "anfitrion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Hospedaje> hospedajes = new ArrayList<>();
