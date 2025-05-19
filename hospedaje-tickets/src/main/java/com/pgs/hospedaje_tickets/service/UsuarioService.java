@@ -76,9 +76,16 @@ public class UsuarioService implements UserDetailsService {
         usuario.setRol(Usuario.Rol.valueOf(rol));
         usuarioRepository.save(usuario);
 
+        UsuarioDTO propietario = new UsuarioDTO();
+        propietario.setId_usuario(usuario.getId_usuario());
+        if (propietario.getId_usuario() == null || propietario.getId_usuario() <= 0) {
+            throw new BadRequestException("El id de propietario es inválido.");
+        }
+
+
         TicketDTO ticketDTO = new TicketDTO();
-        ticketDTO.setPropietario(usuario);
         ticketDTO.setTipoTicket(Ticket.TipoTicket.CIUDAD.toString());
+        ticketDTO.setPropietario(propietario);
         ticketService.createTicketRegister(ticketDTO, usuario);
 
         return user;

@@ -73,15 +73,47 @@ public class Mapper {
     }
 
     public TicketDTO toTicketDTO(Ticket ticket){
-        TicketDTO ticketDTO = new TicketDTO();
-        ticketDTO.setTipoTicket(ticket.getTipoTicket().toString());
-        ticketDTO.setPropietario(ticket.getPropietario());
-        return ticketDTO;
+        if (ticket == null) return null;
+
+
+        TicketDTO dto = new TicketDTO();
+        dto.setTipoTicket(ticket.getTipoTicket().toString());
+
+        // Mapear propietario
+        if (ticket.getPropietario() != null) {
+            Usuario propietario = ticket.getPropietario();
+            UsuarioDTO propietarioDTO = new UsuarioDTO();
+
+            propietarioDTO.setId_usuario(propietario.getId_usuario());
+            propietarioDTO.setNombre(propietario.getNombre());
+            propietarioDTO.setApellidos(propietario.getApellidos());
+            propietarioDTO.setEmail(propietario.getEmail());
+            propietarioDTO.setRol(propietario.getRol().toString());
+            propietarioDTO.setFotoPerfil(propietario.getFotoPerfil());
+            propietarioDTO.setFechaRegistro(propietario.getFechaRegistro());
+
+            dto.setPropietario(propietarioDTO);
+        }
+
+        return dto;
     }
 
     public Ticket toTicket(TicketDTO ticketDTO){
         Ticket ticket = new Ticket();
         ticket.setTipoTicket(Ticket.TipoTicket.valueOf(ticketDTO.getTipoTicket()));
+
+        if (ticket.getPropietario() != null) {
+            UsuarioDTO propietarioDTO = new UsuarioDTO();
+            propietarioDTO.setId_usuario(ticket.getPropietario().getId_usuario());
+            propietarioDTO.setNombre(ticket.getPropietario().getNombre());
+            propietarioDTO.setApellidos(ticket.getPropietario().getApellidos());
+            propietarioDTO.setEmail(ticket.getPropietario().getEmail());
+            propietarioDTO.setRol(ticket.getPropietario().getRol().toString());
+            propietarioDTO.setFotoPerfil(ticket.getPropietario().getFotoPerfil());
+            propietarioDTO.setFechaRegistro(ticket.getPropietario().getFechaRegistro());
+
+            ticketDTO.setPropietario(propietarioDTO);
+        }
         return ticket;
     }
     public MiembroGrupoDTO toMiembroGrupoDTO(MiembroGrupo miembroGrupo) {

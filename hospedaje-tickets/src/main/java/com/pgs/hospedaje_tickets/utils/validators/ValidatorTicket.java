@@ -11,7 +11,7 @@ public class ValidatorTicket {
         if (ticketDTO.getTipoTicket() == null || ticketDTO.getTipoTicket().isEmpty()) {
             throw new ValidationException("El tipo de ticket es obligatorio");
         }
-        if (ticketDTO.getPropietario().getId_usuario() == null || ticketDTO.getPropietario().getId_usuario() <= 0) {
+        if (ticketDTO.getPropietario() == null || ticketDTO.getPropietario().getId_usuario() <= 0) {
             throw new ValidationException("El propietario es obligatorio");
         }
     }

@@ -44,7 +44,7 @@ public class TicketService {
 
         String emailAutenticado = SecurityContextHolder.getContext().getAuthentication().getName();
         Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailAutenticado).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado."));
-        if(!usuarioAutenticado.getId_usuario().equals(propietario.getId_usuario()) || !usuarioAutenticado.getRol().equals(Usuario.Rol.ADMIN)){
+        if(!usuarioAutenticado.getId_usuario().equals(propietario.getId_usuario()) && !usuarioAutenticado.getRol().equals(Usuario.Rol.ADMIN)){
             throw new ForbiddenException("No tienes permiso para acceder a esta información.");
         }
         List<Ticket> tickets = ticketRepository.findByPropietario(propietario);
@@ -60,12 +60,7 @@ public class TicketService {
         Usuario usuarioAutenticado = usuarioRepository.findByEmail(usuario.getEmail()).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado."));
 
         Ticket ticket = mapper.toTicket(ticketDTO);
-        if (ticketDTO.getPropietario() != null && ticketDTO.getPropietario().getId_usuario() != null) {
-            Usuario propietario = usuarioRepository.findById(ticketDTO.getPropietario().getId_usuario())
-                    .orElseThrow(() -> new ResourceNotFoundException("Propietario no encontrado."));
-            ticket.setPropietario(propietario);
-        }
-        //ticket.setPropietario(usuarioAutenticado);
+        ticket.setPropietario(usuarioAutenticado);
         return mapper.toTicketDTO(ticketRepository.save(ticket));
     }
 
@@ -133,7 +128,8 @@ public class TicketService {
         }
         Ticket ticket = ticketRepository.findById(idLong).orElseThrow(() -> new ResourceNotFoundException("Ticket no encontrado."));
         ticket.setTipoTicket(Ticket.TipoTicket.valueOf(ticketDTO.getTipoTicket()));
-        ticket.setPropietario(ticketDTO.getPropietario());
+        Usuario propietario = usuarioRepository.findById(ticketDTO.getPropietario().getId_usuario()).orElseThrow(() -> new ResourceNotFoundException("Propietario no encontrado."));
+        ticket.setPropietario(propietario);
         return mapper.toTicketDTO(ticketRepository.save(ticket));
     }
 

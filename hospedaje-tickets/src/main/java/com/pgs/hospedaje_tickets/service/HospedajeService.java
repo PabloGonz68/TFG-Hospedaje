@@ -79,6 +79,17 @@ public class HospedajeService {
         }
 
         Hospedaje hospedaje = hospedajeRepository.findById(idLong).orElseThrow(() -> new ResourceNotFoundException("Hospedaje no encontrado."));
+
+            Usuario anfitrion = hospedaje.getAnfitrion();
+            String emailAutenticado = SecurityContextHolder.getContext().getAuthentication().getName();
+            boolean esAnfitrion = anfitrion.getEmail().equals(emailAutenticado);
+            boolean esAdmin = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!hospedaje.isVisible() && !esAnfitrion && !esAdmin) {
+            throw new ForbiddenException("No tienes permiso para acceder a esta información.");
+        }
+
         return mapper.toHospedajeDTO(hospedaje);
     }
 
