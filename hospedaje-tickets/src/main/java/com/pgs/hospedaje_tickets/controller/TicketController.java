@@ -18,7 +18,7 @@ public class TicketController {
     public ResponseEntity<?> getAllUserTickets(@PathVariable String id) {
         return ResponseEntity.ok(ticketService.getTicketsByPropietario(id));
     }
-    @GetMapping("/all")
+    @GetMapping("/")
     public ResponseEntity<?> getAllTickets() {
         return ResponseEntity.ok(ticketService.getAllTickets());
     }
@@ -33,12 +33,12 @@ public class TicketController {
         return new ResponseEntity<>(ticketService.createTicket(ticketDTO), HttpStatus.CREATED);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateTicket(@PathVariable String id, @RequestBody TicketDTO ticketDTO) {
         return new ResponseEntity<>(ticketService.updateTicket(id, ticketDTO), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTicket(@PathVariable String id) {
         ticketService.deleteTicket(id);
         return new ResponseEntity<>("Ticket eliminado correctamente", HttpStatus.OK);

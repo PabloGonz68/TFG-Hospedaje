@@ -85,7 +85,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/ticket/{id}").authenticated()
 
                         //Funciones Admin Ticket
-                        .requestMatchers(HttpMethod.GET, "/ticket/all").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/ticket/").authenticated()
                         .requestMatchers(HttpMethod.GET, "/ticket/{id}/admin").authenticated()
                         .requestMatchers(HttpMethod.POST, "/ticket/create").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/ticket/{id}").authenticated()
