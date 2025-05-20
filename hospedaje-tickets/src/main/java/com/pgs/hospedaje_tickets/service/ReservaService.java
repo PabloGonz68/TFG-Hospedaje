@@ -108,18 +108,29 @@ public class ReservaService {
         reserva.setEstado_reserva(Reserva.EstadoReserva.PENDIENTE);
         reserva.setCosteTotalTickets((int) costeTotal);
         reserva = reservaRepository.save(reserva);
+
+        List<ReservaUsuario> reservasUsuarios = new ArrayList<>();
        // Relación usuario - reserva
         ReservaUsuario reservaUsuario = new ReservaUsuario();
         reservaUsuario.setReserva(reserva);
         reservaUsuario.setUsuario(usuarioAutenticado);
         reservaUsuario.setRol(ReservaUsuario.RolUsuario.ORGANIZADOR);
-        reservaUsuarioRepository.save(reservaUsuario);
+
+
+        reservasUsuarios.add(reservaUsuario);
+        reservaUsuarioRepository.saveAll(reservasUsuarios);
+        //reserva.setReservasUsuarios(reservasUsuarios);
+        reserva.getReservasUsuarios().clear();
+        reserva.getReservasUsuarios().addAll(reservasUsuarios);
+
         //Le damos los tickets al propietario
         recompensarPropietario(propietarioHospedaje, (int) costeTotal, tipoTicket);
 
-        int numPersonas = reservaUsuarioRepository.countByReserva(reserva);
+        int numPersonas = reservasUsuarios.size();
+        if (numPersonas>1) throw new BadRequestException("Hay más de un miembro, por lo que debes realizar una reserva grupal.");
         reserva.setNumPersonas(numPersonas);
 
+        reserva = reservaRepository.save(reserva);
         return mapper.toReservaDTO(reserva);
 
     }
@@ -147,6 +158,10 @@ public class ReservaService {
         Usuario usuarioAutenticado = usuarioRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(() -> new RuntimeException("El usuario no existe."));
         boolean isCreador = grupoViaje.getCreador().getId_usuario().equals(usuarioAutenticado.getId_usuario());
         boolean isAdmin = usuarioAutenticado.getRol().equals(Usuario.Rol.ADMIN);
+
+        System.out.println("Autenticado: " + usuarioAutenticado.getEmail());
+        System.out.println("Creador grupo: " + grupoViaje.getCreador().getEmail());
+
 
         if (!isCreador && !isAdmin) {
             throw new ForbiddenException("Solo el creador del grupo o un administrador puede realizar la reserva.");
@@ -236,12 +251,16 @@ public class ReservaService {
 
         }
         reservaUsuarioRepository.saveAll(reservasUsuarios);
+        reserva.getReservasUsuarios().clear();
+        reserva.getReservasUsuarios().addAll(reservasUsuarios);
+
         recompensarPropietario(propietarioHospedaje, costeTotal, tipoTicket);
 
-        int numPersonas = reservaUsuarioRepository.countByReserva(reserva);
+        //int numPersonas = reservaUsuarioRepository.countByReserva(reserva);
+        int numPersonas = reservasUsuarios.size();
         reserva.setNumPersonas(numPersonas);
 
-
+        reservaRepository.save(reserva);
         return mapper.toReservaDTO(reserva);
     }
 
