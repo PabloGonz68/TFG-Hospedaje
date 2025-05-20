@@ -311,8 +311,8 @@ public class ReservaService {
             throw new BadRequestException("El id de la reserva es incorrecto.");
         }
         Reserva reserva = reservaRepository.findById(idReservaLong).orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada"));
-        if (!usuarioAutenticado.getId_usuario().equals(reserva.getHospedaje().getAnfitrion().getId_usuario())) {
-            throw new BadRequestException("No tienes permiso para actualizar el estado de la reserva.");
+        if (!usuarioAutenticado.getId_usuario().equals(reserva.getHospedaje().getAnfitrion().getId_usuario()) && !usuarioAutenticado.getRol().equals(Usuario.Rol.ADMIN)) {
+            throw new ForbiddenException("No tienes permiso para actualizar el estado de la reserva.");
         }
 
         reserva.setEstado_reserva(nuevoEstado.getEstado());
