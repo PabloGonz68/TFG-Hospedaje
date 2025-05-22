@@ -3,8 +3,12 @@ package com.pgs.hospedaje_tickets.controller;
 import com.pgs.hospedaje_tickets.dto.User.*;
 import com.pgs.hospedaje_tickets.service.TokenService;
 import com.pgs.hospedaje_tickets.service.UsuarioService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,13 +35,25 @@ public class UsuarioController {
                     new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
             );
             String token = tokenService.generateToken(authentication);
+
+           /* //Crear cookie con el token dentro
+            ResponseCookie cookie = ResponseCookie.from("jwt", token)
+                    .httpOnly(true) // Usa true en producción
+                    .secure(false)   // Usa true si tienes HTTPS
+                    .path("/")
+                    .maxAge(24 * 60 * 60) //1 dia
+                    .sameSite("Lax")
+                    .build();
+
+            return ResponseEntity.ok()
+                    .header("Set-Cookie", cookie.toString())
+                    .body("Login exitoso.");*/
+//----------------------------------------------------------------------------------
             return ResponseEntity.ok(token);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas.");
         }
     }
-
-
     @PostMapping("/register")
     public ResponseEntity<?> register (@RequestBody UsuarioRegisterDTO user){
     usuarioService.register(user);

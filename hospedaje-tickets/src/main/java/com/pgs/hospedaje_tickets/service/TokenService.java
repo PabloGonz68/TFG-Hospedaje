@@ -27,8 +27,14 @@ import java.util.stream.Collectors;
 @Service
 public class TokenService {
 
+    private final JwtEncoder jwtEncoder;
+    private final JwtDecoder jwtDecoder;  // Asumo que también está declarado como bean en otro lado
+
     @Autowired
-    private JwtEncoder jwtEncoder;
+    public TokenService(JwtEncoder jwtEncoder, JwtDecoder jwtDecoder) {
+        this.jwtEncoder = jwtEncoder;
+        this.jwtDecoder = jwtDecoder;
+    }
 
     @Autowired
     private RsaKeyProperties rsaKeys;
@@ -48,6 +54,21 @@ public class TokenService {
                 .claim("roles", roles).build();
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
+
+  /*  public String getUsernameFromToken(String token) {
+        Jwt jwt = jwtDecoder.decode(token);
+        return jwt.getSubject(); // el email o username
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            jwtDecoder.decode(token);
+            return true;
+        } catch (JwtException e) {
+            return false;
+        }
+    }*/
+
 
 }
 
