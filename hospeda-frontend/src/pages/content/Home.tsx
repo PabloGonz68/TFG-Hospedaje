@@ -9,7 +9,7 @@ const Home = () => {
 
     return (
         <>
-            <div className="relative h-screen overflow-hidden">
+            <section id="hero" className="relative h-screen overflow-hidden">
                 {/* Imagen de fondo */}
                 <div
                     className="absolute inset-0 bg-fixed bg-center bg-cover z-0"
@@ -37,10 +37,10 @@ const Home = () => {
                         Empezar
                     </button>
                 </div>
-            </div>
+            </section>
 
             {/* Sección destino del scroll */}
-            <div ref={sectionRef} id="inicio" className="min-h-screen bg-white p-10">
+            <div ref={sectionRef} id="inicio" className="min-h-screen bg-white p-10 scroll-mt-20">
                 <h2 className="text-3xl font-bold mb-4 text-gray-800">¿Cómo funciona Hospeda?</h2>
                 <p className="text-gray-700 text-lg">
                     Aquí puedes explicar cómo funciona tu plataforma, mostrar un formulario de registro,
