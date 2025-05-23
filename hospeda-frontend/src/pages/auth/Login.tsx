@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
+import { motion } from "motion/react"
 
 function Login() {
     const [formData, SetFormData] = useState({
@@ -26,10 +27,21 @@ function Login() {
             const response = await axios.post("http://localhost:8080/usuario/login", formData, {
             });
 
+            const token = response.data.token;
+            const userId = response.data.id;
 
-            const token = response.data;
+            const userDataResponse = await axios.get(`http://localhost:8080/usuario/${userId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            const { nombre, apellidos, email, imgUrl } = userDataResponse.data;
+
             if (auth) {
-                auth.login(token);
+                auth.login(token, { nombre, apellidos, email, imgUrl });
             }
             alert("Login exitoso");
             console.log("Login exitoso", response.data);
@@ -50,35 +62,43 @@ function Login() {
                     <p className="text-red-500 font-bold">{error}</p>
                 </div>
             )}
-            <form className="flex flex-col max-w-md mx-auto shadow-md rounded px-8 pt-6 pb-8 mb-4 gap-4 border-2 border-gray-300" onSubmit={handleSubmit}>
-                <h2 className="text-xl font-bold mb-4">Login</h2>
-                <div className="flex flex-col gap-2">
-                    <input
-                        className="border-b-2 border-gray-300 mb-4"
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="Email"
-                        required
-                    />
-                    <input
-                        className="border-b-2 border-gray-300 mb-4"
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        placeholder="Contraseña"
-                        required
-                    />
-                </div>
+            <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+            >
 
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Iniciar sesión</button>
-                <div className="flex gap-2">
-                    <span>¿No tienes una cuenta?</span>
-                    <a className="text-blue-500 font-bold hover:underline hover:text-blue-700" href="/register">Registrate</a>
-                </div>
-            </form>
+
+                <form className="flex flex-col max-w-md mx-auto shadow-md rounded px-8 pt-6 pb-8 mb-4 gap-4 border-2 border-gray-300" onSubmit={handleSubmit}>
+                    <h2 className="text-xl font-bold mb-4">Login</h2>
+                    <div className="flex flex-col gap-2">
+                        <input
+                            className="border-b-2 border-gray-300 mb-4"
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="Email"
+                            required
+                        />
+                        <input
+                            className="border-b-2 border-gray-300 mb-4"
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="Contraseña"
+                            required
+                        />
+                    </div>
+
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Iniciar sesión</button>
+                    <div className="flex gap-2">
+                        <span>¿No tienes una cuenta?</span>
+                        <a className="text-blue-500 font-bold hover:underline hover:text-blue-700" href="/register">Registrate</a>
+                    </div>
+                </form>
+            </motion.div>
         </main>
     );
 }

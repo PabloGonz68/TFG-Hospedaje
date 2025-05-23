@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-const Home = () => {
+const Perfil = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
 
     const scrollToSection = () => {
@@ -25,7 +25,7 @@ const Home = () => {
                 {/* Contenido */}
                 <div className="relative z-20 flex flex-col items-center justify-center h-full text-center text-white px-4">
                     <h1 className="text-5xl md:text-6xl font-bold mb-4">
-                        Bienvenido a <span className="text-principal">Hospeda</span>
+                        Bienvenido a <span className="text-principal">Perfil</span>
                     </h1>
                     <p className="text-xl md:text-2xl max-w-2xl mb-6">
                         Tu plataforma para conseguir alojamiento casi gratis.
@@ -51,4 +51,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Perfil;

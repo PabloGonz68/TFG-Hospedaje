@@ -1,6 +1,7 @@
 package com.pgs.hospedaje_tickets.controller;
 
 import com.pgs.hospedaje_tickets.dto.User.*;
+import com.pgs.hospedaje_tickets.model.Usuario;
 import com.pgs.hospedaje_tickets.service.TokenService;
 import com.pgs.hospedaje_tickets.service.UsuarioService;
 import jakarta.servlet.http.Cookie;
@@ -35,6 +36,9 @@ public class UsuarioController {
                     new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
             );
             String token = tokenService.generateToken(authentication);
+            String correo = authentication.getName();
+
+            Usuario userLogged = usuarioService.getUserByEmail(correo);
 
            /* //Crear cookie con el token dentro
             ResponseCookie cookie = ResponseCookie.from("jwt", token)
@@ -49,7 +53,7 @@ public class UsuarioController {
                     .header("Set-Cookie", cookie.toString())
                     .body("Login exitoso.");*/
 //----------------------------------------------------------------------------------
-            return ResponseEntity.ok(token);
+            return ResponseEntity.ok(new AuthResponseDTO(token, userLogged.getId_usuario()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas.");
         }

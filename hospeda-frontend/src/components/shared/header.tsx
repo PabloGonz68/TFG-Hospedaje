@@ -53,7 +53,7 @@ const components: { title: string; href: string; description: string }[] = [
 ]
 
 export function NavigationMenuDemo() {
-  const { logout, isAuthenticated, loading } = useAuth() ?? {};
+  const { logout, isAuthenticated, loading, user } = useAuth() ?? {};
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -168,21 +168,26 @@ export function NavigationMenuDemo() {
 
 
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center">
           {isAuthenticated ? (
-            <>
-              <a href="/perfil" className="bg-white flex items-center justify-center p-3 border border-gray-400 w-[45px] h-[45px] rounded-4xl ">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-15 h-15" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
-                </svg>
+            <div className="flex justify-center items-center w-[120px] gap-2">
+              <a href="/perfil" className="bg-white flex items-center justify-center border border-gray-400 min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px] rounded-4xl overflow-hidden">
+                <img
+                  title="Perfil"
+                  src={user?.imgUrl
+                    ? user.imgUrl
+                    : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.nombre || 'Usuario')}&background=random`}
+                  alt="Avatar"
+                  className="w-full h-full object-cover rounded-full"
+                />
               </a>
               <button onClick={logout}>
                 <AuthBtn color="rgb(255, 65, 65)" icon="logout" text="Cerrar sesión" enlace="/login" />
               </button>
 
-            </>
+            </div>
           ) : (
-            <div className="flex justify-center items-center w-[120px]">
+            <div className="flex justify-center items-center w-[120px] gap-2">
               <AuthBtn color="rgb(2, 35, 65)" icon="login" text="Iniciar sesión" enlace="/login" />
               <AuthBtn color="rgb(55, 245, 65)" icon="register" text="Registrarse" enlace="/register" />
             </div>
