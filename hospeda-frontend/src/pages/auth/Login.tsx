@@ -29,6 +29,9 @@ function Login() {
 
             const token = response.data.token;
             const userId = response.data.id;
+            localStorage.setItem("token", token);
+            localStorage.setItem("userId", userId);
+
 
             const userDataResponse = await axios.get(`http://localhost:8080/usuario/${userId}`,
                 {
@@ -38,10 +41,10 @@ function Login() {
                 }
             );
 
-            const { nombre, apellidos, email, imgUrl } = userDataResponse.data;
+            const { nombre, apellidos, email, fotoPerfil } = userDataResponse.data;
 
             if (auth) {
-                auth.login(token, { nombre, apellidos, email, imgUrl });
+                auth.login(token, { nombre, apellidos, email, fotoPerfil });
             }
             alert("Login exitoso");
             console.log("Login exitoso", response.data);

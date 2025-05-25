@@ -31,6 +31,7 @@ public class Usuario {
     @Column(nullable = false, length = 255)
     private String password;
 
+    @Lob
     @Column(name = "foto_perfil")
     private String fotoPerfil;
 

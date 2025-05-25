@@ -1,52 +1,150 @@
-import { useRef } from "react";
+
+import { useEffect, useState } from "react";
 
 const Perfil = () => {
-    const sectionRef = useRef<HTMLDivElement>(null);
+    const [user, setUser] = useState({
+        nombre: "",
+        apellidos: "",
+        fotoPerfil: ""
+    });
 
-    const scrollToSection = () => {
-        sectionRef.current?.scrollIntoView({ behavior: "smooth" });
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const userId = localStorage.getItem("userId");
+            const token = localStorage.getItem("token");
+
+            if (!userId || !token) return;
+
+            try {
+                const response = await fetch(`http://localhost:8080/usuario/${userId}`, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const userData = await response.json();
+                    setUser({
+                        nombre: userData.nombre,
+                        apellidos: userData.apellidos,
+                        fotoPerfil: userData.fotoPerfil
+                    });
+
+                } else {
+                    console.error("Error al obtener los datos del usuario");
+                }
+            } catch (error) {
+                console.error("Error de red al obtener el usuario", error);
+            }
+        }
+
+        fetchUserData();
+    }, []);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setUser(prevUser => ({
+            ...prevUser,
+            [name]: value
+        }));
     };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (!file) return;
+
+        const reader = new FileReader();
+
+
+        reader.onload = () => {
+            const base64String = reader.result as string;
+            console.log(base64String);
+            setUser(prevUser => ({
+                ...prevUser,
+                fotoPerfil: base64String
+            }))
+        }
+        reader.readAsDataURL(file);
+    }
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const userId = localStorage.getItem("userId");
+        try {
+            const response = await fetch(`http://localhost:8080/usuario/${userId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                },
+                body: JSON.stringify(user)
+            });
+            if (response.ok) {
+                const text = await response.json();
+                alert("Perfil actualizado exitosamente " + text);
+            } else {
+                const errorText = await response.json();
+                console.error("Error del servidor:", errorText);
+                alert("Error al actualizar el perfil");
+            }
+
+        } catch (error) {
+            console.error(
+                "Error al actualizar el usuario:",
+            )
+            alert("Error al actualizar el usuario" + error);
+        }
+    }
 
     return (
         <>
-            <section id="hero" className="relative h-screen overflow-hidden">
-                {/* Imagen de fondo */}
-                <div
-                    className="absolute inset-0 bg-fixed bg-center bg-cover z-0"
-                    style={{
-                        backgroundImage:
-                            "url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80')",
-                    }}
-                ></div>
+            <main className="flex flex-col items-center justify-center h-screen py-4">
 
-                {/* Capa oscura */}
-                <div className="absolute inset-0 bg-black opacity-60 z-10"></div>
 
-                {/* Contenido */}
-                <div className="relative z-20 flex flex-col items-center justify-center h-full text-center text-white px-4">
-                    <h1 className="text-5xl md:text-6xl font-bold mb-4">
-                        Bienvenido a <span className="text-principal">Perfil</span>
-                    </h1>
-                    <p className="text-xl md:text-2xl max-w-2xl mb-6">
-                        Tu plataforma para conseguir alojamiento casi gratis.
-                    </p>
-                    <button
-                        onClick={scrollToSection}
-                        className="bg-secundario hover:bg-secundario-hover text-principal-foreground font-semibold py-3 px-6 rounded-2xl shadow-lg transition duration-300"
+                <form onSubmit={handleSubmit} className="border border-gray-300 p-4">
+                    <h2 className="text-2xl font-bold mb-4">Mi Perfil</h2>
+                    <div>
+                        <label htmlFor="name">Nombre</label>
+                        <input
+                            className="border border-gray-300"
+                            type="text"
+                            name="nombre"
+                            value={user.nombre}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="apellidos">Apellidos</label>
+                        <input
+                            className="border border-gray-300"
+                            type="text"
+                            name="apellidos"
+                            value={user.apellidos}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="fotoPerfil">URL de la imagen de perfil</label>
+                        <input
+                            className="border border-gray-300 p-2"
+                            type="file"
+                            name="fotoPerfil"
+                            onChange={handleFileChange}
+                        />
+                    </div>
+                    {user.fotoPerfil && (
+                        <img
+                            src={user.fotoPerfil}
+                            alt="Previsualización"
+                            className="w-32 h-32 rounded-full mt-2"
+                        />
+                    )}
+                    <button type="submit"
+                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
                     >
-                        Empezar
-                    </button>
-                </div>
-            </section>
-
-            {/* Sección destino del scroll */}
-            <div ref={sectionRef} id="inicio" className="min-h-screen bg-white p-10 scroll-mt-30">
-                <h2 className="text-3xl font-bold mb-4 text-gray-800">¿Cómo funciona Hospeda?</h2>
-                <p className="text-gray-700 text-lg">
-                    Aquí puedes explicar cómo funciona tu plataforma, mostrar un formulario de registro,
-                    ventajas del sistema de tickets, etc.
-                </p>
-            </div>
+                        Guardar cambios</button>
+                </form>
+            </main>
         </>
     );
 };

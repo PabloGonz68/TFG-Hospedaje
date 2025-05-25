@@ -84,7 +84,7 @@ public class UsuarioController {
 
     //Update para Admin
     @PutMapping("/admin/{id}")
-    public ResponseEntity<?> update(@PathVariable String id, @RequestBody UsuarioAdminDTO user) {
+    public ResponseEntity<?> updateAdmin(@PathVariable String id, @RequestBody UsuarioAdminDTO user) {
         UsuarioDTO updatedUser = usuarioService.updateAdmin(id, user);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
