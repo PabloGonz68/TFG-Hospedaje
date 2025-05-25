@@ -44,18 +44,24 @@ const Hospedajes = () => {
 
 
     return (
-        <div className="container mt-30 mx-auto p-4">
+        <div className="container mx-auto p-4">
             <h1 className="text-3xl font-bold mb-6 text-center">Hospedajes</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {
-                    hospedajes.length === 0 ? (
-                        <div className="h-screen w-full flex items-center justify-center">
-                            <h2 className="text-xl font-semibold">No hay hospedajes disponibles</h2>
-                        </div>
 
-                    ) :
-                        (
-                            hospedajes.map((h, index) => (
+            <div className="flex justify-center mb-4">
+                <button onClick={() => window.location.href = "/hospedajes/crear"} className="bg-principal text-white py-2 px-4 rounded-md hover:bg-principal-hover transition">Crea tu hospedaje</button>
+            </div>
+
+
+            {
+                hospedajes.length === 0 ? (
+                    <div className="h-64 w-full flex items-center justify-center">
+                        <h2 className="text-xl font-semibold">No hay hospedajes disponibles todavia...</h2>
+                    </div>
+
+                ) :
+                    (
+                        hospedajes.map((h, index) => (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 <div
                                     key={index}
                                     className="bg-white shadow-md rounded-2xl p-5 hover:shadow-lg transition"
@@ -75,11 +81,12 @@ const Hospedajes = () => {
                                         Ver en mapa
                                     </a>
                                 </div>
-                            )
+                            </div>
+                        )
 
-                            ))}
-            </div>
+                        ))}
         </div>
+
     )
 }
 

@@ -113,7 +113,7 @@ export function NavigationMenuDemo() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>¿Como empiezo?</NavigationMenuTrigger>
+              <NavigationMenuTrigger>¿Como funciona?</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                   <li className="row-span-3">
@@ -122,25 +122,25 @@ export function NavigationMenuDemo() {
                         className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                         href="/"
                       >
+                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="" />
 
                         <div className="mb-2 mt-4 text-lg font-medium">
-                          shadcn/ui
+                          ¿Como empezar?
                         </div>
                         <p className="text-sm leading-tight text-muted-foreground">
-                          Beautifully designed components built with Radix UI and
-                          Tailwind CSS.
+                          Hospeda y obten hospedaje a cambio.
                         </p>
                       </a>
                     </NavigationMenuLink>
                   </li>
-                  <ListItem href="/docs" title="Introduction">
-                    Re-usable components built using Radix UI and Tailwind CSS.
+                  <ListItem href="/hospedajes" title="Hospedajes">
+                    Descubre nuevos lugares para hospedarte.
                   </ListItem>
-                  <ListItem href="/docs/installation" title="Installation">
-                    How to install dependencies and structure your app.
+                  <ListItem href="/grupos" title="Grupos de Viajes">
+                    Crea o gestiona el grupo con el que deseas viajar.
                   </ListItem>
-                  <ListItem href="/docs/primitives/typography" title="Typography">
-                    Styles for headings, paragraphs, lists...etc
+                  <ListItem href="/reservas" title="Reservas">
+                    Gestiona las reservas de tus viajes.
                   </ListItem>
                 </ul>
               </NavigationMenuContent>
