@@ -69,6 +69,8 @@ const Hospedajes = () => {
                 ) :
                     (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+
                             {hospedajes.map((h) => (
                                 <Link key={h.id} to={`/hospedaje/${h.id}`}>
                                     <div className="bg-white shadow-md rounded-2xl p-5 hover:shadow-lg transition">

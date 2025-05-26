@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import Map from "../../../components/shared/map";
 
 interface Hospedaje {
     nombre: string;
@@ -73,6 +74,7 @@ const VerHospedaje = () => {
             <p className="text-gray-700"><span className="font-medium">Capacidad:</span> {hospedaje.capacidad} personas</p>
             <p className="text-gray-700"><span className="font-medium">Zona:</span> {hospedaje.tipoZona}</p>
             <p className="text-gray-700 mt-4">{hospedaje.descripcion}</p>
+            <Map direccion={hospedaje.ubicacion} />
             <a
                 href={hospedaje.ubicacion}
                 target="_blank"

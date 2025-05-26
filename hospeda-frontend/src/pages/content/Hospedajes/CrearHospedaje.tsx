@@ -1,8 +1,36 @@
 import { useState } from "react";
+import { useRef, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 
+declare global {
+    interface Window {
+        google: any;
+    }
+}
+
+
 const CrearHospedaje = () => {
+    const ubicacionRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+        if (!window.google || !ubicacionRef.current) return;
+
+        const autocomplete = new window.google.maps.places.Autocomplete(ubicacionRef.current, {
+            types: ["geocode"],
+        });
+
+        autocomplete.addListener("place_changed", () => {
+            const place = autocomplete.getPlace();
+            if (place.formatted_address) {
+                setFormData((prev) => ({
+                    ...prev,
+                    ubicacion: place.formatted_address,
+                }));
+            }
+        });
+    }, []);
+
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
 
@@ -145,12 +173,14 @@ const CrearHospedaje = () => {
                 <input
                     type="text"
                     name="ubicacion"
-                    placeholder="Ubicación (link de Google Maps)"
+                    placeholder="Ubicación (busca y selecciona)"
                     value={formData.ubicacion}
+                    ref={ubicacionRef}
                     onChange={handleChange}
                     required
                     className="w-full p-2 border border-gray-300 rounded"
                 />
+
 
                 <input
                     type="checkbox"
