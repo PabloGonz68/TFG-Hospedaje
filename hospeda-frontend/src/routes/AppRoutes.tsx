@@ -7,6 +7,7 @@ import TopLayout from "@/layouts/TopLayout";
 import Perfil from "@/pages/content/Perfil";
 import Hospedajes from "@/pages/content/Hospedajes/Hospedajes";
 import CrearHospedaje from "@/pages/content/Hospedajes/CrearHospedaje";
+import VerHospedaje from "@/pages/content/Hospedajes/VerHospedaje";
 
 function AppRoutes() {
     return (
@@ -18,6 +19,8 @@ function AppRoutes() {
                 <Route path="/perfil" element={<MainLayout><Perfil /></MainLayout>} />
                 <Route path="/hospedajes" element={<TopLayout><Hospedajes /></TopLayout>}></Route>
                 <Route path="/hospedajes/crear" element={<TopLayout><CrearHospedaje /></TopLayout>}></Route>
+                <Route path="/hospedaje/:id" element={<TopLayout><VerHospedaje /></TopLayout>} />
+
                 <Route path="*" element={<h1>404</h1>} />
 
             </Routes>
