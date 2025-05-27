@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Map from "../../../components/shared/map";
+import ReservaModal from "@/components/modals/reservaModal";
 
 interface Hospedaje {
     nombre: string;
@@ -67,22 +68,19 @@ const VerHospedaje = () => {
     }
 
     return (
-        <div className="max-w-3xl mx-auto p-6 bg-white shadow rounded-2xl mt-6">
+        <div className="felx flex-col max-w-3xl mx-auto p-6 bg-white shadow rounded-2xl mt-6">
             <h1 className="text-3xl font-bold mb-4">{hospedaje.nombre}</h1>
             <p className="text-gray-700"><span className="font-medium">Dirección:</span> {hospedaje.direccion}, {hospedaje.codigoPostal}</p>
             <p className="text-gray-700"><span className="font-medium">Ciudad:</span> {hospedaje.ciudad}, {hospedaje.pais}</p>
             <p className="text-gray-700"><span className="font-medium">Capacidad:</span> {hospedaje.capacidad} personas</p>
             <p className="text-gray-700"><span className="font-medium">Zona:</span> {hospedaje.tipoZona}</p>
             <p className="text-gray-700 mt-4">{hospedaje.descripcion}</p>
+
             <Map direccion={hospedaje.ubicacion} />
-            <a
-                href={hospedaje.ubicacion}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block mt-4 text-blue-600 hover:underline"
-            >
-                Ver en Google Maps
-            </a>
+            {id && <ReservaModal hospedajeId={id} />}
+
+
+
         </div>
     );
 };

@@ -8,6 +8,8 @@ import Perfil from "@/pages/content/Perfil";
 import Hospedajes from "@/pages/content/Hospedajes/Hospedajes";
 import CrearHospedaje from "@/pages/content/Hospedajes/CrearHospedaje";
 import VerHospedaje from "@/pages/content/Hospedajes/VerHospedaje";
+import ReservaIndividualForm from "@/pages/content/Reserva/ReservaIndividualForm";
+import VerReservas from "@/pages/content/Reserva/VerReservas";
 
 function AppRoutes() {
     return (
@@ -20,6 +22,8 @@ function AppRoutes() {
                 <Route path="/hospedajes" element={<TopLayout><Hospedajes /></TopLayout>}></Route>
                 <Route path="/hospedajes/crear" element={<TopLayout><CrearHospedaje /></TopLayout>}></Route>
                 <Route path="/hospedaje/:id" element={<TopLayout><VerHospedaje /></TopLayout>} />
+                <Route path="/reserva/individual/:id" element={<TopLayout><ReservaIndividualForm /></TopLayout>} />
+                <Route path="/reserva/mis-reservas" element={<TopLayout><VerReservas /></TopLayout>} />
 
                 <Route path="*" element={<h1>404</h1>} />
 
