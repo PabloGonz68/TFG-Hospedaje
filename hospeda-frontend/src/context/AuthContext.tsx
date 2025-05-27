@@ -2,6 +2,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 type User = {
+    id_usuario: number;
     nombre: string;
     apellidos: string;
     email: string;

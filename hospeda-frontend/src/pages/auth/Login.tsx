@@ -40,11 +40,12 @@ function Login() {
                     }
                 }
             );
+            console.log("Datos usuario obtenidos:", userDataResponse.data);
 
-            const { nombre, apellidos, email, fotoPerfil } = userDataResponse.data;
+            const { id_usuario, nombre, apellidos, email, fotoPerfil } = userDataResponse.data;
 
             if (auth) {
-                auth.login(token, { nombre, apellidos, email, fotoPerfil });
+                auth.login(token, { id_usuario, nombre, apellidos, email, fotoPerfil });
             }
             alert("Login exitoso");
             console.log("Login exitoso", response.data);

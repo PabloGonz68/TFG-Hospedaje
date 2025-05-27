@@ -14,7 +14,7 @@ public class TicketController {
     @Autowired
     private TicketService ticketService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<?> getAllUserTickets(@PathVariable String id) {
         return ResponseEntity.ok(ticketService.getTicketsByPropietario(id));
     }

@@ -138,6 +138,7 @@ public class Mapper {
 
     public ReservaDTO toReservaDTO(Reserva reserva) {
         ReservaDTO reservaDTO = new ReservaDTO();
+        reservaDTO.setId_reserva(reserva.getId_reserva());
         reservaDTO.setId_hospedaje(reserva.getHospedaje().getId_hospedaje());
         reservaDTO.setFecha_inicio(reserva.getFecha_inicio());
         reservaDTO.setFecha_fin(reserva.getFecha_fin());

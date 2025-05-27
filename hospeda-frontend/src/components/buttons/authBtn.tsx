@@ -4,7 +4,7 @@ import React from 'react';
 
 interface AuthBtnProps {
   color: string;
-  icon: 'logout' | 'login' | 'register';
+  icon: 'logout' | 'login' | 'register' | 'ticket';
   text: string;
   enlace: string;
 }
@@ -31,7 +31,33 @@ const AuthBtn: React.FC<AuthBtnProps> = ({ color, icon, text, enlace }) => {
               <svg fill="#000000" width="900px" height="900px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2,21h8a1,1,0,0,0,0-2H3.071A7.011,7.011,0,0,1,10,13a5.044,5.044,0,1,0-3.377-1.337A9.01,9.01,0,0,0,1,20,1,1,0,0,0,2,21ZM10,5A3,3,0,1,1,7,8,3,3,0,0,1,10,5ZM23,16a1,1,0,0,1-1,1H19v3a1,1,0,0,1-2,0V17H14a1,1,0,0,1,0-2h3V12a1,1,0,0,1,2,0v3h3A1,1,0,0,1,23,16Z" /></svg>
 
             )}
-            {/* podrías añadir más íconos según el valor de `icon` */}
+            {icon === 'ticket' && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1000px"
+                height="1000px"
+                viewBox="0 0 64 64"
+                fill="none"
+              >
+                <path
+                  d="M58 12H6c-.55 0-1 .45-1 1v8a5 5 0 010 10v8a5 5 0 010 10v2c0 .55.45 1 1 1h52c.55 0 1-.45 1-1V41a5 5 0 010-10v-8a5 5 0 010-10v-1c0-.55-.45-1-1-1z"
+                  fill="#FFD93B"
+                  stroke="#3D3D3D"
+                  strokeWidth="2"
+                />
+                <path
+                  d="M20 20h24v4H20zM20 28h24v4H20zM20 36h24v4H20z"
+                  fill="#F4C534"
+                />
+                <path
+                  d="M20 20h24v4H20zM20 28h24v4H20zM20 36h24v4H20z"
+                  stroke="#3D3D3D"
+                  strokeWidth="1.5"
+                />
+              </svg>
+
+            )}
+
           </div>
           <div className="text">{text}</div>
         </div>

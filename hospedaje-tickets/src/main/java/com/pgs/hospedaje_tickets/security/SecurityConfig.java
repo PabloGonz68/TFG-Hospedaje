@@ -116,7 +116,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/hospedaje/admin").authenticated()
 
                         //Funciones Ticket
-                        .requestMatchers(HttpMethod.GET, "/ticket/{id}").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/ticket/user/{id}").authenticated()
 
                         //Funciones Admin Ticket
                         .requestMatchers(HttpMethod.GET, "/ticket/").authenticated()

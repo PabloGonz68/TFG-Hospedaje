@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class ReservaDTO {
+    private Long id_reserva;
     private Long id_hospedaje;
     private LocalDate fecha_inicio;
     private LocalDate fecha_fin;

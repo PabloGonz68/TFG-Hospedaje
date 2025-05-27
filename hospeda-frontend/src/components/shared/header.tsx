@@ -12,6 +12,7 @@ import {
 import AuthBtn from "../buttons/authBtn";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
+import { TicketModal } from "../modals/ticketsModal";
 
 
 const components: { title: string; href: string; description: string }[] = [
@@ -55,7 +56,7 @@ const components: { title: string; href: string; description: string }[] = [
 export function NavigationMenuDemo() {
   const { logout, isAuthenticated, loading, user } = useAuth() ?? {};
   const [scrolled, setScrolled] = useState(false);
-
+  //Esto sirve para saber si el usuario ha llegado a la mitad de la pantalla, cambiar el tipo de header
   useEffect(() => {
     const handleScroll = () => {
       const hero = document.getElementById("hero");
@@ -72,6 +73,41 @@ export function NavigationMenuDemo() {
     }
 
   }, []);
+
+  const [ticketsCiudad, setTicketsCiudad] = useState(0);
+  const [ticketsPueblo, setTicketsPueblo] = useState(0);
+  console.log("User en el componente NavigationMenuDemo:", user);
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        console.log("Intentando obtener tickets para user ID:", user?.id_usuario);
+
+        const response = await fetch(`http://localhost:8080/ticket/user/${user?.id_usuario}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }); if (response.ok) {
+          const data = await response.json();
+          setTicketsCiudad(data.ticketsCiudad || 0);
+          setTicketsPueblo(data.ticketsPueblo || 0);
+        } else {
+          console.error("Error al obtener los tickets");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (user?.id_usuario) {
+      fetchTickets();
+    }
+  }, [user?.id_usuario]);
+
+
 
   if (loading) return (
 
@@ -171,6 +207,9 @@ export function NavigationMenuDemo() {
                   className="w-full h-full object-cover rounded-full"
                 />
               </a>
+              <TicketModal ticketsCiudad={ticketsCiudad} ticketsPueblo={ticketsPueblo} />
+
+
               <button onClick={logout}>
                 <AuthBtn color="rgb(255, 65, 65)" icon="logout" text="Cerrar sesión" enlace="/login" />
               </button>

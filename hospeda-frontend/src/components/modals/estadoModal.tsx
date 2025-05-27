@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -8,41 +9,63 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { EstadoCombo } from "@/components/combobox/estadoCombo"
 
-export function EstadoModal() {
+export function EstadoModal({ reservaID }: { reservaID: number }) {
+
+    const handleGuardarCambios = async () => {
+        const token = localStorage.getItem("token");
+        try {
+            const response = await fetch(`http://localhost:8080/reservas/estado/${reservaID}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ estado: estadoSeleccionado })
+            })
+
+            if (!response.ok) {
+                throw new Error("Error al actualizar el estado");
+            }
+            alert("Estado actualizado exitosamente");
+            window.location.reload();
+
+        } catch (error) {
+            console.log(error);
+            alert("Error al actualizar el estado");
+        }
+        setOpen(false);
+    }
+
+    const [estadoSeleccionado, setEstadoSeleccionado] = useState("PENDIENTE");
+    const [open, setOpen] = useState(false)
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline">Edit Profile</Button>
+                <Button variant="outline">Cambiar Estado</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Edit profile</DialogTitle>
+                    <DialogTitle>Cambiar Estado</DialogTitle>
                     <DialogDescription>
-                        Make changes to your profile here. Click save when you're done.
+                        Cambie el estado de la reserva aquí. Haga clic en guardar cuando termine.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="name" className="text-right">
-                            Name
-                        </Label>
-                        <Input id="name" value="Pedro Duarte" className="col-span-3" />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="username" className="text-right">
-                            Username
-                        </Label>
-                        <Input id="username" value="@peduarte" className="col-span-3" />
 
-                        <EstadoCombo />
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="estado" className="text-right">
+                            Estado
+                        </Label>
+
+
+                        <EstadoCombo onChange={(value: string) => setEstadoSeleccionado(value)} />
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button type="submit">Save changes</Button>
+                    <Button type="submit" onClick={handleGuardarCambios}>Guardar cambios</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
