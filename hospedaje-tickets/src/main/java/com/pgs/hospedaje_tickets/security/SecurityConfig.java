@@ -128,12 +128,13 @@ public class SecurityConfig {
 
                         //Funciones GrupoViaje
                         .requestMatchers(HttpMethod.POST, "/grupo-viaje/create").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/grupo-viaje/mis-grupos").authenticated()
                         .requestMatchers(HttpMethod.GET, "/grupo-viaje/{id}").access(getGrupoViajeIdManager())
-                        .requestMatchers(HttpMethod.GET, "/grupo-viaje/miembro/{email}").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/grupo-viaje/{id}").access(getGrupoViajeIdManager())
                         .requestMatchers(HttpMethod.DELETE, "/grupo-viaje/{id}").access(getGrupoViajeIdManager())
 
                         //Funciones Admin GrupoViaje
+                        .requestMatchers(HttpMethod.GET, "/grupo-viaje/miembro/{email}").authenticated()
                         .requestMatchers(HttpMethod.GET, "/grupo-viaje/admin").authenticated()
 
                         //Funciones Reserva
@@ -158,7 +159,6 @@ public class SecurityConfig {
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(oauth->oauth.jwt(Customizer.withDefaults()))
                 .httpBasic(Customizer.withDefaults())
-                //.addFilterBefore(jwtCookieFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

@@ -69,7 +69,6 @@ const CrearGrupoViaje = () => {
     const handleCrearGrupo = async () => {
         try {
             const token = localStorage.getItem("token");
-            console.log(token);
             const body = {
                 cantidadTicketsCreador,
                 miembros: miembros.map((miembro) => ({
@@ -78,7 +77,6 @@ const CrearGrupoViaje = () => {
                 }))
 
             };
-            console.log(body);
             const response = await fetch("http://localhost:8080/grupo-viaje/create", {
                 method: "POST",
                 headers: {
@@ -90,7 +88,7 @@ const CrearGrupoViaje = () => {
 
             if (response.ok) {
                 alert("Grupo creado correctamente");
-                navigate("/");
+                navigate("/grupoViaje/mis-grupos");
             } else {
                 const errorText = await response.text();
                 alert(`Error al crear el grupo: ${errorText}`);

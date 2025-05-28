@@ -35,6 +35,11 @@ public class GrupoViajeController {
         return new ResponseEntity<>(grupoViajeService.getGruposViajeByMiembro(email), HttpStatus.OK);
     }
 
+    @GetMapping("/mis-grupos")
+    public ResponseEntity<?> getMisGruposViaje() {
+        return new ResponseEntity<>(grupoViajeService.getMisGruposViaje(), HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateGrupoViaje(@PathVariable String id, @RequestBody CrearGrupoViajeDTO dto) {
         return new ResponseEntity<>(grupoViajeService.updateGrupoViaje(id, dto), HttpStatus.OK);

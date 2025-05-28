@@ -168,7 +168,7 @@ export function NavigationMenuDemo() {
                   <ListItem href="/hospedajes" title="Hospedajes">
                     Descubre nuevos lugares para hospedarte.
                   </ListItem>
-                  <ListItem href="/grupos" title="Grupos de Viajes">
+                  <ListItem href="/grupoViaje/mis-grupos" title="Grupos de Viajes">
                     Crea o gestiona el grupo con el que deseas viajar.
                   </ListItem>
                   <ListItem href="/reserva/mis-reservas" title="Reservas">
@@ -178,7 +178,7 @@ export function NavigationMenuDemo() {
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>Components</NavigationMenuTrigger>
+              <NavigationMenuTrigger>Información</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                   {components.map((component) => (
@@ -195,7 +195,7 @@ export function NavigationMenuDemo() {
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink href="https://github.com/PabloGonz68/TFG-Hospedaje" target="_blank" className={navigationMenuTriggerStyle()}>
-                Documentation
+                Documentación
               </NavigationMenuLink>          </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>

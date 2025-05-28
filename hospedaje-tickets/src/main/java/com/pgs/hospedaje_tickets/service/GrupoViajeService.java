@@ -117,6 +117,21 @@ public class GrupoViajeService {
         return grupos.stream().map(mapper::toGrupoViajeDTO).collect(Collectors.toList());
     }
 
+    public List<GrupoViajeDTO> getMisGruposViaje() {
+        String emailAutenticado = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println("Email autenticado: " + emailAutenticado);
+        Usuario usuario = usuarioRepository.findByEmail(emailAutenticado).orElseThrow(() -> new ResourceNotFoundException("El usuario no existe."));
+        System.out.println("Usuario ID: " + usuario.getId_usuario());
+        List<MiembroGrupo> miembros = miembroGrupoRepository.findByUsuario(usuario);
+        System.out.println("MiembroGrupos encontrados: " + miembros.size());
+
+        List<GrupoViaje> grupos = miembroGrupoRepository.findByUsuario(usuario).stream().map(MiembroGrupo::getGrupoViaje).collect(Collectors.toList());
+        if (grupos.isEmpty()) {
+            throw new ResourceNotFoundException("No se encontraron grupos de viaje.");
+        }
+        return grupos.stream().map(mapper::toGrupoViajeDTO).collect(Collectors.toList());
+    }
+
     //Para Admin
     public List<GrupoViajeDTO> getGruposViaje() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
