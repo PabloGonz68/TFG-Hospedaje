@@ -42,10 +42,17 @@ function Login() {
             );
             console.log("Datos usuario obtenidos:", userDataResponse.data);
 
-            const { id_usuario, nombre, apellidos, email, fotoPerfil } = userDataResponse.data;
+            const backendUser = userDataResponse.data;
+
+            const id = userId;
+            const nombre = backendUser.nombre;
+            const apellidos = backendUser.apellidos;
+            const email = backendUser.email;
+            const fotoPerfil = backendUser.fotoPerfil;
 
             if (auth) {
-                auth.login(token, { id_usuario, nombre, apellidos, email, fotoPerfil });
+                auth.login(token, { id_usuario: id, nombre, apellidos, email, fotoPerfil });
+                console.log("Usuario guardado en localStorage:", localStorage.getItem("user"));
             }
             alert("Login exitoso");
             console.log("Login exitoso", response.data);

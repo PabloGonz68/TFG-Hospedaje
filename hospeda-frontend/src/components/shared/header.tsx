@@ -92,8 +92,14 @@ export function NavigationMenuDemo() {
           },
         }); if (response.ok) {
           const data = await response.json();
-          setTicketsCiudad(data.ticketsCiudad || 0);
-          setTicketsPueblo(data.ticketsPueblo || 0);
+
+          const ciudad = data.filter((ticket: any) => ticket.tipoTicket === "CIUDAD").length;
+          const pueblo = data.filter((ticket: any) => ticket.tipoTicket === "PUEBLO").length;
+
+          console.log("Tickets obtenidos:", data);
+          setTicketsCiudad(ciudad || 0);
+          setTicketsPueblo(pueblo || 0);
+          console.log("Tickets CIUDAD:", ciudad, "Tickets PUEBLO:", pueblo);
         } else {
           console.error("Error al obtener los tickets");
         }
@@ -104,6 +110,8 @@ export function NavigationMenuDemo() {
 
     if (user?.id_usuario) {
       fetchTickets();
+    } else {
+      console.log("No se ha obtenido aún el ID del usuario");
     }
   }, [user?.id_usuario]);
 
@@ -197,6 +205,7 @@ export function NavigationMenuDemo() {
         <div className="flex items-center">
           {isAuthenticated ? (
             <div className="flex justify-center items-center w-[120px] gap-2">
+              <TicketModal ticketsCiudad={ticketsCiudad} ticketsPueblo={ticketsPueblo} />
               <a href="/perfil" className="bg-white flex items-center justify-center border border-gray-400 min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px] rounded-4xl overflow-hidden">
                 <img
                   title="Perfil"
@@ -207,7 +216,7 @@ export function NavigationMenuDemo() {
                   className="w-full h-full object-cover rounded-full"
                 />
               </a>
-              <TicketModal ticketsCiudad={ticketsCiudad} ticketsPueblo={ticketsPueblo} />
+
 
 
               <button onClick={logout}>

@@ -1,7 +1,11 @@
-
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 
+
 const Perfil = () => {
+    const navigate = useNavigate();
+    const { logout } = useAuth() ?? {};
     const [user, setUser] = useState({
         nombre: "",
         apellidos: "",
@@ -96,6 +100,37 @@ const Perfil = () => {
         }
     }
 
+    const handleDelete = async () => {
+        const confirmDelete = confirm("¿Estás seguro de que deseas eliminar tu cuenta?");
+        if (!confirmDelete) return;
+        const userId = localStorage.getItem("userId");
+        try {
+            const response = await fetch(`http://localhost:8080/usuario/${userId}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+            if (response.ok) {
+                const text = await response.text();
+                alert(text);
+                logout?.();
+                navigate("/");
+
+            } else {
+                const errorText = await response.json();
+                console.error("Error del servidor:", errorText);
+                alert("Error al eliminar el usuario");
+            }
+        } catch (error) {
+            console.error(
+                "Error al eliminar el usuario:",
+            )
+            alert("Error al eliminar el usuario" + error);
+        }
+    }
+
     return (
         <>
             <main className="flex flex-col items-center justify-center h-screen py-4">
@@ -143,6 +178,8 @@ const Perfil = () => {
                         className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
                     >
                         Guardar cambios</button>
+
+                    <button className="mt-4 px-4 py-2 bg-red-500 text-white rounded" onClick={handleDelete} type="button">Eliminar cuenta</button>
                 </form>
             </main>
         </>
