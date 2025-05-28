@@ -22,6 +22,7 @@ public class Mapper {
 
     public UsuarioDTO toUsuarioDTO(Usuario usuario) {
         UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId_usuario(usuario.getId_usuario());
         usuarioDTO.setNombre(usuario.getNombre());
         usuarioDTO.setApellidos(usuario.getApellidos());
         usuarioDTO.setEmail(usuario.getEmail());

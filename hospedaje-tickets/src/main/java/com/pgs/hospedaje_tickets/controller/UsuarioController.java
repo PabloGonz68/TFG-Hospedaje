@@ -70,6 +70,12 @@ public class UsuarioController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
+        UsuarioDTO user = usuarioService.getUserDTOByEmail(email);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
     @GetMapping("/admin")
     public ResponseEntity<?> getAllUsers() {
         return new ResponseEntity<>(usuarioService.getAllUsers(), HttpStatus.OK);

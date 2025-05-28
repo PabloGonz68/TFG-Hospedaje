@@ -40,7 +40,7 @@ const ReservaModal: React.FC<ReservaModalProps> = ({ hospedajeId }) => {
                         Individual
                     </button>
                     <button
-                        onClick={() => navigate(`/reserva/grupo/${hospedajeId}`)}
+                        onClick={() => navigate(`/grupoViaje/${hospedajeId}`)}
                         className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition"
                     >
                         En grupo

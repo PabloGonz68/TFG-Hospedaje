@@ -100,6 +100,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/usuario/changePassword/{id}").access(getUserIdManager())
                         //Puedes ver la informacion de cualquier perfil de otro usuario
                         .requestMatchers(HttpMethod.GET, "/usuario/{id}").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/usuario/email/{email}").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/usuario/{id}").access(getUserIdManager())
                         //Funciones Admin Usuario
                         .requestMatchers(HttpMethod.PUT, "/usuario/admin/{id}").authenticated()//admin update
@@ -126,7 +127,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/ticket/{id}").authenticated()
 
                         //Funciones GrupoViaje
-                        .requestMatchers(HttpMethod.POST, "/grupo-viaje/create").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/grupo-viaje/create").permitAll()
                         .requestMatchers(HttpMethod.GET, "/grupo-viaje/{id}").access(getGrupoViajeIdManager())
                         .requestMatchers(HttpMethod.GET, "/grupo-viaje/miembro/{email}").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/grupo-viaje/{id}").access(getGrupoViajeIdManager())

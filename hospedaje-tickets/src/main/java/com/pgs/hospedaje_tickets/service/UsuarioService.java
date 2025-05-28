@@ -111,6 +111,17 @@ public class UsuarioService implements UserDetailsService {
         return user;
     }
 
+    public UsuarioDTO getUserDTOByEmail(String email) {
+        Usuario user = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado."));
+
+        if (user == null) {
+            throw new ResourceNotFoundException("Usuario no encontrado.");
+        }
+        UsuarioDTO userDTO = mapper.toUsuarioDTO(user);
+        return userDTO;
+    }
+
     public List<UsuarioDTO> getAllUsers() {
         List<Usuario> usuarios = usuarioRepository.findAll();
         if (usuarios.isEmpty()) {
