@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { GrupoUpdateModal } from "@/components/modals/grupoUpdateModal";
 
 type MiembroDTO = {
     id: number;
@@ -19,25 +20,26 @@ const VerGruposViaje = () => {
     const token = localStorage.getItem("token");
     const [gruposViaje, setGruposViaje] = useState<GrupoViajeDTO[]>([]);
 
-    useEffect(() => {
-        const fetchGruposViaje = async () => {
-            if (!token) return;
-            try {
-                const response = await fetch("http://localhost:8080/grupo-viaje/mis-grupos", {
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    }
-                });
-                if (!response.ok) {
-                    throw new Error("Error al obtener los grupos de viaje");
+    const fetchGruposViaje = async () => {
+        if (!token) return;
+        try {
+            const response = await fetch("http://localhost:8080/grupo-viaje/mis-grupos", {
+                headers: {
+                    "Authorization": `Bearer ${token}`
                 }
-                const data = await response.json();
-                console.log("Datos recibidos: " + JSON.stringify(data, null, 2));
-                setGruposViaje(data);
-            } catch (err: any) {
-                console.error(err.message);
+            });
+            if (!response.ok) {
+                throw new Error("Error al obtener los grupos de viaje");
             }
-        };
+            const data = await response.json();
+            console.log("Datos recibidos: " + JSON.stringify(data, null, 2));
+            setGruposViaje(data);
+        } catch (err: any) {
+            console.error(err.message);
+        }
+    };
+
+    useEffect(() => {
         fetchGruposViaje();
     }, [token]);
 
@@ -51,22 +53,29 @@ const VerGruposViaje = () => {
             ) : (
                 <ul className="space-y-4">
                     {gruposViaje.map((grupo) => (
-                        <li key={grupo.id} className="border p-4 rounded shadow bg-white">
-                            <h2 className="text-lg font-semibold">Grupo ID: {grupo.id}</h2>
-                            <p><strong>Creado por usuario:</strong> {grupo.idCreador}</p>
+                        <li key={grupo.id} className="flex items-start justify-between  border p-4 rounded shadow bg-white">
+                            <div>
+                                <h2 className="text-lg font-semibold">Grupo ID: {grupo.id}</h2>
+                                <p><strong>Creado por usuario:</strong> {grupo.idCreador}</p>
 
-                            <h3 className="mt-2 font-semibold">Miembros:</h3>
-                            <ul className="ml-4 list-disc">
-                                {grupo.miembros.length > 0 ? (
-                                    grupo.miembros.map((miembro) => (
-                                        <li key={miembro.id}>
-                                            Usuario ID: {miembro.idUsuario} — Tickets: {miembro.ticketsAportados}
-                                        </li>
-                                    ))
-                                ) : (
-                                    <li>No hay miembros.</li>
-                                )}
-                            </ul>
+                                <h3 className="mt-2 font-semibold">Miembros:</h3>
+                                <ul className="ml-4 list-disc">
+                                    {grupo.miembros.length > 0 ? (
+                                        grupo.miembros.map((miembro) => (
+                                            <li key={miembro.id}>
+                                                Usuario ID: {miembro.idUsuario} — Tickets: {miembro.ticketsAportados}🎫
+                                            </li>
+                                        ))
+                                    ) : (
+                                        <li>No hay miembros.</li>
+                                    )}
+                                </ul>
+                            </div>
+                            <div>
+                                <GrupoUpdateModal grupo={grupo} onUpdated={() => fetchGruposViaje()} />
+
+                            </div>
+
                         </li>
                     ))}
                 </ul>

@@ -11,6 +11,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { TicketIcon } from "lucide-react"
+import { useState } from "react"
 
 interface TicketDialogProps {
     ticketsCiudad: number
@@ -18,8 +19,13 @@ interface TicketDialogProps {
 }
 
 export function TicketModal({ ticketsCiudad, ticketsPueblo }: TicketDialogProps) {
+    const [open, setOpen] = useState(false)
+
+    const handleClose = () => {
+        setOpen(false)
+    }
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button className="bg-blue-400 text-white hover:bg-blue-500 flex items-center gap-2">
                     <TicketIcon className="h-4 w-4" />
@@ -42,7 +48,7 @@ export function TicketModal({ ticketsCiudad, ticketsPueblo }: TicketDialogProps)
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button variant="outline">Cerrar</Button>
+                    <Button onClick={handleClose} variant="outline">Cerrar</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

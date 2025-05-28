@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 
 const CrearGrupoViaje = () => {
@@ -97,6 +97,8 @@ const CrearGrupoViaje = () => {
             console.error("Error al crear grupo:", error);
         }
     }
+    const { hospedajeId } = useParams();
+
 
     return (
         <main className="p-4 max-w-xl mx-auto">
@@ -175,12 +177,21 @@ const CrearGrupoViaje = () => {
             </div>
 
             {/* Crear grupo */}
-            <button
-                onClick={handleCrearGrupo}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded w-full"
-            >
-                Crear Grupo de Viaje
-            </button>
+            <div className="flex gap-4">
+                <button
+                    onClick={handleCrearGrupo}
+                    className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded w-full"
+                >
+                    Crear Grupo de Viaje
+                </button>
+                <button
+                    onClick={() => navigate(`/reserva/grupal/${hospedajeId}`)}
+                    className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition"
+                >
+                    ¿Ya tienes un grupo?
+                </button>
+            </div>
+
         </main>
 
     )
