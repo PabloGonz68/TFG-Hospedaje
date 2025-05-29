@@ -42,7 +42,7 @@ function Login() {
                     }
                 }
             );
-            console.log("Datos usuario obtenidos:", userDataResponse.data);
+            console.log("Datos usuario obtenidos en el LOGIN:", userDataResponse.data);
 
             const backendUser = userDataResponse.data;
 
@@ -51,6 +51,7 @@ function Login() {
             const apellidos = backendUser.apellidos;
             const email = backendUser.email;
             const fotoPerfil = backendUser.fotoPerfil;
+            console.log("contenido de fotoPerfil al loguear(sera false porq no hay foto aun):", fotoPerfil);
 
             if (auth) {
                 auth.login(token, { id_usuario: id, nombre, apellidos, email, fotoPerfil });

@@ -216,12 +216,9 @@ export function NavigationMenuDemo() {
                     ? user.fotoPerfil
                     : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.nombre || 'Usuario')}&background=random`}
                   alt="Avatar"
-                  className="w-full h-full object-cover rounded-full"
+                  className="w-full h-full object-cover rounded-full aspect-square"
                 />
               </a>
-
-
-
               <button onClick={logout}>
                 <AuthBtn color="rgb(255, 65, 65)" icon="logout" text="Cerrar sesión" enlace="/login" />
               </button>

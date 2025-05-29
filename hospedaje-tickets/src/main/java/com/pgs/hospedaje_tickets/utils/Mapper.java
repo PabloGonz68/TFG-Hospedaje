@@ -38,7 +38,7 @@ public class Mapper {
         usuario.setApellidos(usuarioDTO.getApellidos());
         usuario.setEmail(usuarioDTO.getEmail());
         usuario.setPassword(usuarioDTO.getPassword());
-        usuario.setFotoPerfil(null);
+        usuario.setFotoPerfil("hola");
         usuario.setRol(Usuario.Rol.USUARIO);
         return usuario;
     }

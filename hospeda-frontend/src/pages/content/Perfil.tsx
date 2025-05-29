@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import { toast } from 'sonner';
-
+//import { supabase } from "@/supabaseClient";
 
 const Perfil = () => {
     const navigate = useNavigate();
@@ -54,23 +54,80 @@ const Perfil = () => {
         }));
     };
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0]
+    //const CLIENT_ID = import.meta.env.VITE_IMGUR_CLIENT_ID || "11b34638560014b" || "08795c3cac52f5af1852cc62aba777cf88c87b13";
+
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
         if (!file) return;
 
-        const reader = new FileReader();
+        try {
+            const formData = new FormData();
+            formData.append("image", file);
 
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=a9a442802d1867768e4e3eed39e50987`, {
+                method: "POST",
+                body: formData,
+            });
 
-        reader.onload = () => {
-            const base64String = reader.result as string;
-            console.log(base64String);
-            setUser(prevUser => ({
-                ...prevUser,
-                fotoPerfil: base64String
-            }))
+            const data = await res.json();
+
+            if (data.success) {
+                const imageUrl = data.data.url;
+                setUser(prevUser => ({
+                    ...prevUser,
+                    fotoPerfil: imageUrl,
+                }));
+                toast.success("Imagen subida correctamente");
+            } else {
+                console.error("Error al subir imagen:", data);
+                toast.error("No se pudo subir la imagen");
+            }
+        } catch (error) {
+            console.error("Error en la subida:", error);
+            toast.error("Error al subir imagen");
         }
-        reader.readAsDataURL(file);
-    }
+    };
+
+
+    /* const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+         const file = e.target.files?.[0];
+         if (!file) return;
+ 
+         const userId = localStorage.getItem("userId");
+         const fileExt = file.name.split('.').pop();
+         const fileName = `perfil_${userId}_${Date.now()}.${fileExt}`;
+         const filePath = `${fileName}`;
+ 
+         // Subir archivo al bucket
+         const { error: uploadError } = await supabase.storage
+             .from("imagenes-perfil")
+             .upload(filePath, file, {
+                 cacheControl: "3600",
+                 upsert: true,
+             });
+ 
+         if (uploadError) {
+             console.error("Error al subir imagen:", uploadError);
+             toast.error("Error al subir imagen a Supabase");
+             return;
+         }
+ 
+         // Obtener URL pública
+         const { data: publicUrlData } = supabase
+             .storage
+             .from("imagenes-perfil")
+             .getPublicUrl(filePath);
+ 
+         if (publicUrlData?.publicUrl) {
+             setUser((prevUser) => ({
+                 ...prevUser,
+                 fotoPerfil: publicUrlData.publicUrl,
+             }));
+             toast.success("Imagen subida correctamente");
+         }
+     };*/
+
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -158,22 +215,21 @@ const Perfil = () => {
                             onChange={handleChange}
                         />
                     </div>
-                    <div>
-                        <label htmlFor="fotoPerfil">URL de la imagen de perfil</label>
-                        <input
-                            className="border border-gray-300 p-2"
-                            type="file"
-                            name="fotoPerfil"
-                            onChange={handleFileChange}
-                        />
-                    </div>
+                    <input
+                        className="border border-gray-300 p-2"
+                        type="file"
+                        name="fotoPerfil"
+                        onChange={handleFileChange}
+                    />
+
                     {user.fotoPerfil && (
                         <img
                             src={user.fotoPerfil}
                             alt="Previsualización"
-                            className="w-32 h-32 rounded-full mt-2"
+                            className="w-32 h-32 rounded-full mt-2 aspect-square object-cover"
                         />
                     )}
+
                     <button type="submit"
                         className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
                     >
