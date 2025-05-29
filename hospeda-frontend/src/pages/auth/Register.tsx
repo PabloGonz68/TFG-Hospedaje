@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react"
+import { toast } from 'sonner';
 
 function Register() {
     const [formData, SetFormData] = useState({
@@ -28,7 +29,7 @@ function Register() {
         try {
             const response = await axios.post("http://localhost:8080/usuario/register", formData);
             console.log("Registro exitoso", response.data);
-            confirm("Registro exitoso");
+            toast.success("Registro exitoso");
             /*if(confirm("¿Deseas iniciar sesión?")){
                 navigate("/login");
             }*/
@@ -37,11 +38,11 @@ function Register() {
             if (error.response) {
                 const mensajeError = error.response.data?.message;
                 if (mensajeError) {
-                    alert(mensajeError);
+                    toast.warning(mensajeError);
                     console.error("Error en el registro", mensajeError);
                 } else {
                     console.error("Error en el registro", error);
-                    alert("Error al registrar el usuario");
+                    toast.error("Error al registrar el usuario");
                 }
             }
         }

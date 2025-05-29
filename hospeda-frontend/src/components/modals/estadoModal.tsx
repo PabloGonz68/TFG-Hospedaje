@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { EstadoCombo } from "@/components/combobox/estadoCombo"
+import { toast } from 'sonner';
+
 
 export function EstadoModal({ reservaID }: { reservaID: number }) {
 
@@ -29,12 +31,12 @@ export function EstadoModal({ reservaID }: { reservaID: number }) {
             if (!response.ok) {
                 throw new Error("Error al actualizar el estado");
             }
-            alert("Estado actualizado exitosamente");
+            toast.success("Estado actualizado exitosamente");
             window.location.reload();
 
         } catch (error) {
             console.log(error);
-            alert("Error al actualizar el estado");
+            toast.error("Error al actualizar el estado");
         }
         setOpen(false);
     }

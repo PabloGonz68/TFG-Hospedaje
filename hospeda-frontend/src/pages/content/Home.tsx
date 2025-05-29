@@ -1,5 +1,6 @@
 import { useRef } from "react";
 
+
 const Home = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
 

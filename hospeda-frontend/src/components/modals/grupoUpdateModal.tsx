@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-
+import { toast } from 'sonner';
 import { useState } from "react";
 
 
@@ -22,6 +22,7 @@ type MiembroDTO = {
 
 type GrupoViajeDTO = {
     id: number;
+    nombre: string;
     idCreador: number;
     fechaCreacion: string;
     miembros: MiembroDTO[];
@@ -35,13 +36,21 @@ type GrupoUpdateModalProps = {
 
 export function GrupoUpdateModal({ grupo, onUpdated }: GrupoUpdateModalProps) {
     const [miembros, setMiembros] = useState<MiembroDTO[]>(grupo.miembros);
+    const [nombreGrupo, setNombreGrupo] = useState(grupo.nombre);
+
     const [open, setOpen] = useState(false);
 
     const handleGuardar = async () => {
         const token = localStorage.getItem("token");
         if (!token) return;
+        if (!nombreGrupo.trim()) {
+            toast.error("El nombre del grupo no puede estar vacío.");
+            return;
+        }
+
 
         const dto = {
+            nombre: nombreGrupo,
             cantidadTicketsCreador: miembros.find(m => m.idUsuario === grupo.idCreador)?.ticketsAportados ?? 0,
             miembros: miembros.map(m => ({
                 idUsuario: m.idUsuario,
@@ -61,11 +70,11 @@ export function GrupoUpdateModal({ grupo, onUpdated }: GrupoUpdateModalProps) {
 
             if (!res.ok) throw new Error("Error al actualizar grupo");
 
-            alert("Grupo actualizado");
+            toast.success("Grupo actualizado");
             if (onUpdated) onUpdated();
 
         } catch (error: any) {
-            alert("Error: " + error.message);
+            toast.error("Error: " + error.message);
         }
 
         setOpen(false);
@@ -81,6 +90,16 @@ export function GrupoUpdateModal({ grupo, onUpdated }: GrupoUpdateModalProps) {
                     <DialogTitle>Editar grupo</DialogTitle>
                     <DialogDescription>Modifica los tickets de los miembros.</DialogDescription>
                 </DialogHeader>
+                <div className="grid grid-cols-4 items-center gap-4">
+                    <Label className="text-right" htmlFor="nombre">Nombre</Label>
+                    <Input
+                        id="nombre"
+                        value={nombreGrupo}
+                        onChange={(e) => setNombreGrupo(e.target.value)}
+                        className="col-span-3"
+                    />
+                </div>
+
                 <div className="grid gap-4 py-4">
                     {miembros.map((miembro, index) => (
                         <div key={miembro.id} className="grid grid-cols-4 items-center gap-4">

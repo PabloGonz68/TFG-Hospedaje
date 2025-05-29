@@ -1,5 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
+import { toast } from 'sonner';
+
 
 const CrearGrupoViaje = () => {
 
@@ -59,7 +61,7 @@ const CrearGrupoViaje = () => {
 
         console.log(miembroAgregado);
         if (miembroAgregado) {
-            alert("El usuario ya se encuentra en el grupo");
+            toast.error("El usuario ya se encuentra en el grupo");
             return;
         }
 
@@ -91,11 +93,11 @@ const CrearGrupoViaje = () => {
             });
 
             if (response.ok) {
-                alert("Grupo creado correctamente");
+                toast.success("Grupo creado correctamente");
                 navigate("/grupoViaje/mis-grupos");
             } else {
                 const errorText = await response.text();
-                alert(`Error al crear el grupo: ${errorText}`);
+                toast.error(`Error al crear el grupo: ${errorText}`);
             }
         } catch (error) {
             console.error("Error al crear grupo:", error);

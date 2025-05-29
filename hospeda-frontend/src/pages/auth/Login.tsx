@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { motion } from "motion/react"
+import { toast } from 'sonner';
+
 
 function Login() {
     const [formData, SetFormData] = useState({
@@ -54,7 +56,7 @@ function Login() {
                 auth.login(token, { id_usuario: id, nombre, apellidos, email, fotoPerfil });
                 console.log("Usuario guardado en localStorage:", localStorage.getItem("user"));
             }
-            alert("Login exitoso");
+            toast.success("Login exitoso");
             console.log("Login exitoso", response.data);
             navigate("/");
         } catch (error: any) {

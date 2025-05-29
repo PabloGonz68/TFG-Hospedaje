@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
+import { toast } from 'sonner';
 
 
 const Perfil = () => {
@@ -85,18 +86,18 @@ const Perfil = () => {
             });
             if (response.ok) {
                 const text = await response.json();
-                alert("Perfil actualizado exitosamente " + text);
+                toast.success("Perfil actualizado exitosamente " + text);
             } else {
                 const errorText = await response.json();
                 console.error("Error del servidor:", errorText);
-                alert("Error al actualizar el perfil");
+                toast.error("Error al actualizar el perfil");
             }
 
         } catch (error) {
             console.error(
                 "Error al actualizar el usuario:",
             )
-            alert("Error al actualizar el usuario" + error);
+            toast.error("Error al actualizar el usuario" + error);
         }
     }
 
@@ -114,20 +115,20 @@ const Perfil = () => {
             });
             if (response.ok) {
                 const text = await response.text();
-                alert(text);
+                toast.info(text);
                 logout?.();
                 navigate("/");
 
             } else {
                 const errorText = await response.json();
                 console.error("Error del servidor:", errorText);
-                alert("Error al eliminar el usuario");
+                toast.warning("Error al eliminar el usuario");
             }
         } catch (error) {
             console.error(
                 "Error al eliminar el usuario:",
             )
-            alert("Error al eliminar el usuario" + error);
+            toast.error("Error al eliminar el usuario" + error);
         }
     }
 

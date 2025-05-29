@@ -1,9 +1,13 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Map from "../../../components/shared/map";
 import ReservaModal from "@/components/modals/reservaModal";
+import { toast } from 'sonner';
+
 
 interface Hospedaje {
+    id: number;
+    id_anfitrion: number;
     nombre: string;
     direccion: string;
     codigoPostal: string;
@@ -17,15 +21,22 @@ interface Hospedaje {
 }
 
 const VerHospedaje = () => {
+    const navigate = useNavigate();
     const { id } = useParams();
+    const idNum = id ? parseInt(id) : null;
     console.log("ID recibido por useParams:", id);
     const token = localStorage.getItem("token");
+    const usuarioId = localStorage.getItem("userId");
+    const usuarioIdNum = usuarioId ? parseInt(usuarioId) : null;
 
     const [hospedaje, setHospedaje] = useState<Hospedaje | null>(null);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
 
 
+    const handleClickEditar = (id: number) => {
+        navigate(`/hospedajes/editar/${id}`)
+    }
     useEffect(() => {
         const fetchHospedaje = async () => {
             if (!token) return;
@@ -45,7 +56,9 @@ const VerHospedaje = () => {
                 const data = await response.json();
                 setHospedaje(data); // guardar hospedaje en el estado
             } catch (err: any) {
-                setError(err.message); // guardar error
+                toast.error(err.message || "Error desconocido al cargar el hospedaje");
+                setError(err.message);
+
 
             } finally {
                 setLoading(false);
@@ -77,10 +90,18 @@ const VerHospedaje = () => {
             <p className="text-gray-700 mt-4">{hospedaje.descripcion}</p>
 
             <Map direccion={hospedaje.ubicacion} />
-            {id && <ReservaModal hospedajeId={id} />}
-
-
-
+            {idNum !== null && hospedaje.id_anfitrion === usuarioIdNum ? (
+                <div className="flex  mt-4">
+                    <button
+                        onClick={() => handleClickEditar(idNum)}
+                        className="bg-principal text-white py-2 px-4 rounded-md hover:bg-principal-hover transition"
+                    >
+                        Editar
+                    </button>
+                </div>
+            ) : (
+                id && <ReservaModal hospedajeId={id} />
+            )}
         </div>
     );
 };
