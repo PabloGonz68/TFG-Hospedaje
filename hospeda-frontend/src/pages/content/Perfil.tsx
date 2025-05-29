@@ -85,8 +85,7 @@ const Perfil = () => {
                 body: JSON.stringify(user)
             });
             if (response.ok) {
-                const text = await response.json();
-                toast.success("Perfil actualizado exitosamente " + text);
+                toast.success("Perfil actualizado exitosamente");
             } else {
                 const errorText = await response.json();
                 console.error("Error del servidor:", errorText);

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ReservaCalendar from "@/components/calendars/reservaCalendar";
+import { toast } from "sonner";
 
 const ReservaIndividualForm = () => {
     const token = localStorage.getItem("token");
@@ -10,19 +11,18 @@ const ReservaIndividualForm = () => {
     const [startDate, setStartDate] = useState<Date | undefined>(undefined);
     const [endDate, setEndDate] = useState<Date | undefined>(undefined);
 
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
+
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (!token || !id) {
-            setError("No se pudo autenticar la solicitud.");
+            toast.error("No se pudo autenticar la solicitud.");
             return;
         }
 
         if (!startDate || !endDate) {
-            setError("Debes seleccionar las fechas.");
+            toast.error("Debes seleccionar las fechas.");
             return;
         }
 
@@ -48,10 +48,10 @@ const ReservaIndividualForm = () => {
                 throw new Error(errorData.message || "Error al crear la reserva");
             }
 
-            setSuccess("Reserva creada exitosamente");
+            toast.success("Reserva creada exitosamente");
             setTimeout(() => navigate("/reserva/mis-reservas"), 2000);
         } catch (err: any) {
-            setError(err.message);
+            toast.error(err.message);
         }
     };
 
@@ -82,11 +82,6 @@ const ReservaIndividualForm = () => {
                             Reservar
                         </button>
                     </div>
-
-
-
-                    {error && <p className="text-red-600 mt-2">{error}</p>}
-                    {success && <p className="text-green-600 mt-2">{success}</p>}
                 </form>
             </div>
         </section>
