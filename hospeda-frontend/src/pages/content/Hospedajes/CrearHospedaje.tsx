@@ -67,7 +67,7 @@ const CrearHospedaje = () => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`, // Muy importante
+                    Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify(formData),
             });

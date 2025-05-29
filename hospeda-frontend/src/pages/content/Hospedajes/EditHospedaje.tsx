@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useRef, useEffect } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 declare global {
     interface Window {
@@ -11,6 +11,7 @@ declare global {
 
 
 const EditHospedaje = () => {
+    const { id } = useParams();
     const ubicacionRef = useRef<HTMLInputElement | null>(null);
 
     useEffect(() => {
@@ -33,6 +34,45 @@ const EditHospedaje = () => {
 
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchHospedaje = async () => {
+            if (!token || !id) return;
+            try {
+                const response = await fetch(`http://localhost:8080/hospedaje/${id}`, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error("Error al obtener los datos del hospedaje");
+                }
+
+                const data = await response.json();
+
+                setFormData({
+                    nombre: data.nombre || "",
+                    direccion: data.direccion || "",
+                    codigoPostal: data.codigoPostal || "",
+                    ciudad: data.ciudad || "",
+                    pais: data.pais || "",
+                    capacidad: data.capacidad || 1,
+                    tipoZona: data.tipoZona || "CIUDAD",
+                    descripcion: data.descripcion || "",
+                    ubicacion: data.ubicacion || "",
+                    visible: data.visible || false,
+                });
+            } catch (error: any) {
+                console.error("Error al cargar el hospedaje:", error.message);
+            }
+        };
+
+        fetchHospedaje();
+    }, [id, token]);
+
+
+
 
     const [formData, setFormData] = useState({
         nombre: "",
@@ -63,11 +103,11 @@ const EditHospedaje = () => {
         setSuccess(false);
 
         try {
-            const response = await fetch("http://localhost:8080/hospedaje/", {
-                method: "POST",
+            const response = await fetch(`http://localhost:8080/hospedaje/${id}`, {
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`, // Muy importante
+                    Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify(formData),
             });
@@ -195,11 +235,11 @@ const EditHospedaje = () => {
                     type="submit"
                     className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition"
                 >
-                    Crear Hospedaje
+                    Guardar Cambios
                 </button>
 
                 {error && <p className="text-red-500 text-sm">{error}</p>}
-                {success && <p className="text-green-500 text-sm">Hospedaje creado con éxito.</p>}
+                {success && <p className="text-green-500 text-sm">Hospedaje editado con éxito.</p>}
             </form>
         </div>
     );
