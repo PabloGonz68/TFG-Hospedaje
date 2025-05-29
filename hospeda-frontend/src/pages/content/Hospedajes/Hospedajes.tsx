@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Hospedaje {
     id: number;
+    id_anfitrion: number;
     nombre: string;
     direccion: string;
     codigoPostal: string;
@@ -13,11 +14,21 @@ interface Hospedaje {
     descripcion: string;
     ubicacion: string;
     visible: boolean;
+
 }
 
 const Hospedajes = () => {
+    const navigate = useNavigate();
 
     const [hospedajes, setHospedajes] = useState<Hospedaje[]>([]);
+    const [usuarioId, setUsuarioId] = useState<number | null>(null);
+
+    useEffect(() => {
+        const id = localStorage.getItem("userId");
+        if (id) {
+            setUsuarioId(parseInt(id));
+        }
+    }, [])
 
     useEffect(() => {
         const fetchHospedajes = async () => {
@@ -34,6 +45,7 @@ const Hospedajes = () => {
                 if (!response.ok) throw new Error("Error al obtener los hospedajes");
 
                 const data = await response.json();
+                console.log("Hospedajes obtenidos:", data);
                 setHospedajes(data);
             } catch (error) {
                 console.error("Error al obtener los hospedajes", error);
@@ -42,7 +54,9 @@ const Hospedajes = () => {
         fetchHospedajes();
     }, []);
 
-
+    const handleClickEditar = (id: number) => {
+        navigate(`/hospedajes/editar/${id}`)
+    }
 
 
 
@@ -72,24 +86,38 @@ const Hospedajes = () => {
 
 
                             {hospedajes.map((h) => (
-                                <Link key={h.id} to={`/hospedaje/${h.id}`}>
-                                    <div className="bg-white shadow-md rounded-2xl p-5 hover:shadow-lg transition">
+
+                                <div key={h.id} className="bg-white shadow-md rounded-2xl p-5 hover:shadow-lg transition">
+                                    <Link to={`/hospedaje/${h.id}`}>
                                         <h2 className="text-xl font-semibold mb-2">{h.nombre}</h2>
                                         <p className="text-gray-700"><span className="font-medium">Dirección:</span> {h.direccion}, {h.codigoPostal}</p>
                                         <p className="text-gray-700"><span className="font-medium">Ciudad:</span> {h.ciudad}, {h.pais}</p>
                                         <p className="text-gray-700"><span className="font-medium">Capacidad:</span> {h.capacidad} personas</p>
                                         <p className="text-gray-700"><span className="font-medium">Zona:</span> {h.tipoZona}</p>
                                         <p className="text-gray-600 mt-2">{h.descripcion}</p>
-                                        <a
-                                            href={h.ubicacion}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="inline-block mt-3 text-blue-600 hover:underline"
-                                        >
-                                            Ver en mapa
-                                        </a>
-                                    </div>
-                                </Link>
+                                    </Link>
+                                    <a
+                                        href={h.ubicacion}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-block mt-3 text-blue-600 hover:underline"
+                                    >
+                                        Ver en mapa
+                                    </a>
+
+                                    {h.id_anfitrion === usuarioId && (
+                                        <div className="flex justify-end mt-4">
+                                            <button
+                                                onClick={() => handleClickEditar(h.id)}
+                                                className="bg-principal text-white py-2 px-4 rounded-md hover:bg-principal-hover transition"
+                                            >
+                                                Editar
+                                            </button>
+                                        </div>
+                                    )}
+
+                                </div>
+
                             ))}
                         </div>
                     )}

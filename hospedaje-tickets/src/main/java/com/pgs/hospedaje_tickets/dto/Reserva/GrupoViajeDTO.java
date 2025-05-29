@@ -9,6 +9,7 @@ import java.util.List;
 public class GrupoViajeDTO {
 
     private Long id;
+    private String nombre;
     private Long idCreador;
     private LocalDateTime fechaCreacion;
     private List<MiembroGrupoDTO> miembros;

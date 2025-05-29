@@ -5,6 +5,8 @@ const CrearGrupoViaje = () => {
 
     const navigate = useNavigate();
 
+
+    const [nombreGrupo, setNombreGrupo] = useState("");
     const [cantidadTicketsCreador, setcantidadTicketsCreador] = useState(0);
     const [emailBusqueda, setEmailBusqueda] = useState("");
     const [usuarioEncontrado, setUsuarioEncontrado] = useState<{
@@ -69,7 +71,9 @@ const CrearGrupoViaje = () => {
     const handleCrearGrupo = async () => {
         try {
             const token = localStorage.getItem("token");
+            console.log("Token:", token);
             const body = {
+                nombre: nombreGrupo,
                 cantidadTicketsCreador,
                 miembros: miembros.map((miembro) => ({
                     idUsuario: miembro.idUsuario,
@@ -104,6 +108,15 @@ const CrearGrupoViaje = () => {
         <main className="p-4 max-w-xl mx-auto">
             <h1 className="text-2xl font-bold mb-6">Crear Grupo de Viaje</h1>
 
+            <div className="mb-4">
+                <label className="block mb-1 font-semibold">Nombre del grupo:</label>
+                <input
+                    type="text"
+                    value={nombreGrupo}
+                    onChange={(e) => setNombreGrupo(e.target.value)}
+                    className="w-full border p-2 rounded"
+                />
+            </div>
             {/* Tickets del creador */}
             <div className="mb-4">
                 <label className="block mb-1 font-semibold">Tus tickets aportados:</label>

@@ -158,9 +158,13 @@ public class ReservaService {
         Usuario usuarioAutenticado = usuarioRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(() -> new RuntimeException("El usuario no existe."));
         boolean isCreador = grupoViaje.getCreador().getId_usuario().equals(usuarioAutenticado.getId_usuario());
         boolean isAdmin = usuarioAutenticado.getRol().equals(Usuario.Rol.ADMIN);
-
+        System.out.println("---------------------------------------------------------");
         System.out.println("Autenticado: " + usuarioAutenticado.getEmail());
-        System.out.println("Creador grupo: " + grupoViaje.getCreador().getEmail());
+        System.out.println("ID autenticado: " + usuarioAutenticado.getId_usuario());
+        System.out.println("ID creador grupo: " + grupoViaje.getCreador().getId_usuario());
+        System.out.println("Rol autenticado: " + usuarioAutenticado.getRol());
+        System.out.println("---------------------------------------------------------");
+
 
 
         if (!isCreador && !isAdmin) {

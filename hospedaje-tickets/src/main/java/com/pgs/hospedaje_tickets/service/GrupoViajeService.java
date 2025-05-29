@@ -39,6 +39,7 @@ public class GrupoViajeService {
         Usuario creador = usuarioRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("El usuario no existe."));
         //Creas el grupo de viaje
         GrupoViaje grupo = new GrupoViaje();
+        grupo.setNombre(dto.getNombre());
         //Añadimos los datos del creador
         grupo.setCreador(creador);
         grupo.setCantidadTicketsCreador(dto.getCantidadTicketsCreador());
@@ -153,6 +154,7 @@ public class GrupoViajeService {
             throw new BadRequestException("El id de grupo de viaje es inválido.");
         }
         GrupoViaje grupo = grupoViajeRepository.findById(idLong).orElseThrow(() -> new ResourceNotFoundException("El grupo de viaje no existe."));
+        grupo.setNombre(dto.getNombre());
         grupo.setCantidadTicketsCreador(dto.getCantidadTicketsCreador());
         MiembroGrupo miembroCreador = grupo.getMiembros().stream().filter(m -> m.getUsuario().getId_usuario().equals(grupo.getCreador().getId_usuario())).findFirst().orElse(null);
         if (miembroCreador != null) {

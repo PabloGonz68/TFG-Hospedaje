@@ -46,6 +46,7 @@ public class Mapper {
     public HospedajeDTO toHospedajeDTO(Hospedaje hospedaje){
         HospedajeDTO hospedajeDTO = new HospedajeDTO();
         hospedajeDTO.setId(hospedaje.getId_hospedaje());
+        hospedajeDTO.setId_anfitrion(hospedaje.getAnfitrion().getId_usuario());
         hospedajeDTO.setNombre(hospedaje.getNombre());
         hospedajeDTO.setDireccion(hospedaje.getDireccion());
         hospedajeDTO.setCodigoPostal(hospedaje.getCodigoPostal());
@@ -59,8 +60,10 @@ public class Mapper {
         return hospedajeDTO;
     }
 
-    public Hospedaje toHospedaje(HospedajeDTO hospedajeDTO){
+    public Hospedaje toHospedaje(HospedajeDTO hospedajeDTO, Usuario anfitrion){
         Hospedaje hospedaje = new Hospedaje();
+        hospedaje.setId_hospedaje(hospedajeDTO.getId());
+        hospedaje.setAnfitrion(anfitrion);
         hospedaje.setNombre(hospedajeDTO.getNombre());
         hospedaje.setDireccion(hospedajeDTO.getDireccion());
         hospedaje.setCodigoPostal(hospedajeDTO.getCodigoPostal());
@@ -129,6 +132,7 @@ public class Mapper {
     public GrupoViajeDTO toGrupoViajeDTO(GrupoViaje grupoViaje) {
         GrupoViajeDTO grupoViajeDTO = new GrupoViajeDTO();
         grupoViajeDTO.setId(grupoViaje.getId());
+        grupoViajeDTO.setNombre(grupoViaje.getNombre());
         grupoViajeDTO.setIdCreador(grupoViaje.getCreador().getId_usuario());
         grupoViajeDTO.setMiembros(grupoViaje.getMiembros().stream()
                 .map(this::toMiembroGrupoDTO)

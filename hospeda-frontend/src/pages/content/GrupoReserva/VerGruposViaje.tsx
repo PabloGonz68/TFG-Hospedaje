@@ -9,6 +9,7 @@ type MiembroDTO = {
 
 type GrupoViajeDTO = {
     id: number;
+    nombre: string;
     idCreador: number;
     fechaCreacion: string;
     miembros: MiembroDTO[];
@@ -55,7 +56,7 @@ const VerGruposViaje = () => {
                     {gruposViaje.map((grupo) => (
                         <li key={grupo.id} className="flex items-start justify-between  border p-4 rounded shadow bg-white">
                             <div>
-                                <h2 className="text-lg font-semibold">Grupo ID: {grupo.id}</h2>
+                                <h2 className="text-lg font-semibold">Grupo: {grupo.nombre} (ID: {grupo.id})</h2>
                                 <p><strong>Creado por usuario:</strong> {grupo.idCreador}</p>
 
                                 <h3 className="mt-2 font-semibold">Miembros:</h3>

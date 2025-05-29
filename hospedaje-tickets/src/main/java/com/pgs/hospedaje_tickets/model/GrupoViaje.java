@@ -20,6 +20,9 @@ public class GrupoViaje {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String nombre;
+
     @ManyToOne
     @JoinColumn(name = "id_creador", nullable = false)
     private Usuario creador;

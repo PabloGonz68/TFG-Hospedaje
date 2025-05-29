@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class HospedajeDTO {
     private Long id;
+    private Long id_anfitrion;
     private String nombre;
     private String direccion;
     private String codigoPostal;

@@ -1,7 +1,7 @@
 package com.pgs.hospedaje_tickets.service;
 
 import com.pgs.hospedaje_tickets.dto.Hospedaje.HospedajeDTO;
-import com.pgs.hospedaje_tickets.dto.Hospedaje.HospedajeResponseDTO;
+import com.pgs.hospedaje_tickets.dto.Hospedaje.HospedajeDTO;
 import com.pgs.hospedaje_tickets.error.exceptions.BadRequestException;
 import com.pgs.hospedaje_tickets.error.exceptions.ForbiddenException;
 import com.pgs.hospedaje_tickets.error.exceptions.ResourceNotFoundException;
@@ -39,7 +39,7 @@ public class HospedajeService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public HospedajeResponseDTO createHospedaje(HospedajeDTO dto, Authentication auth) {
+    public HospedajeDTO createHospedaje(HospedajeDTO dto, Authentication auth) {
         validatorHospedaje.validateHospedaje(dto);
 
        if (auth==null || !auth.isAuthenticated()) {
@@ -50,25 +50,11 @@ public class HospedajeService {
         Usuario anfitrion = usuarioRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("El usuario no existe."));
 
 
-        Hospedaje hospedaje = mapper.toHospedaje(dto);
-        hospedaje.setAnfitrion(anfitrion);
+        Hospedaje hospedaje = mapper.toHospedaje(dto, anfitrion);
         hospedaje.setFechaCreacion(LocalDateTime.now());
         hospedajeRepository.save(hospedaje);
 
-        HospedajeResponseDTO response = new HospedajeResponseDTO(
-                hospedaje.getId_hospedaje(),
-                hospedaje.getNombre(),
-                hospedaje.getDireccion(),
-                hospedaje.getCiudad(),
-                hospedaje.getPais(),
-                hospedaje.getCapacidad(),
-                hospedaje.getTipoZona().name(),
-                hospedaje.getDescripcion(),
-                hospedaje.isVisible(),
-                hospedaje.getUbicacion()
-        );
-
-        return response;
+        return mapper.toHospedajeDTO(hospedaje);
 
     }
 

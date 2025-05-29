@@ -10,17 +10,21 @@ type CrearReservaConGrupoDTO = {
 
 type GrupoViajeDTO = {
     id: number;
+    nombre: string;
 };
 
 const ReservaGrupalForm = () => {
-    const { idHospedaje } = useParams();
+    const { hospedajeId } = useParams<{ hospedajeId: string }>();
+
+    // Puedes parsear a número si es necesario
+    const idHospedajeNum = hospedajeId ? parseInt(hospedajeId) : 0;
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
 
     const [grupos, setGrupos] = useState<GrupoViajeDTO[]>([]);
     const [form, setForm] = useState<CrearReservaConGrupoDTO>({
         idGrupo: 0,
-        idHospedaje: Number(idHospedaje),
+        idHospedaje: idHospedajeNum,
         fechaInicio: "",
         fechaFin: "",
     });
@@ -63,6 +67,8 @@ const ReservaGrupalForm = () => {
                 },
                 body: JSON.stringify(form),
             });
+            console.log("Token:", token);
+            console.log("Form a enviar:", form);
 
             if (!res.ok) {
                 const errorText = await res.text();
@@ -73,7 +79,7 @@ const ReservaGrupalForm = () => {
             const data = await res.json();
             setMensajeExito("Reserva creada con éxito 🎉");
             console.log("Reserva creada:", data);
-            setTimeout(() => navigate("/mis-reservas"), 1500);
+            setTimeout(() => navigate("/reserva/mis-reservas"), 1500);
         } catch (error: any) {
             setMensajeError("Error: " + error.message);
         }
@@ -91,7 +97,7 @@ const ReservaGrupalForm = () => {
                         <option value="">Selecciona un grupo</option>
                         {grupos.map((grupo) => (
                             <option key={grupo.id} value={grupo.id}>
-                                Grupo #{grupo.id}
+                                Grupo: {grupo.nombre}
                             </option>
                         ))}
                     </select>
