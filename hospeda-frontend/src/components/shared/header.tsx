@@ -60,11 +60,14 @@ export function NavigationMenuDemo() {
   useEffect(() => {
     const handleScroll = () => {
       const hero = document.getElementById("hero");
-      if (!hero) return;
-
-      const heroReact = hero.getBoundingClientRect();
-      const passedHalfHero = heroReact.bottom < window.innerHeight / 2;
-      setScrolled(passedHalfHero);
+      if (hero) {
+        const heroRect = hero.getBoundingClientRect();
+        const passedHalfHero = heroRect.bottom < window.innerHeight / 2;
+        setScrolled(passedHalfHero);
+      } else {
+        const passedHalfScreen = window.scrollY > window.innerHeight / 2;
+        setScrolled(passedHalfScreen);
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
