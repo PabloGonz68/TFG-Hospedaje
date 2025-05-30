@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class HospedajeDTO {
     private Long id;
     private Long id_anfitrion;
+    private String nombreAnfitrion;
     private String nombre;
     private String direccion;
     private String codigoPostal;

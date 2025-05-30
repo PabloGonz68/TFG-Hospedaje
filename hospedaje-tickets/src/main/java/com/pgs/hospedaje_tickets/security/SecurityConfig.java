@@ -113,6 +113,15 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/hospedaje/{id}").access(getHospedajeIdManager())
                         .requestMatchers(HttpMethod.DELETE, "/hospedaje/{id}").access(getHospedajeIdManager())
 
+                        //Filtros Hospedaje
+                        .requestMatchers(HttpMethod.GET, "/hospedaje/filtrar").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/hospedaje/anfitrion/{email}").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/hospedaje/email/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/hospedaje/ciudad/{ciudad}").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/hospedaje/pais/{pais}").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/hospedaje/tipoZona/{tipoZona}").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/hospedaje/capacidad/{capacidad}").authenticated()
+
                         //Funciones Admin Hospedaje
                         .requestMatchers(HttpMethod.GET, "/hospedaje/admin").authenticated()
 
@@ -153,7 +162,7 @@ public class SecurityConfig {
 
 
                         //Cualquier otra petición debe estar autenticada
-                        //.anyRequest().authenticated()
+                        //.anyRequest().permitAll()
 
                 )
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/hospedaje")
 public class HospedajeController {
@@ -36,12 +38,29 @@ public class HospedajeController {
         return new ResponseEntity<>(hospedajeService.getHospedaje(id), HttpStatus.OK);
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> getHospedajesByOtroAnfitrion(@PathVariable String email) {
+        return new ResponseEntity<>(hospedajeService.getHospedajesByOtroAnfitrion(email), HttpStatus.OK);
+    }
+
     @GetMapping("/anfitrion/{email}")
     public ResponseEntity<?> getHospedajesByAnfitrion(@PathVariable String email) {
         return new ResponseEntity<>(hospedajeService.getHospedajesByAnfitrion(email), HttpStatus.OK);
     }
 
-    @GetMapping("/ciudad/{ciudad}")
+    @GetMapping("/filtrar")
+    public ResponseEntity<List<HospedajeDTO>> filtrarHospedajes(
+            @RequestParam(required = false) String ciudad,
+            @RequestParam(required = false) String pais,
+            @RequestParam(required = false) String tipoZona,
+            @RequestParam(required = false) Integer capacidad
+    ) {
+        List<HospedajeDTO> resultados = hospedajeService.filtrarHospedajes(ciudad, pais, tipoZona, capacidad);
+        return ResponseEntity.ok(resultados);
+    }
+
+
+/*    @GetMapping("/ciudad/{ciudad}")
     public ResponseEntity<?> getHospedajesByCiudad(@PathVariable String ciudad) {
         return new ResponseEntity<>(hospedajeService.getHospedajesByCiudad(ciudad), HttpStatus.OK);
     }
@@ -59,7 +78,7 @@ public class HospedajeController {
     @GetMapping("/capacidad/{capacidad}")
     public ResponseEntity<?> getHospedajesByCapacidad(@PathVariable int capacidad) {
         return new ResponseEntity<>(hospedajeService.getHospedajesByCapacidad(capacidad), HttpStatus.OK);
-    }
+    }*/
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateHospedaje(@PathVariable String id, @RequestBody HospedajeDTO dto) {

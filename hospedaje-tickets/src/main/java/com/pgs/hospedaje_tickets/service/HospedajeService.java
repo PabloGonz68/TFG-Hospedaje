@@ -99,45 +99,48 @@ public class HospedajeService {
         return hospedajes.stream().map(mapper::toHospedajeDTO).collect(Collectors.toList());
     }
     //Filtros
-    public List<HospedajeDTO> getHospedajesByAnfitrion(String email){
-        List<Hospedaje> hospedajes = hospedajeRepository.findByAnfitrionEmailOrVisibleIsTrue(email);
-        if (hospedajes.isEmpty()){
-            throw new ResourceNotFoundException("No se encontraron hospedajes");
-        }
+    public List<HospedajeDTO> getHospedajesByOtroAnfitrion(String email){
+        List<Hospedaje> hospedajes = hospedajeRepository.findByAnfitrionEmailAndVisibleIsTrue(email);
         return hospedajes.stream().map(mapper::toHospedajeDTO).collect(Collectors.toList());
     }
 
+    public List<HospedajeDTO> getHospedajesByAnfitrion(String email){
+        List<Hospedaje> hospedajes = hospedajeRepository.findByAnfitrionEmail(email);
+        return hospedajes.stream().map(mapper::toHospedajeDTO).collect(Collectors.toList());
+    }
+
+    public List<HospedajeDTO> filtrarHospedajes(String ciudad, String pais, String tipoZona, Integer capacidad){
+        List<Hospedaje> hospedajes = hospedajeRepository.findByVisible(true).stream()
+                .filter(h -> ciudad == null || ciudad.isEmpty() || h.getCiudad().equalsIgnoreCase(ciudad))
+                .filter(h -> pais == null || pais.isEmpty() || h.getPais().equalsIgnoreCase(pais))
+                .filter(h -> tipoZona == null || tipoZona.isEmpty() || h.getTipoZona().name().equalsIgnoreCase(tipoZona))
+                .filter(h -> capacidad == null || capacidad == 0 || h.getCapacidad() >= capacidad)
+                .collect(Collectors.toList());
+        return hospedajes.stream().map(mapper::toHospedajeDTO).collect(Collectors.toList());
+    }
+
+/*
     public List<HospedajeDTO> getHospedajesByCiudad(String ciudad){
         List<Hospedaje> hospedajes = hospedajeRepository.findByCiudadAndVisibleIsTrue(ciudad);
-        if (hospedajes.isEmpty()){
-            throw new ResourceNotFoundException("No se encontraron hospedajes");
-        }
         return hospedajes.stream().map(mapper::toHospedajeDTO).collect(Collectors.toList());
     }
 
     public List<HospedajeDTO> getHospedajesByPais(String pais){
         List<Hospedaje> hospedajes = hospedajeRepository.findByPaisAndVisibleIsTrue(pais);
-        if (hospedajes.isEmpty()){
-            throw new ResourceNotFoundException("No se encontraron hospedajes");
-        }
         return hospedajes.stream().map(mapper::toHospedajeDTO).collect(Collectors.toList());
     }
 
     public List<HospedajeDTO> getHospedajesByTipoZona(String tipoZona){
         List<Hospedaje> hospedajes = hospedajeRepository.findByTipoZonaAndVisibleIsTrue(Hospedaje.TipoZona.valueOf(tipoZona));
-        if (hospedajes.isEmpty()){
-            throw new ResourceNotFoundException("No se encontraron hospedajes");
-        }
         return hospedajes.stream().map(mapper::toHospedajeDTO).collect(Collectors.toList());
     }
 
     public List<HospedajeDTO> getHospedajesByCapacidad(int capacidad){
-        List<Hospedaje> hospedajes = hospedajeRepository.findByCapacidadAndVisibleIsTrue(capacidad);
-        if (hospedajes.isEmpty()){
-            throw new ResourceNotFoundException("No se encontraron hospedajes");
-        }
+        List<Hospedaje> hospedajes = hospedajeRepository.findByCapacidadLessThanEqualAndVisibleIsTrue(capacidad);
         return hospedajes.stream().map(mapper::toHospedajeDTO).collect(Collectors.toList());
     }
+
+ */
     //
 
     public HospedajeDTO updateHospedaje(String id, HospedajeDTO dto) {

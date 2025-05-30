@@ -47,6 +47,7 @@ public class Mapper {
         HospedajeDTO hospedajeDTO = new HospedajeDTO();
         hospedajeDTO.setId(hospedaje.getId_hospedaje());
         hospedajeDTO.setId_anfitrion(hospedaje.getAnfitrion().getId_usuario());
+        hospedajeDTO.setNombreAnfitrion(hospedaje.getAnfitrion().getNombre()+" "+hospedaje.getAnfitrion().getApellidos());
         hospedajeDTO.setNombre(hospedaje.getNombre());
         hospedajeDTO.setDireccion(hospedaje.getDireccion());
         hospedajeDTO.setCodigoPostal(hospedaje.getCodigoPostal());
