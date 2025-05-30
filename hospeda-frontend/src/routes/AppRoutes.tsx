@@ -28,6 +28,7 @@ function AppRoutes() {
                 <Route path="/hospedajes/editar/:id" element={<TopLayout><EditHospedaje /></TopLayout>}></Route>
                 <Route path="/hospedaje/:id" element={<TopLayout><VerHospedaje /></TopLayout>} />
                 <Route path="/reserva/individual/:id" element={<TopLayout><ReservaIndividualForm /></TopLayout>} />
+                <Route path="/grupoViaje" element={<TopLayout><CrearGrupoViaje /></TopLayout>} />
                 <Route path="/grupoViaje/:hospedajeId" element={<TopLayout>< CrearGrupoViaje /></TopLayout>} />
                 <Route path="/grupoViaje/mis-grupos" element={<TopLayout>< VerGruposViaje /></TopLayout>} />
                 <Route path="/reserva/grupal/:hospedajeId" element={<TopLayout><ReservaGrupalForm /></TopLayout>} />

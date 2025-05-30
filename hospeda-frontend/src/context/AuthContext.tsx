@@ -14,6 +14,7 @@ type AuthContextType = {
     user: User | null,
     login: (token: string, userData: User) => void;
     logout: () => void;
+    updateUser: (updatedUser: User) => void;
     isAuthenticated: boolean;
     loading: boolean;
 };
@@ -43,6 +44,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(null);
     };
 
+    const updateUser = (updatedUser: User) => {
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        setUser((prevUser) => (prevUser ? { ...prevUser, ...updatedUser } : updatedUser));
+    };
+
     const isAuthenticated = !!token;
 
     useEffect(() => {
@@ -62,7 +68,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ token, user, login, logout, isAuthenticated, loading }}>
+        <AuthContext.Provider value={{ token, user, login, logout, updateUser, isAuthenticated, loading }}>
             {children}
         </AuthContext.Provider>
     )

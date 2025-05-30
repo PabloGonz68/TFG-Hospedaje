@@ -48,6 +48,7 @@ const VerGruposViaje = () => {
     return (
         <main className="p-4 max-w-3xl mx-auto">
             <h1 className="text-2xl font-bold mb-4">Mis Grupos de Viaje</h1>
+            <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded" onClick={() => window.location.href = "/grupoViaje/"}>Crear nuevo grupo de viaje</button>
 
             {gruposViaje.length === 0 ? (
                 <p className="text-gray-600">No tienes grupos de viaje aún.</p>

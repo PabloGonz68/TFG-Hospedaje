@@ -70,6 +70,10 @@ const CrearGrupoViaje = () => {
         setEmailBusqueda("");
     }
 
+    const eliminarMiembro = (idUsuario: number) => {
+        setMiembros((prevMiembros) => prevMiembros.filter((miembro) => miembro.idUsuario !== idUsuario));
+    }
+
     const handleCrearGrupo = async () => {
         try {
             const token = localStorage.getItem("token");
@@ -96,8 +100,9 @@ const CrearGrupoViaje = () => {
                 toast.success("Grupo creado correctamente");
                 navigate("/grupoViaje/mis-grupos");
             } else {
-                const errorText = await response.text();
-                toast.error(`Error al crear el grupo: ${errorText}`);
+                const errorJson = await response.json();
+                toast.error(errorJson.message || "Error al crear el grupo, intenta de nuevo");
+
             }
         } catch (error) {
             console.error("Error al crear grupo:", error);
@@ -183,8 +188,14 @@ const CrearGrupoViaje = () => {
                 ) : (
                     <ul className="list-disc list-inside">
                         {miembros.map((m, idx) => (
-                            <li key={idx}>
-                                {m.nombre} — {m.ticketsAportados} tickets
+                            <li key={idx} className="flex items-center justify-between mb-2">
+                                <span>{m.nombre} — {m.ticketsAportados} tickets</span>
+                                <button
+                                    onClick={() => eliminarMiembro(m.idUsuario)}
+                                    className="ml-4 bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-sm"
+                                >
+                                    Eliminar
+                                </button>
                             </li>
                         ))}
                     </ul>
@@ -199,12 +210,12 @@ const CrearGrupoViaje = () => {
                 >
                     Crear Grupo de Viaje
                 </button>
-                <button
+                {hospedajeId && <button
                     onClick={() => navigate(`/reserva/grupal/${hospedajeId}`)}
                     className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition"
                 >
                     ¿Ya tienes un grupo?
-                </button>
+                </button>}
             </div>
 
         </main>

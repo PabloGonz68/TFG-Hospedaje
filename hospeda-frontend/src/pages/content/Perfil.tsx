@@ -1,15 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from 'sonner';
 //import { supabase } from "@/supabaseClient";
 
 const Perfil = () => {
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
-    const { logout } = useAuth() ?? {};
+    const { logout, updateUser } = useAuth() ?? {};
     const [user, setUser] = useState({
         nombre: "",
         apellidos: "",
+        email: "",
         fotoPerfil: ""
     });
 
@@ -32,8 +34,11 @@ const Perfil = () => {
                     setUser({
                         nombre: userData.nombre,
                         apellidos: userData.apellidos,
-                        fotoPerfil: userData.fotoPerfil
+                        fotoPerfil: userData.fotoPerfil,
+                        email: userData.email
                     });
+                    console.log("Datos del usuario:", userData);
+
 
                 } else {
                     console.error("Error al obtener los datos del usuario");
@@ -142,6 +147,9 @@ const Perfil = () => {
                 body: JSON.stringify(user)
             });
             if (response.ok) {
+                const updatedUser = await response.json();
+                console.log("Perfil actualizado:", updatedUser);
+                updateUser?.(updatedUser);
                 toast.success("Perfil actualizado exitosamente");
             } else {
                 const errorText = await response.json();
@@ -193,42 +201,80 @@ const Perfil = () => {
             <main className="flex flex-col items-center justify-center h-screen py-4">
 
 
-                <form onSubmit={handleSubmit} className="border border-gray-300 p-4">
+                <form onSubmit={handleSubmit} className="border border-gray-300 p-4 flex flex-col">
                     <h2 className="text-2xl font-bold mb-4">Mi Perfil</h2>
-                    <div>
-                        <label htmlFor="name">Nombre</label>
-                        <input
-                            className="border border-gray-300"
-                            type="text"
-                            name="nombre"
-                            value={user.nombre}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="apellidos">Apellidos</label>
-                        <input
-                            className="border border-gray-300"
-                            type="text"
-                            name="apellidos"
-                            value={user.apellidos}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <input
-                        className="border border-gray-300 p-2"
-                        type="file"
-                        name="fotoPerfil"
-                        onChange={handleFileChange}
-                    />
 
-                    {user.fotoPerfil && (
-                        <img
-                            src={user.fotoPerfil}
-                            alt="Previsualización"
-                            className="w-32 h-32 rounded-full mt-2 aspect-square object-cover"
-                        />
-                    )}
+                    <article className="flex flex-col gap-4">
+                        <section className="flex gap-10 items-center justify-center">
+
+
+                            <div className="flex flex-col">
+                                {user.fotoPerfil ? (
+                                    <img
+                                        src={user.fotoPerfil}
+                                        alt="Previsualización"
+                                        className="w-32 h-32 rounded-full mt-2 aspect-square object-cover cursor-pointer hover:opacity-80 transition"
+                                        onClick={() => fileInputRef.current?.click()}
+                                    />
+                                ) : (
+                                    <div
+                                        className="w-32 h-32 rounded-full mt-2 bg-gray-300 flex items-center justify-center text-gray-600 cursor-pointer"
+                                        onClick={() => fileInputRef.current?.click()}
+                                    >
+                                        <span className="text-4xl">+</span>
+                                    </div>
+                                )}
+
+                                <input
+                                    ref={fileInputRef}
+                                    className="hidden"
+                                    type="file"
+                                    name="fotoPerfil"
+                                    onChange={handleFileChange}
+                                />
+
+
+
+                            </div>
+                            <div className="flex flex-col gap-4">
+                                <div className="flex flex-col">
+                                    <label htmlFor="name">Nombre</label>
+                                    <input
+                                        className="border border-gray-300"
+                                        type="text"
+                                        name="nombre"
+                                        value={user.nombre}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="flex flex-col">
+                                    <label htmlFor="apellidos">Apellidos</label>
+                                    <input
+                                        className="border border-gray-300"
+                                        type="text"
+                                        name="apellidos"
+                                        value={user.apellidos}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
+                        </section>
+
+
+
+
+                        <div className="flex flex-col">
+                            <label htmlFor="email">Correo Electrónico</label>
+                            <input
+                                type="email"
+                                className="border border-gray-300 p-2 rounded w-full bg-gray-100 text-gray-800"
+                                value={user.email}
+                                disabled
+                            />
+                        </div>
+
+                    </article>
+
 
                     <button type="submit"
                         className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
