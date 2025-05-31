@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRef, useEffect } from "react";
 
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 declare global {
     interface Window {
@@ -118,9 +119,11 @@ const EditHospedaje = () => {
             }
 
             setSuccess(true);
+            toast.success("Hospedaje actualizado");
             navigate("/hospedajes"); // Redirige si quieres
         } catch (err: any) {
             setError(err.message);
+            toast.error(err.message);
         }
     };
 

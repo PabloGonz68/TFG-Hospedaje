@@ -1,0 +1,19 @@
+package com.pgs.hospedaje_tickets.repository;
+
+import com.pgs.hospedaje_tickets.model.GrupoViaje;
+import com.pgs.hospedaje_tickets.model.Usuario;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface GrupoViajeRepository extends JpaRepository<GrupoViaje, Long> {
+    List<GrupoViaje> findAllByMiembrosContaining(Usuario usuario);
+    List<GrupoViaje> findAllByCreador(Usuario usuario);
+
+    @EntityGraph(attributePaths = "miembros")  // Para cargar miembros junto con GrupoViaje
+    Optional<GrupoViaje> findById(Long id);
+}

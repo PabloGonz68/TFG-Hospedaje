@@ -13,6 +13,7 @@ import AuthBtn from "../buttons/authBtn";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import { TicketModal } from "../modals/ticketsModal";
+import { useLocation } from "react-router-dom";
 
 
 const components: { title: string; href: string; description: string }[] = [
@@ -54,10 +55,20 @@ const components: { title: string; href: string; description: string }[] = [
 ]
 
 export function NavigationMenuDemo() {
+  const location = useLocation();
+  // Variable para desactivar la animación en la ruta de perfil
+  const disableScrollAnimation = location.pathname.startsWith("/perfil");
+
+
   const { logout, isAuthenticated, loading, user } = useAuth() ?? {};
   const [scrolled, setScrolled] = useState(false);
   //Esto sirve para saber si el usuario ha llegado a la mitad de la pantalla, cambiar el tipo de header
   useEffect(() => {
+    if (disableScrollAnimation) {
+      setScrolled(false);
+      return;
+    }
+
     const handleScroll = () => {
       const hero = document.getElementById("hero");
       if (hero) {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRef, useEffect } from "react";
-
+import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
 declare global {
@@ -12,6 +12,8 @@ declare global {
 
 const CrearHospedaje = () => {
     const ubicacionRef = useRef<HTMLInputElement | null>(null);
+
+
 
     useEffect(() => {
         if (!window.google || !ubicacionRef.current) return;
@@ -35,6 +37,7 @@ const CrearHospedaje = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
+        foto: "",
         nombre: "",
         direccion: "",
         codigoPostal: "",
@@ -49,6 +52,38 @@ const CrearHospedaje = () => {
 
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        try {
+            const formData = new FormData();
+            formData.append("image", file);
+
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=a9a442802d1867768e4e3eed39e50987`, {
+                method: "POST",
+                body: formData,
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                const imageUrl = data.data.url;
+                setFormData(prevHospedaje => ({
+                    ...prevHospedaje,
+                    foto: imageUrl,
+                }));
+                toast.success("Imagen subida correctamente");
+            } else {
+                console.error("Error al subir imagen:", data);
+                toast.error("No se pudo subir la imagen");
+            }
+        } catch (error) {
+            console.error("Error en la subida:", error);
+            toast.error("Error al subir imagen");
+        }
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({

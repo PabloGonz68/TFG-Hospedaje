@@ -26,8 +26,13 @@ const ReservaIndividualForm = () => {
             return;
         }
 
-        const fechaInicio = startDate.toISOString().split("T")[0]; // yyyy-mm-dd
-        const fechaFin = endDate.toISOString().split("T")[0];
+        const formatDateToLocal = (date: Date) => {
+            return date.toLocaleDateString("sv-SE");
+        };
+
+        const fechaInicio = formatDateToLocal(startDate);
+        const fechaFin = formatDateToLocal(endDate);
+
 
         try {
             const response = await fetch("http://localhost:8080/reservas/individual", {

@@ -35,6 +35,9 @@ const ReservaGrupalForm = () => {
     const [endDate, setEndDate] = useState<Date | undefined>(undefined);
 
 
+    const formatDateToLocal = (date: Date | undefined): string => {
+        return date ? date.toLocaleDateString("sv-SE") : "";
+    };
 
 
     useEffect(() => {
@@ -61,10 +64,11 @@ const ReservaGrupalForm = () => {
     useEffect(() => {
         setForm((prev) => ({
             ...prev,
-            fechaInicio: startDate ? startDate.toISOString().split("T")[0] : "",
-            fechaFin: endDate ? endDate.toISOString().split("T")[0] : "",
+            fechaInicio: formatDateToLocal(startDate),
+            fechaFin: formatDateToLocal(endDate),
         }));
     }, [startDate, endDate]);
+
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

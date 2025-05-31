@@ -1,5 +1,8 @@
+import { ConfirmToast } from "@/components/toasts/ConfirmToast";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+
 
 interface Hospedaje {
     id: number;
@@ -100,6 +103,29 @@ const Hospedajes = () => {
         navigate(`/hospedajes/editar/${id}`)
     }
 
+    const eliminarHospedaje = async (id: number) => {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+        try {
+            await fetch(`http://localhost:8080/hospedaje/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            setHospedajes(hospedajes.filter((hospedaje) => hospedaje.id !== id));
+            toast.success("Hospedaje eliminado");
+        } catch (error) {
+            console.error("Error al eliminar el hospedaje", error);
+        }
+    }
+
+    const handleClickEliminar = (id: number) => {
+        toast.custom((t) => (
+            <ConfirmToast message="¿Desea eliminar el hospedaje?" onConfirm={() => eliminarHospedaje(id)} onCancel={() => toast.dismiss(t)} />
+        ))
+    }
+
     const zonaSelector = (zona: 'CIUDAD' | 'PUEBLO') => {
         switch (zona) {
             case 'CIUDAD':
@@ -170,7 +196,7 @@ const Hospedajes = () => {
 
                             {hospedajes.map((h) => (
 
-                                <div key={h.id} className="bg-white shadow-md rounded-2xl p-5 hover:shadow-lg transition">
+                                <div key={h.id} className="bg-white  border border-gray-300 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
                                     <Link to={`/hospedaje/${h.id}`}>
                                         <h2 className="text-xl font-semibold mb-2">{h.nombre}</h2>
                                         <p className="text-gray-700"><span className="font-medium">Dirección:</span> {h.direccion}, {h.codigoPostal}</p>
@@ -204,6 +230,7 @@ const Hospedajes = () => {
                                             >
                                                 Editar
                                             </button>
+                                            <button onClick={() => handleClickEliminar(h.id)} className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition ml-2">Eliminar</button>
                                         </div>
                                     )}
 
