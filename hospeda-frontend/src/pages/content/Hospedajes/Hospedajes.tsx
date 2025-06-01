@@ -18,6 +18,7 @@ interface Hospedaje {
     descripcion: string;
     ubicacion: string;
     visible: boolean;
+    foto: string;
 
 }
 
@@ -198,6 +199,7 @@ const Hospedajes = () => {
 
                                 <div key={h.id} className="bg-white  border border-gray-300 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
                                     <Link to={`/hospedaje/${h.id}`}>
+                                        <img src={h.foto} className="w-full h-48 object-cover mb-4" alt="" />
                                         <h2 className="text-xl font-semibold mb-2">{h.nombre}</h2>
                                         <p className="text-gray-700"><span className="font-medium">Dirección:</span> {h.direccion}, {h.codigoPostal}</p>
                                         <p className="text-gray-700"><span className="font-medium">Ciudad:</span> {h.ciudad}, {h.pais}</p>

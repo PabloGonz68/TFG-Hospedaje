@@ -12,7 +12,7 @@ declare global {
 
 const CrearHospedaje = () => {
     const ubicacionRef = useRef<HTMLInputElement | null>(null);
-
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
 
     useEffect(() => {
@@ -47,7 +47,7 @@ const CrearHospedaje = () => {
         tipoZona: "CIUDAD", // O "PUEBLO"
         descripcion: "",
         ubicacion: "",
-        visible: false,
+        visible: true,
     });
 
     const [error, setError] = useState("");
@@ -97,6 +97,12 @@ const CrearHospedaje = () => {
         setError("");
         setSuccess(false);
 
+        if (!formData.foto) {
+            toast.error("Por favor, selecciona una imagen.");
+            setError("Por favor, selecciona una imagen.");
+            return;
+        }
+
         try {
             const response = await fetch("http://localhost:8080/hospedaje/create", {
                 method: "POST",
@@ -113,9 +119,13 @@ const CrearHospedaje = () => {
             }
 
             setSuccess(true);
+            toast.success("Hospedaje creado");
+            console.log("Hospedaje creado:", formData);
             navigate("/hospedajes"); // Redirige si quieres
         } catch (err: any) {
             setError(err.message);
+            toast.error(err.message);
+
         }
     };
 
@@ -217,14 +227,44 @@ const CrearHospedaje = () => {
                 />
 
 
-                <input
-                    type="checkbox"
-                    name="visible"
-                    checked={formData.visible}
-                    onChange={(e) => setFormData({ ...formData, visible: e.target.checked })}
-                    className="mr-2"
-                />
-                <label htmlFor="visible">Visible</label>
+                <div className="flex flex-col w-full">
+                    <label htmlFor="foto">Insertar foto del hospedaje <span className="text-red-500">*</span></label>
+                    {formData.foto ? (
+                        <img
+                            src={formData.foto}
+                            alt="Previsualización"
+                            className="w-full h-48 rounded-lg mt-2 object-cover cursor-pointer hover:opacity-80 transition"
+                            onClick={() => fileInputRef.current?.click()}
+                        />
+                    ) : (
+                        <div
+                            className="w-full h-48 rounded-lg mt-2 bg-gray-300 flex items-center justify-center text-gray-600 cursor-pointer"
+                            onClick={() => fileInputRef.current?.click()}
+                        >
+                            <span className="text-4xl">+</span>
+                        </div>
+                    )}
+
+                    <input
+                        ref={fileInputRef}
+                        className="hidden"
+                        type="file"
+                        name="fotoPerfil"
+                        onChange={handleFileChange}
+                    />
+                </div>
+                <div className="flex items-center mt-2">
+                    <input
+                        type="checkbox"
+                        name="visible"
+                        checked={formData.visible}
+                        onChange={(e) => setFormData({ ...formData, visible: e.target.checked })}
+                        className="mr-2"
+                    />
+                    <label htmlFor="visible">Marcar como <span className="font-bold">visible</span></label>
+                </div>
+
+
 
                 <button
                     type="submit"

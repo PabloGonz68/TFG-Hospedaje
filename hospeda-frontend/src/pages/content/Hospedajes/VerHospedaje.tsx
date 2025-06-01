@@ -18,6 +18,7 @@ interface Hospedaje {
     descripcion: string;
     ubicacion: string;
     visible: boolean;
+    foto: string;
 }
 
 const VerHospedaje = () => {
@@ -81,15 +82,29 @@ const VerHospedaje = () => {
     }
 
     return (
-        <div className="felx flex-col max-w-3xl mx-auto p-6 bg-white shadow rounded-2xl mt-6">
+        <div className="flex flex-col gap-4 max-w-3xl mx-auto p-6 bg-white shadow rounded-2xl mt-6">
             <h1 className="text-3xl font-bold mb-4">{hospedaje.nombre}</h1>
-            <p className="text-gray-700"><span className="font-medium">Dirección:</span> {hospedaje.direccion}, {hospedaje.codigoPostal}</p>
-            <p className="text-gray-700"><span className="font-medium">Ciudad:</span> {hospedaje.ciudad}, {hospedaje.pais}</p>
-            <p className="text-gray-700"><span className="font-medium">Capacidad:</span> {hospedaje.capacidad} personas</p>
-            <p className="text-gray-700"><span className="font-medium">Zona:</span> {hospedaje.tipoZona}</p>
-            <p className="text-gray-700 mt-4">{hospedaje.descripcion}</p>
+            <img src={hospedaje.foto} alt="Hospedaje" />
+            <div className="flex gap-4 justify-center items-center">
+                <p className="text-gray-700"><span className="font-medium">Dirección:</span> {hospedaje.direccion}, {hospedaje.codigoPostal}</p>
+                <p className="text-gray-700"><span className="font-medium">Ciudad:</span> {hospedaje.ciudad}, {hospedaje.pais}</p>
+            </div>
+            <div className="flex gap-4 justify-center items-center">
+                <p className="text-gray-700"><span className="font-medium">Capacidad:</span> {hospedaje.capacidad} personas</p>
+                <p className="text-gray-700"><span className="font-medium">Zona:</span> {hospedaje.tipoZona}</p>
+            </div>
+            <div>
+                <label htmlFor="descripcion">Descripción:</label>
+                <div className="bg-gray-100  p-4 rounded-lg">
+                    <p className="text-gray-700">{hospedaje.descripcion}</p>
+                </div>
+            </div>
 
-            <Map direccion={hospedaje.ubicacion} />
+
+            <div className="flex justify-center items-center">
+                <Map direccion={hospedaje.ubicacion} />
+            </div>
+
             {idNum !== null && hospedaje.id_anfitrion === usuarioIdNum ? (
                 <div className="flex  mt-4">
                     <button

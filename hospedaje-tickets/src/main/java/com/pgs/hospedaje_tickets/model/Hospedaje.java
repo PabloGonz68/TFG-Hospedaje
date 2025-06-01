@@ -24,7 +24,7 @@ public class Hospedaje {
     @JoinColumn(name = "id_anfitrion", nullable = false)
     private Usuario anfitrion;
 
-    @Column(name = "foto")
+    @Column(name = "foto", nullable = true)
     private String foto;
 
     @Column(nullable = false, length = 100)

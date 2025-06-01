@@ -21,5 +21,6 @@ public class HospedajeDTO {
     private String descripcion;
     private String ubicacion;
     private boolean visible;
+    private String foto;
 
 }

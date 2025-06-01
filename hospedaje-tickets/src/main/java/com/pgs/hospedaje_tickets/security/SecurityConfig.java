@@ -108,7 +108,7 @@ public class SecurityConfig {
 
                         //Funciones Hospedaje
                         .requestMatchers(HttpMethod.GET, "/hospedaje/{id}").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/hospedaje/").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/hospedaje/").permitAll()
                         .requestMatchers(HttpMethod.POST, "/hospedaje/create").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/hospedaje/{id}").access(getHospedajeIdManager())
                         .requestMatchers(HttpMethod.DELETE, "/hospedaje/{id}").access(getHospedajeIdManager())
