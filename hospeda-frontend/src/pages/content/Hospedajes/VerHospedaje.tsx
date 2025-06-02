@@ -100,10 +100,14 @@ const VerHospedaje = () => {
                 </div>
             </div>
 
+            <div className="flex flex-col w-full">
+                <div className="flex flex-col gap-4">
+                    <label htmlFor="ubicacion">Ubicación:</label>
+                    <Map direccion={hospedaje.ubicacion} />
+                </div>
 
-            <div className="flex justify-center items-center">
-                <Map direccion={hospedaje.ubicacion} />
             </div>
+
 
             {idNum !== null && hospedaje.id_anfitrion === usuarioIdNum ? (
                 <div className="flex  mt-4">

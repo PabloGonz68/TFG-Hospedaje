@@ -161,6 +161,7 @@ public class HospedajeService {
         hospedaje.setTipoZona(Hospedaje.TipoZona.valueOf(dto.getTipoZona()));
         hospedaje.setDescripcion(dto.getDescripcion());
         hospedaje.setUbicacion(dto.getUbicacion());
+        hospedaje.setFoto(dto.getFoto());
         hospedaje.setVisible(dto.isVisible());
         hospedajeRepository.save(hospedaje);
 

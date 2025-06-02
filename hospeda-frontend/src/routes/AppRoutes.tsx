@@ -15,6 +15,8 @@ import VerGruposViaje from "@/pages/content/GrupoReserva/VerGruposViaje";
 import ReservaGrupalForm from "@/pages/content/Reserva/ReservaGrupalForm";
 import EditHospedaje from "@/pages/content/Hospedajes/EditHospedaje";
 import PerfilUser from "@/pages/content/User/PerfilUser";
+import PanelControl from "@/pages/content/Admin/PanelControl";
+import RutaProtegidaAdmin from "@/components/shared/rutaProtegidaAdmin";
 
 function AppRoutes() {
     return (
@@ -40,6 +42,8 @@ function AppRoutes() {
 
                 <Route path="/reserva/grupal/:hospedajeId" element={<TopLayout><ReservaGrupalForm /></TopLayout>} />
                 <Route path="/reserva/mis-reservas" element={<TopLayout><VerReservas /></TopLayout>} />
+
+                <Route path="/admin" element={<MainLayout><RutaProtegidaAdmin><PanelControl /></RutaProtegidaAdmin></MainLayout>} />
 
 
 

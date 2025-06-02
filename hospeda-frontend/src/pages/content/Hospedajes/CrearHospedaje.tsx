@@ -121,7 +121,7 @@ const CrearHospedaje = () => {
             setSuccess(true);
             toast.success("Hospedaje creado");
             console.log("Hospedaje creado:", formData);
-            navigate("/hospedajes"); // Redirige si quieres
+            navigate("/hospedajes");
         } catch (err: any) {
             setError(err.message);
             toast.error(err.message);

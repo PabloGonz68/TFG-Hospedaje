@@ -7,6 +7,7 @@ type User = {
     apellidos: string;
     email: string;
     fotoPerfil: string;
+    rol: 'USER' | 'ADMIN';
 }
 
 type AuthContextType = {

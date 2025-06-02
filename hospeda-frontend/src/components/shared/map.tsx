@@ -9,8 +9,7 @@ const Map = ({ direccion }: MapaProps) => {
 
     return (
         <iframe
-            width="600"
-            height="450"
+            height="350"
             style={{ border: 0 }}
             loading="lazy"
             allowFullScreen

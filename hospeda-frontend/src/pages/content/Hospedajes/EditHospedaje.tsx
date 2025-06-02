@@ -157,9 +157,10 @@ const EditHospedaje = () => {
 
             if (!response.ok) {
                 const errorData = await response.json();
+                console.error("Error al actualizar el hospedaje:", errorData);
                 throw new Error(errorData.message || "Error al crear el hospedaje");
             }
-
+            console.log("Hospedaje actualizado:", formData);
             setSuccess(true);
             toast.success("Hospedaje actualizado");
             navigate("/hospedajes"); // Redirige si quieres

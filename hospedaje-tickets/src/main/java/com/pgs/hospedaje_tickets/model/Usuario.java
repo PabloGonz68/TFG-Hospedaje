@@ -56,6 +56,13 @@ public class Usuario {
     @OneToMany(mappedBy = "anfitrion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Hospedaje> hospedajes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "creador", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GrupoViaje> gruposCreados = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MiembroGrupo> gruposMiembro = new ArrayList<>();
+
+
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReservaUsuario> reservasUsuarios = new ArrayList<>();
 
