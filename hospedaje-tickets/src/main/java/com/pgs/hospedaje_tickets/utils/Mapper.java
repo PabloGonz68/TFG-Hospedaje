@@ -82,10 +82,10 @@ public class Mapper {
 
     public TicketDTO toTicketDTO(Ticket ticket){
         if (ticket == null) return null;
-
-
         TicketDTO dto = new TicketDTO();
+        dto.setId(ticket.getId_ticket());
         dto.setTipoTicket(ticket.getTipoTicket().toString());
+
 
         // Mapear propietario
         if (ticket.getPropietario() != null) {
@@ -102,6 +102,7 @@ public class Mapper {
 
             dto.setPropietario(propietarioDTO);
         }
+        dto.setFechaGeneracion(ticket.getFechaGeneracion());
 
         return dto;
     }

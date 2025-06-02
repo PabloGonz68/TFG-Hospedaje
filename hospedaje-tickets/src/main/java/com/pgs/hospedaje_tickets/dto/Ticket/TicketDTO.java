@@ -6,10 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class TicketDTO {
+    private Long id;
     private String tipoTicket; // "PUEBLO" o "CIUDAD"
     private UsuarioDTO propietario;
+    private LocalDateTime fechaGeneracion;
 }

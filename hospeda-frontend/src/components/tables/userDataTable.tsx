@@ -38,6 +38,8 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { toast } from "sonner"
+import { ConfirmToast } from '../toasts/ConfirmToast';
+import { SheetTicketsUsuario } from '../sheet/TicketAdmin';
 
 export type Usuario = {
     id_usuario: string;
@@ -54,13 +56,42 @@ const UserDataTable = () => {
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
     const [usuarioSeleccionado, setUsuarioSeleccionado] = useState<Usuario | null>(null);
     const [sheetOpen, setSheetOpen] = useState(false);
+
+    const [ticketSheetOpen, setTicketSheetOpen] = useState(false);
+    const [usuarioTicketsId, setUsuarioTicketsId] = useState<string | null>(null);
 
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = useState({});
+
+
+    const eliminarUser = async (userId: string) => {
+        try {
+            const response = await fetch(`http://localhost:8080/usuario/${userId}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+            if (response.ok) {
+                const text = await response.text();
+                toast.info(text);
+                setUsuarios((prevUsuarios) => prevUsuarios.filter((u) => u.id_usuario !== userId));
+            } else {
+                const errorText = await response.json();
+                console.error("Error del servidor:", errorText);
+                toast.warning("Error al eliminar el usuario");
+            }
+        } catch (error) {
+            console.error("Error al eliminar el usuario:", error);
+            toast.error("Error al eliminar el usuario");
+        }
+    };
 
     const columns: ColumnDef<Usuario>[] = [
         {
@@ -177,8 +208,28 @@ const UserDataTable = () => {
                                     setSheetOpen(true);
                                 }}
                             >
-                                Ver perfil
+                                Editar perfil
                             </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => {
+                                    setUsuarioTicketsId(usuario.id_usuario);
+                                    setTicketSheetOpen(true);
+                                }}>
+                                Tickets
+                            </DropdownMenuItem>
+
+                            {String(usuario.id_usuario) !== localStorage.getItem("userId") && (<DropdownMenuItem
+                                className='text-red-600 '
+                                onClick={() => {
+                                    toast.custom((t) => (
+                                        <ConfirmToast
+                                            message="¿Desea eliminar el usuario?"
+                                            onConfirm={() => eliminarUser(usuario.id_usuario)}
+                                            onCancel={() => toast.dismiss(t)}
+                                        />
+                                    ))
+                                }}>Eliminar</DropdownMenuItem>)}
+
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );
@@ -355,6 +406,15 @@ const UserDataTable = () => {
                     }}
                 />
             )}
+            {/* Sheet para administrar tickets */}
+            {usuarioTicketsId && (
+                <SheetTicketsUsuario
+                    open={ticketSheetOpen}
+                    onClose={() => setTicketSheetOpen(false)}
+                    idUsuario={usuarioTicketsId}
+                />
+            )}
+
         </div>
     );
 };

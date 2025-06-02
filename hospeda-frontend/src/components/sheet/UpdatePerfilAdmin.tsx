@@ -12,7 +12,6 @@ import {
     SheetTitle,
 } from "@/components/ui/sheet"
 import { toast } from "sonner"
-import { useAuth } from "@/context/AuthContext"
 
 export type Usuario = {
     id_usuario: string
@@ -45,7 +44,7 @@ export function SheetAdminUser({
     const [rol, setRol] = useState<"USER" | "ADMIN">("USER")
     const [password, setPassword] = useState("")
 
-    const { updateUser } = useAuth() ?? {};
+
 
     useEffect(() => {
         if (usuario) {
@@ -95,7 +94,6 @@ export function SheetAdminUser({
                 const updatedUser = await response.json()
                 console.log("Perfil actualizado:", updatedUser)
                 toast.success("Perfil actualizado exitosamente")
-                updateUser?.(updatedUser);
                 onOpenChange(false)
             }
         } catch (error) {

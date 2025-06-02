@@ -15,6 +15,7 @@ interface Hospedaje {
     descripcion: string;
     ubicacion: string;
     visible: boolean;
+    foto: string;
 
 }
 const PerfilUser = () => {
@@ -178,53 +179,84 @@ const PerfilUser = () => {
                     ) : (
                         <div className="flex flex-col space-y-6">
                             {hospedajes.map((h) => (
-                                <div
+                                <Link
+                                    to={`/hospedaje/${h.id}`}
                                     key={h.id}
-                                    className="bg-white shadow-md rounded-2xl p-5 border border-gray-300 w-full hover:shadow-lg transition flex-shrink-0"
+                                    className="bg-white shadow-md rounded-2xl p-5 border border-gray-300 w-full hover:shadow-lg transition flex-shrink-0 block"
                                 >
-                                    <Link to={`/hospedaje/${h.id}`}>
-                                        <h2 className="text-xl font-semibold mb-2">{h.nombre}</h2>
-                                        <p className="text-gray-700">
-                                            <span className="font-medium">Dirección:</span> {h.direccion}, {h.codigoPostal}
-                                        </p>
-                                        <p className="text-gray-700">
-                                            <span className="font-medium">Ciudad:</span> {h.ciudad}, {h.pais}
-                                        </p>
-                                        {h.capacidad > 1 ? (
+                                    <section className="flex gap-4">
+                                        <div className="w-1/3 h-full">
+                                            <img
+                                                src={h.foto}
+                                                className="w-full rounded-lg h-74 aspect-square object-cover mb-4"
+                                                alt={h.nombre}
+                                            />
+                                        </div>
+                                        <div className="w-2/3">
+                                            <h2 className="text-xl font-semibold mb-2">{h.nombre}</h2>
                                             <p className="text-gray-700">
-                                                <span className="font-medium">Capacidad:</span> {h.capacidad} personas
+                                                <span className="font-medium">Dirección:</span> {h.direccion}, {h.codigoPostal}
                                             </p>
-                                        ) : (
                                             <p className="text-gray-700">
-                                                <span className="font-medium">Capacidad:</span> {h.capacidad} persona
+                                                <span className="font-medium">Ciudad:</span> {h.ciudad}, {h.pais}
                                             </p>
-                                        )}
+                                            {h.capacidad > 1 ? (
+                                                <p className="text-gray-700">
+                                                    <span className="font-medium">Capacidad:</span> {h.capacidad} personas
+                                                </p>
+                                            ) : (
+                                                <p className="text-gray-700">
+                                                    <span className="font-medium">Capacidad:</span> {h.capacidad} persona
+                                                </p>
+                                            )}
+                                            <p className="text-gray-700">
+                                                <span className="font-medium">
+                                                    Zona: <span className={zonaSelector(h.tipoZona)}>{h.tipoZona}</span>
+                                                </span>
+                                            </p>
+                                            <p className="text-gray-600 mt-2 truncate w-full">{h.descripcion}</p>
 
-                                        <p className="text-gray-700">
-                                            <span className="font-medium">
-                                                Zona: <span className={zonaSelector(h.tipoZona)}>{h.tipoZona}</span>
-                                            </span>
-                                        </p>
-                                        <p className="text-gray-600 mt-2">{h.descripcion}</p>
-                                    </Link>
-                                    <div className="flex justify-between flex-col">
-                                        <a href={`/perfil/${h.id_anfitrion}`} className="inline-block mt-3 ">
-                                            <span className="text-gray-700 font-medium">Anfitrion:</span>{' '}
-                                            <span className="text-principal hover:underline font-semibold">{h.nombreAnfitrion}</span>
-                                        </a>
-                                        <a
-                                            href={`https://www.google.com/maps/search/?api=1&query=${h.direccion}, ${h.ciudad}, ${h.pais}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="inline-block mt-3 text-blue-600 hover:underline"
-                                        >
-                                            Ver en Google Maps
-                                        </a>
-                                    </div>
-                                </div>
+                                            <div className="flex flex-col z-20 mt-3">
+                                                {/* Botón perfil anfitrión */}
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation(); // evita que dispare el Link padre
+                                                        window.location.href = `/perfil/${h.id_anfitrion}`;
+                                                    }}
+                                                    className="text-gray-700 font-medium hover:underline text-left"
+                                                    type="button"
+                                                >
+                                                    Anfitrión:{' '}
+                                                    <span className="text-principal font-semibold">{h.nombreAnfitrion}</span>
+                                                </button>
+
+                                                {/* Botón Google Maps */}
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                        window.open(
+                                                            `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                                                                `${h.direccion}, ${h.ciudad}, ${h.pais}`
+                                                            )}`,
+                                                            '_blank',
+                                                            'noopener noreferrer'
+                                                        );
+                                                    }}
+                                                    className="text-blue-600 hover:underline mt-3 text-left"
+                                                    type="button"
+                                                >
+                                                    Ver en Google Maps
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </Link>
                             ))}
                         </div>
                     )}
+
                 </section>
             </main>
 

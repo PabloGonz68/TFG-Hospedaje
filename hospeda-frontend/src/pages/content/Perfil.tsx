@@ -18,6 +18,7 @@ interface Hospedaje {
     descripcion: string;
     ubicacion: string;
     visible: boolean;
+    foto: string;
 
 }
 const Perfil = () => {
@@ -361,6 +362,7 @@ const Perfil = () => {
 
                                             <div key={h.id} className="bg-white  border border-gray-300 shadow-md rounded-2xl p-5 hover:shadow-lg transition">
                                                 <Link to={`/hospedaje/${h.id}`}>
+                                                    <img src={h.foto} className="w-full rounded-t-lg h-48 object-cover mb-4" alt="" />
                                                     <h2 className="text-xl font-semibold mb-2">{h.nombre}</h2>
                                                     <p className="text-gray-700"><span className="font-medium">Dirección:</span> {h.direccion}, {h.codigoPostal}</p>
                                                     <p className="text-gray-700"><span className="font-medium">Ciudad:</span> {h.ciudad}, {h.pais}</p>
@@ -371,7 +373,7 @@ const Perfil = () => {
                                                     )}
 
                                                     <p className="text-gray-700"><span className="font-medium">Zona: <span className={zonaSelector(h.tipoZona)}>{h.tipoZona}</span></span></p>
-                                                    <p className="text-gray-600 mt-2">{h.descripcion}</p>
+                                                    <p className="text-gray-600 truncate w-full mt-2">{h.descripcion}</p>
                                                     <p className="text-gray-600 mt-2"> {h.visible ? <span className="text-green-600 font-semibold">Publicado</span> : <span className="text-red-600 font-semibold">Privado</span>}</p><span></span>
                                                 </Link>
                                                 <div className="flex justify-between flex-col">

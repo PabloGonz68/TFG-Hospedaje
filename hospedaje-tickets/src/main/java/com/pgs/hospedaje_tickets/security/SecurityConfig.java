@@ -126,11 +126,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/hospedaje/admin").authenticated()
 
                         //Funciones Ticket
-                        .requestMatchers(HttpMethod.GET, "/ticket/user/{id}").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/ticket/user/{id}").authenticated()//tickets del usuario
 
                         //Funciones Admin Ticket
-                        .requestMatchers(HttpMethod.GET, "/ticket/").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/ticket/{id}/admin").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/ticket/").authenticated()//get all tickets
+                        .requestMatchers(HttpMethod.GET, "/ticket/{id}/admin").authenticated()//get by id ticket
                         .requestMatchers(HttpMethod.POST, "/ticket/create").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/ticket/{id}").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/ticket/{id}").authenticated()

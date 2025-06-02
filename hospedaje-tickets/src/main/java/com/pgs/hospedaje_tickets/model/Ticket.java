@@ -30,10 +30,10 @@ public class Ticket {
     }
 
     @Column(name = "fecha_generacion")
-    private LocalDateTime fecha_generacion;
+    private LocalDateTime fechaGeneracion;
 
     @PrePersist
     protected void onCreate() {
-        this.fecha_generacion = LocalDateTime.now();
+        this.fechaGeneracion = LocalDateTime.now();
     }
 }

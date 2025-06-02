@@ -32,11 +32,18 @@ const Hospedajes = () => {
     const [filtroCapacidad, setFiltroCapacidad] = useState<number | null>(null);
 
     const [usuarioId, setUsuarioId] = useState<number | null>(null);
+    const [rol, setRol] = useState<string | null>(null);
 
     useEffect(() => {
         const id = localStorage.getItem("userId");
         if (id) {
             setUsuarioId(parseInt(id));
+        }
+        const usuarioStr = localStorage.getItem("user");
+        if (usuarioStr) {
+            const usuario = JSON.parse(usuarioStr);
+            console.log("Rol del usuario:", usuario.rol);
+            setRol(usuario.rol);
         }
     }, [])
 
@@ -205,7 +212,7 @@ const Hospedajes = () => {
                                         <p className="text-gray-700"><span className="font-medium">Ciudad:</span> {h.ciudad}, {h.pais}</p>
                                         <p className="text-gray-700"><span className="font-medium">Capacidad:</span> {h.capacidad} personas</p>
                                         <p className="text-gray-700"><span className="font-medium">Zona: <span className={zonaSelector(h.tipoZona)}>{h.tipoZona}</span></span></p>
-                                        <p className="text-gray-600 mt-2">{h.descripcion}</p>
+                                        <p className="text-gray-600 mt-2 truncate w-full">{h.descripcion}</p>
                                     </Link>
                                     <div className="flex justify-between flex-col">
                                         <a href={`/perfil/${h.id_anfitrion}`}
@@ -224,7 +231,7 @@ const Hospedajes = () => {
                                         </a>
 
                                     </div>
-                                    {h.id_anfitrion === usuarioId && (
+                                    {(h.id_anfitrion === usuarioId || rol === "ADMIN") && (
                                         <div className="flex justify-end mt-4">
                                             <button
                                                 onClick={() => handleClickEditar(h.id)}
