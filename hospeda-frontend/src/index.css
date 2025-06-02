@@ -2,9 +2,9 @@
 @import "tw-animate-css";
 
 @theme {
-  --color-principal: #4f46e5;
+  --color-principal: RGB(255, 205, 63);
   --color-principal-foreground: #000000;
-  --color-principal-hover: #4338ca;
+  --color-principal-hover: RGB(255, 195, 63);
   --color-secundario: #3b82f6;
   --color-secundario-foreground: #ffffff;
   --color-secundario-hover: #2563eb;
