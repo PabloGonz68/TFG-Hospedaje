@@ -51,10 +51,11 @@ function Login() {
             const apellidos = backendUser.apellidos;
             const email = backendUser.email;
             const fotoPerfil = backendUser.fotoPerfil;
+            const rol = backendUser.rol;
             console.log("contenido de fotoPerfil al loguear(sera false porq no hay foto aun):", fotoPerfil);
 
             if (auth) {
-                auth.login(token, { id_usuario: id, nombre, apellidos, email, fotoPerfil });
+                auth.login(token, { id_usuario: id, nombre, apellidos, email, fotoPerfil, rol });
                 console.log("Usuario guardado en localStorage:", localStorage.getItem("user"));
             }
             toast.success("Login exitoso");

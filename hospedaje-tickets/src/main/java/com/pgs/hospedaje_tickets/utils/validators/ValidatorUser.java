@@ -25,11 +25,6 @@ public class ValidatorUser {
         if (userDTO.getEmail() == null || userDTO.getEmail().isEmpty()) {
             throw new ValidationException("El email es obligatorio");
         }
-
-        if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
-            throw new ValidationException("La contraseña es obligatoria");
-        }
-
     }
 
     public void validateUserRegister(UsuarioRegisterDTO userRegisterDTO) {

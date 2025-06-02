@@ -64,7 +64,7 @@ public class UsuarioService implements UserDetailsService {
 
     String rol = "USUARIO";
 
-        if ("pablo@gmail.com".equals(user.getEmail())) {
+        if ("pablo@gmail.com".equals(user.getEmail()) || "pablogonzalezsilva6@gmail.com".equals(user.getEmail())) {
             rol = "ADMIN";  // Asignar "admin" a un correo especial
         }
 
@@ -181,12 +181,6 @@ public class UsuarioService implements UserDetailsService {
         if (idLong == null || idLong <= 0) {
             throw new BadRequestException("El id de usuario es inválido.");
         }
-        String emailAutenticado = SecurityContextHolder.getContext().getAuthentication().getName();
-        Usuario usuarioAutenticado = usuarioRepository.findByEmail(emailAutenticado).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado."));
-        if (!usuarioAutenticado.getRol().equals(Usuario.Rol.ADMIN)) {
-            throw new ForbiddenException("No tienes permiso para acceder a esta información.");
-        }
-
         validatorUser.validateUserAdmin(user);
 
         Usuario existingUser = usuarioRepository.findById(idLong).orElse(null);

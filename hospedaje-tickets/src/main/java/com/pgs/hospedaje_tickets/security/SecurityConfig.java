@@ -103,7 +103,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/usuario/email/{email}").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/usuario/{id}").access(getUserIdManager())
                         //Funciones Admin Usuario
-                        .requestMatchers(HttpMethod.PUT, "/usuario/admin/{id}").authenticated()//admin update
+                        .requestMatchers(HttpMethod.PUT, "/usuario/admin/{id}").hasRole("ADMIN") //admin update
                         .requestMatchers(HttpMethod.GET, "/usuario/admin/").authenticated()//admin get all
 
                         //Funciones Hospedaje
