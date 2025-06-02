@@ -14,6 +14,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import { TicketModal } from "../modals/ticketsModal";
 import { useLocation } from "react-router-dom";
+import { GlowAvatar } from "../avatar/AdminAvatar";
 
 
 const components: { title: string; href: string; description: string }[] = [
@@ -221,13 +222,13 @@ export function NavigationMenuDemo() {
             <div className="flex justify-center items-center w-[120px] gap-2">
               <TicketModal ticketsCiudad={ticketsCiudad} ticketsPueblo={ticketsPueblo} />
               <a href="/perfil" className="bg-white flex items-center justify-center border border-gray-400 min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px] rounded-4xl overflow-hidden">
-                {user?.rol === 'ADMIN' ? (<img
-                  title="Perfil"
-                  src={user?.fotoPerfil
-                    ? user.fotoPerfil
-                    : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.nombre || 'Usuario')}&background=random`}
+                {user?.rol === 'ADMIN' ? (<GlowAvatar
+                  src={
+                    user?.fotoPerfil
+                      ? user.fotoPerfil
+                      : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.nombre || 'Usuario')}&background=random`
+                  }
                   alt="Avatar"
-                  className="w-full h-full object-cover rounded-full aspect-square boder-2 border-white"
                 />) : (<img
                   title="Perfil"
                   src={user?.fotoPerfil
