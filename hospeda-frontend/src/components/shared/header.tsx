@@ -19,41 +19,37 @@ import { GlowAvatar } from "../avatar/AdminAvatar";
 
 const components: { title: string; href: string; description: string }[] = [
   {
-    title: "Alert Dialog",
-    href: "/docs/primitives/alert-dialog",
-    description:
-      "A modal dialog that interrupts the user with important content and expects a response.",
+    title: "¿Qué es Hospeda?",
+    href: "/#que-es",
+    description: "Una comunidad donde compartes tu casa y usas tickets para alojarte en otras.",
   },
   {
-    title: "Hover Card",
-    href: "/docs/primitives/hover-card",
-    description:
-      "For sighted users to preview content available behind a link.",
+    title: "¿Cómo funciona?",
+    href: "/#como-funciona",
+    description: "Elige destino, usa tickets y hospédate fácilmente en casas de la comunidad.",
   },
   {
-    title: "Progress",
-    href: "/docs/primitives/progress",
-    description:
-      "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+    title: "¿Cómo se usan los tickets?",
+    href: "/#tickets",
+    description: "Utiliza tickets de ciudad o pueblo para reservar noches según el tipo de destino.",
   },
   {
-    title: "Scroll-area",
-    href: "/docs/primitives/scroll-area",
-    description: "Visually or semantically separates content.",
+    title: "¿Cómo consigo tickets?",
+    href: "/#conseguir-tickets",
+    description: "Permite que otros se alojen en tu casa y gana tickets automáticamente.",
   },
   {
-    title: "Tabs",
-    href: "/docs/primitives/tabs",
-    description:
-      "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+    title: "¿Puedo viajar con un grupo?",
+    href: "/#viajar-grupo",
+    description: "Forma grupos de viaje y repartan los tickets según el número de personas y noches.",
   },
   {
-    title: "Tooltip",
-    href: "/docs/primitives/tooltip",
-    description:
-      "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+    title: "¿Cómo se gestionan las reservas?",
+    href: "/#gestion-reservas",
+    description: "Los anfitriones aceptan, completan o cancelan las reservas de forma sencilla.",
   },
-]
+];
+
 
 export function NavigationMenuDemo() {
   const location = useLocation();
@@ -145,10 +141,10 @@ export function NavigationMenuDemo() {
 
       <header
         className={cn(
-          "transition-all duration-300 flex items-center  shadow-md",
+          "transition-all duration-300 flex items-center",
           scrolled
-            ? "bg-negro/60 backdrop-blur-md mt-5 rounded-3xl px-20 py-2 max-w-fit gap-30"
-            : "bg-negro py-4 w-full justify-between px-30"
+            ? "bg-negro/60 backdrop-blur-md mt-5 rounded-3xl px-2 md:px-5 lg:px-20 py-2 max-w-fit gap-10  md:gap-20 lg:gap-30"
+            : "py-4 w-full justify-center sm:justify-between px-10 lg:px-30"
         )}
       >
         <div>
@@ -160,16 +156,16 @@ export function NavigationMenuDemo() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>¿Como funciona?</NavigationMenuTrigger>
+              <NavigationMenuTrigger className="text-xs md:text-sm">¿Como funciona?</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                   <li className="row-span-3">
                     <NavigationMenuLink asChild>
                       <a
-                        className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                        className="flex h-full w-full select-none flex-col justify-end items-center md:items-start rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                         href="/"
                       >
-                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="" />
+                        <img className="w-44" src="https://i.ibb.co/XkKPrxRK/logo-Hospeda-negro.png" alt="Logo Hospeda en negro" />
 
                         <div className="mb-2 mt-4 text-lg font-medium">
                           ¿Como empezar?
@@ -193,7 +189,7 @@ export function NavigationMenuDemo() {
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>Información</NavigationMenuTrigger>
+              <NavigationMenuTrigger className="text-xs md:text-sm">Información</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                   {components.map((component) => (
@@ -217,7 +213,7 @@ export function NavigationMenuDemo() {
 
 
 
-        <div className="flex items-center">
+        <div className="hidden lg:flex items-center">
           {isAuthenticated ? (
             <div className="flex justify-center items-center w-[120px] gap-2">
               <TicketModal ticketsCiudad={ticketsCiudad} ticketsPueblo={ticketsPueblo} />
@@ -252,8 +248,67 @@ export function NavigationMenuDemo() {
               <AuthBtn color="rgb(55, 245, 65)" icon="register" text="Registrarse" enlace="/register" />
             </div>
           )}
-        </div>
 
+
+
+        </div>
+        {/* Botón hamburguesa visible solo en pantallas pequeñas */}
+        <label className="flex flex-col gap-2 w-8 cursor-pointer lg:hidden relative z-50">
+          <input id="menu-toggle" type="checkbox" className="peer hidden" />
+          <div className="rounded-2xl h-[3px] w-1/2 bg-black duration-500 peer-checked:rotate-[225deg] origin-right peer-checked:-translate-x-[12px] peer-checked:-translate-y-[1px]" />
+          <div className="rounded-2xl h-[3px] w-full bg-black duration-500 peer-checked:-rotate-45" />
+          <div className="rounded-2xl h-[3px] w-1/2 bg-black duration-500 place-self-end peer-checked:rotate-[225deg] origin-left peer-checked:translate-x-[12px] peer-checked:translate-y-[1px]" />
+
+          {/* Contenedor del menú móvil */}
+          <div className="peer-checked:flex hidden absolute top-10 right-0 bg-white text-black flex-col gap-4 rounded-xl shadow-md w-60">
+            {isAuthenticated ? (
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center justify-center bg-gray-500 text-principal p-2 rounded-t-lg">
+                  <h2 className="text-lg font-semibold">Acciones</h2>
+                </div>
+                <div className="flex flex-col gap-2 p-4">
+                  <TicketModal ticketsCiudad={ticketsCiudad} ticketsPueblo={ticketsPueblo} />
+
+                  <a className="flex items-center gap-2" href="/perfil">
+                    <div className="bg-white flex items-center justify-center border border-gray-400 min-w-[45px] min-h-[45px] max-w-[45px] max-h-[45px] rounded-4xl overflow-hidden">
+                      {user?.rol === 'ADMIN' ? (<GlowAvatar
+                        src={
+                          user?.fotoPerfil
+                            ? user.fotoPerfil
+                            : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.nombre || 'Usuario')}&background=random`
+                        }
+                        alt="Avatar"
+                      />) : (<img
+                        title="Perfil"
+                        src={user?.fotoPerfil
+                          ? user.fotoPerfil
+                          : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.nombre || 'Usuario')}&background=random`}
+                        alt="Avatar"
+                        className="w-full h-full object-cover rounded-full aspect-square"
+                      />)}
+                    </div>
+                    <h2 className="text-lg font-semibold">Perfil</h2>
+                  </a>
+
+                  <button onClick={logout}>
+                    <AuthBtn color="rgb(255, 65, 65)" icon="logout" text="Cerrar sesión" enlace="/login" />
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-center bg-principal text-white p-2 rounded-t-lg">
+                  <h2 className="text-lg font-semibold">Acceso</h2>
+                </div>
+                <div className="flex flex-col gap-2 p-4">
+
+                  <AuthBtn color="rgb(2, 35, 65)" icon="login" text="Iniciar sesión" enlace="/login" />
+                  <AuthBtn color="rgb(55, 245, 65)" icon="register" text="Registrarse" enlace="/register" />
+                </div>
+              </div>
+            )}
+          </div>
+        </label>
 
 
 

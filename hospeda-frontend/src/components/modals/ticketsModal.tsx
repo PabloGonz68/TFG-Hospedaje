@@ -27,7 +27,7 @@ export function TicketModal({ ticketsCiudad, ticketsPueblo }: TicketDialogProps)
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="bg-blue-400 text-white hover:bg-blue-500 flex items-center gap-2">
+                <Button className="bg-principal text-white hover:bg-principal-hover flex items-center gap-2">
                     <TicketIcon className="h-4 w-4" />
                     Mis tickets
                 </Button>

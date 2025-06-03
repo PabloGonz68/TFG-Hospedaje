@@ -3,6 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useEffect, useRef, useState } from "react";
 import { toast } from 'sonner';
 import { ConfirmToast } from "@/components/toasts/ConfirmToast";
+import { PopoverPassword } from "@/components/popovers/popoverPassword";
 
 interface Hospedaje {
     id: number;
@@ -192,8 +193,6 @@ const Perfil = () => {
             toast.error("Error al actualizar el usuario" + error);
         }
     }
-
-
     const eliminarUser = async () => {
         const userId = localStorage.getItem("userId");
         try {
@@ -223,11 +222,14 @@ const Perfil = () => {
         }
     }
 
+
     const handleClickEliminar = () => {
         toast.custom((t) => (
             <ConfirmToast message="¿Desea eliminar el usuario?" onConfirm={() => eliminarUser()} onCancel={() => toast.dismiss(t)} />
         ))
     }
+
+
 
     useEffect(() => {
         const fetchHospedajes = async () => {
@@ -261,7 +263,7 @@ const Perfil = () => {
 
                 <section className="flex justify-center mt-30">
                     <form onSubmit={handleSubmit} className="flex gap-10 justify-center items-center">
-                        <article className="flex flex-col gap-4 border border-gray-300 p-4 px-8 w-4xl">
+                        <article className="flex flex-col gap-4 border border-gray-300 p-4 px-8 w-5xl">
                             <h2 className="text-2xl font-bold mb-4">Mi Perfil</h2>
                             <section className="flex gap-10 items-center">
 
@@ -325,13 +327,17 @@ const Perfil = () => {
                                         />
                                     </div>
                                 </div>
-                                <article className="flex flex-col">
+                                <article className="flex flex-col gap-4">
                                     <button type="submit"
-                                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-full"
+                                        className=" px-4 py-2 bg-blue-500 text-white rounded-full"
                                     >
                                         Actualizar</button>
 
-                                    <button className="mt-4 px-4 py-2 bg-red-500 text-white rounded-full" onClick={handleClickEliminar} type="button">Eliminar cuenta</button>
+                                    <PopoverPassword />
+
+                                    <button className="px-4 py-2 bg-red-500 text-white rounded-full" onClick={handleClickEliminar} type="button">Eliminar cuenta</button>
+
+
                                 </article>
 
                             </section>
