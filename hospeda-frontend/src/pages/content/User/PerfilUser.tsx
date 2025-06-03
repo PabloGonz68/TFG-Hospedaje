@@ -108,7 +108,7 @@ const PerfilUser = () => {
         <>
             <main className="flex max-w-screen overflow-hidden">
                 {/* Form fijo a la izquierda */}
-                <form className="border border-gray-300 p-4 px-8 w-80 fixed left-0 top-28 bottom-0 overflow-auto bg-white">
+                <form className="border border-gray-300 rounded-tr-lg p-4 px-8 w-80 fixed left-0 top-28 bottom-0 overflow-auto bg-white">
                     <h2 className="text-2xl font-bold mb-4">Perfil</h2>
 
                     <article className="flex flex-col gap-4">
@@ -184,32 +184,32 @@ const PerfilUser = () => {
                                     key={h.id}
                                     className="bg-white shadow-md rounded-2xl p-5 border border-gray-300 w-full hover:shadow-lg transition flex-shrink-0 block"
                                 >
-                                    <section className="flex gap-4">
-                                        <div className="w-1/3 h-full">
+                                    <section className="flex sm:flex-col lg:flex-row gap-4">
+                                        <div className="lg:w-1/3 h-full">
                                             <img
                                                 src={h.foto}
                                                 className="w-full rounded-lg h-74 aspect-square object-cover mb-4"
                                                 alt={h.nombre}
                                             />
                                         </div>
-                                        <div className="w-2/3">
-                                            <h2 className="text-xl font-semibold mb-2">{h.nombre}</h2>
-                                            <p className="text-gray-700">
+                                        <div className="lg:w-2/3">
+                                            <h2 className="text-lg md:text-xl  font-semibold mb-2">{h.nombre}</h2>
+                                            <p className="text-gray-700 text-xs md:text-md">
                                                 <span className="font-medium">Dirección:</span> {h.direccion}, {h.codigoPostal}
                                             </p>
-                                            <p className="text-gray-700">
+                                            <p className="text-gray-700 text-xs md:text-md">
                                                 <span className="font-medium">Ciudad:</span> {h.ciudad}, {h.pais}
                                             </p>
                                             {h.capacidad > 1 ? (
-                                                <p className="text-gray-700">
+                                                <p className="text-gray-700 text-xs md:text-md">
                                                     <span className="font-medium">Capacidad:</span> {h.capacidad} personas
                                                 </p>
                                             ) : (
-                                                <p className="text-gray-700">
+                                                <p className="text-gray-700 text-xs md:text-md">
                                                     <span className="font-medium">Capacidad:</span> {h.capacidad} persona
                                                 </p>
                                             )}
-                                            <p className="text-gray-700">
+                                            <p className="text-gray-700 text-xs md:text-md">
                                                 <span className="font-medium">
                                                     Zona: <span className={zonaSelector(h.tipoZona)}>{h.tipoZona}</span>
                                                 </span>
@@ -224,7 +224,7 @@ const PerfilUser = () => {
                                                         e.stopPropagation(); // evita que dispare el Link padre
                                                         window.location.href = `/perfil/${h.id_anfitrion}`;
                                                     }}
-                                                    className="text-gray-700 font-medium hover:underline text-left"
+                                                    className="text-gray-700 sm:text-sm font-medium hover:underline text-left"
                                                     type="button"
                                                 >
                                                     Anfitrión:{' '}

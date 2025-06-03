@@ -153,7 +153,7 @@ export function NavigationMenuDemo() {
           </a>
         </div>
 
-        <NavigationMenu>
+        <NavigationMenu className="bg-white rounded-lg">
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuTrigger className="text-xs md:text-sm">¿Como funciona?</NavigationMenuTrigger>

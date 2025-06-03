@@ -26,6 +26,9 @@ function ParallaxSection({
     const y = useParallax(scrollYProgress, parallaxDistance)
     const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8])
 
+
+
+
     return (
         <section className={`parallax-section ${className}`}>
             <motion.div className={`parallax-bg ${bgColor}`} style={{ y: useTransform(scrollYProgress, [0, 1], [0, -50]) }} />
@@ -53,10 +56,15 @@ function IconCard({ icon: Icon, className = "" }: { icon: any; className?: strin
 
 export default function HospedaParallax() {
     const { scrollYProgress } = useScroll()
-    const scaleX = useSpring(scrollYProgress, {
+    const rawScaleX = useSpring(scrollYProgress, {
         damping: 30,
         restDelta: 0.001,
-    });
+    })
+    const scaleX = useTransform(rawScaleX, [0, 0, 0.9], [0, 0, 1])
+    const opacity = useTransform(scrollYProgress, [0, 0.8, 0.9], [1, 1, 0])
+
+
+
 
 
 
@@ -244,7 +252,7 @@ export default function HospedaParallax() {
             {/* Progress Bar */}
             <motion.div
                 className="fixed left-0 right-0 h-1 bg-principal bottom-8 mx-4 rounded-full shadow-lg z-50"
-                style={{ scaleX, transformOrigin: "0%" }}
+                style={{ scaleX, opacity, transformOrigin: "0%" }}
             />
 
             <style>{`
