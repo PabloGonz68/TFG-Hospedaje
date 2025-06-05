@@ -262,10 +262,10 @@ const Perfil = () => {
             <main className="flex flex-col gap-10 py-4">
 
                 <section className="flex justify-center mt-30">
-                    <form onSubmit={handleSubmit} className="flex gap-10 justify-center items-center">
-                        <article className="flex flex-col gap-4 border border-gray-300 p-4 px-8 w-5xl">
+                    <form onSubmit={handleSubmit} className="flex bg-negro rounded-xl text-blanco gap-10 justify-center items-center">
+                        <article className="flex flex-col gap-4  p-4 px-8 w-5xl">
                             <h2 className="text-2xl font-bold mb-4">Mi Perfil</h2>
-                            <section className="flex gap-10 items-center">
+                            <section className="flex gap-10 items-center py-5">
 
 
                                 <div className="flex flex-col">

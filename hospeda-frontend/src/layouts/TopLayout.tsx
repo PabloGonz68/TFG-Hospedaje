@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import Header from "../components/shared/header";
+import Header from "../components/shared/header-black";
 import Footer from "@/components/shared/footer";
 
 interface MainLayoutProps {
@@ -10,7 +10,7 @@ function TopLayout({ children }: MainLayoutProps) {
   return (
     <main>
       <Header />
-      <div className="container mt-30 mx-auto px-4 py-8 pb-20">
+      <div className=" container mt-30 mx-auto px-4 py-8 pb-20">
         {children}
       </div>
       <Footer />

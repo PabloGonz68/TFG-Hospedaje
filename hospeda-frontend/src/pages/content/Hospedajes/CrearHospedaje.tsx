@@ -130,153 +130,155 @@ const CrearHospedaje = () => {
     };
 
     return (
-        <div className="max-w-2xl mx-auto p-6 bg-white shadow rounded-2xl mt-6">
-            <h1 className="text-2xl font-bold mb-4 text-center">Crear Hospedaje</h1>
+        <main>
+            <div className="max-w-2xl mx-auto p-6 bg-white shadow rounded-2xl mt-6">
+                <h1 className="text-2xl font-bold mb-4 text-center">Crear Hospedaje</h1>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                    type="text"
-                    name="nombre"
-                    placeholder="Nombre"
-                    value={formData.nombre}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <input
+                        type="text"
+                        name="nombre"
+                        placeholder="Nombre"
+                        value={formData.nombre}
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
 
-                <input
-                    type="text"
-                    name="direccion"
-                    placeholder="Dirección"
-                    value={formData.direccion}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
+                    <input
+                        type="text"
+                        name="direccion"
+                        placeholder="Dirección"
+                        value={formData.direccion}
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
 
-                <input
-                    type="text"
-                    name="codigoPostal"
-                    placeholder="Código Postal"
-                    value={formData.codigoPostal}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
+                    <input
+                        type="text"
+                        name="codigoPostal"
+                        placeholder="Código Postal"
+                        value={formData.codigoPostal}
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
 
-                <input
-                    type="text"
-                    name="ciudad"
-                    placeholder="Ciudad"
-                    value={formData.ciudad}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
+                    <input
+                        type="text"
+                        name="ciudad"
+                        placeholder="Ciudad"
+                        value={formData.ciudad}
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
 
-                <input
-                    type="text"
-                    name="pais"
-                    placeholder="País"
-                    value={formData.pais}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
+                    <input
+                        type="text"
+                        name="pais"
+                        placeholder="País"
+                        value={formData.pais}
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
 
-                <input
-                    type="number"
-                    name="capacidad"
-                    placeholder="Capacidad"
-                    value={formData.capacidad}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-2 border border-gray-300 rounded"
-                    min={1}
-                />
+                    <input
+                        type="number"
+                        name="capacidad"
+                        placeholder="Capacidad"
+                        value={formData.capacidad}
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 border border-gray-300 rounded"
+                        min={1}
+                    />
 
-                <select
-                    name="tipoZona"
-                    value={formData.tipoZona}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                >
-                    <option value="CIUDAD">Ciudad</option>
-                    <option value="PUEBLO">Pueblo</option>
-                </select>
+                    <select
+                        name="tipoZona"
+                        value={formData.tipoZona}
+                        onChange={handleChange}
+                        className="w-full p-2 border border-gray-300 rounded"
+                    >
+                        <option value="CIUDAD">Ciudad</option>
+                        <option value="PUEBLO">Pueblo</option>
+                    </select>
 
-                <textarea
-                    name="descripcion"
-                    placeholder="Descripción"
-                    value={formData.descripcion}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-2 border border-gray-300 rounded"
-                    rows={4}
-                />
+                    <textarea
+                        name="descripcion"
+                        placeholder="Descripción"
+                        value={formData.descripcion}
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 border border-gray-300 rounded"
+                        rows={4}
+                    />
 
-                <input
-                    type="text"
-                    name="ubicacion"
-                    placeholder="Ubicación (busca y selecciona)"
-                    value={formData.ubicacion}
-                    ref={ubicacionRef}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
+                    <input
+                        type="text"
+                        name="ubicacion"
+                        placeholder="Ubicación (busca y selecciona)"
+                        value={formData.ubicacion}
+                        ref={ubicacionRef}
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
 
 
-                <div className="flex flex-col w-full">
-                    <label htmlFor="foto">Insertar foto del hospedaje <span className="text-red-500">*</span></label>
-                    {formData.foto ? (
-                        <img
-                            src={formData.foto}
-                            alt="Previsualización"
-                            className="w-full h-48 rounded-lg mt-2 object-cover cursor-pointer hover:opacity-80 transition"
-                            onClick={() => fileInputRef.current?.click()}
+                    <div className="flex flex-col w-full">
+                        <label htmlFor="foto">Insertar foto del hospedaje <span className="text-red-500">*</span></label>
+                        {formData.foto ? (
+                            <img
+                                src={formData.foto}
+                                alt="Previsualización"
+                                className="w-full h-48 rounded-lg mt-2 object-cover cursor-pointer hover:opacity-80 transition"
+                                onClick={() => fileInputRef.current?.click()}
+                            />
+                        ) : (
+                            <div
+                                className="w-full h-48 rounded-lg mt-2 bg-gray-300 flex items-center justify-center text-gray-600 cursor-pointer"
+                                onClick={() => fileInputRef.current?.click()}
+                            >
+                                <span className="text-4xl">+</span>
+                            </div>
+                        )}
+
+                        <input
+                            ref={fileInputRef}
+                            className="hidden"
+                            type="file"
+                            name="fotoPerfil"
+                            onChange={handleFileChange}
                         />
-                    ) : (
-                        <div
-                            className="w-full h-48 rounded-lg mt-2 bg-gray-300 flex items-center justify-center text-gray-600 cursor-pointer"
-                            onClick={() => fileInputRef.current?.click()}
-                        >
-                            <span className="text-4xl">+</span>
-                        </div>
-                    )}
-
-                    <input
-                        ref={fileInputRef}
-                        className="hidden"
-                        type="file"
-                        name="fotoPerfil"
-                        onChange={handleFileChange}
-                    />
-                </div>
-                <div className="flex items-center mt-2">
-                    <input
-                        type="checkbox"
-                        name="visible"
-                        checked={formData.visible}
-                        onChange={(e) => setFormData({ ...formData, visible: e.target.checked })}
-                        className="mr-2"
-                    />
-                    <label htmlFor="visible">Marcar como <span className="font-bold">visible</span></label>
-                </div>
+                    </div>
+                    <div className="flex items-center mt-2">
+                        <input
+                            type="checkbox"
+                            name="visible"
+                            checked={formData.visible}
+                            onChange={(e) => setFormData({ ...formData, visible: e.target.checked })}
+                            className="mr-2"
+                        />
+                        <label htmlFor="visible">Marcar como <span className="font-bold">visible</span></label>
+                    </div>
 
 
 
-                <button
-                    type="submit"
-                    className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition"
-                >
-                    Crear Hospedaje
-                </button>
+                    <button
+                        type="submit"
+                        className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition"
+                    >
+                        Crear Hospedaje
+                    </button>
 
-                {error && <p className="text-red-500 text-sm">{error}</p>}
-                {success && <p className="text-green-500 text-sm">Hospedaje creado con éxito.</p>}
-            </form>
-        </div>
+                    {error && <p className="text-red-500 text-sm">{error}</p>}
+                    {success && <p className="text-green-500 text-sm">Hospedaje creado con éxito.</p>}
+                </form>
+            </div>
+        </main>
     );
 };
 

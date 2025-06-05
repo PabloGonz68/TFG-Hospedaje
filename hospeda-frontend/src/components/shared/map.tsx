@@ -10,7 +10,10 @@ const Map = ({ direccion }: MapaProps) => {
     return (
         <iframe
             height="350"
-            style={{ border: 0 }}
+            style={{
+                border: 0,
+                borderRadius: '10px',
+            }}
             loading="lazy"
             allowFullScreen
             referrerPolicy="no-referrer-when-downgrade"

@@ -154,17 +154,17 @@ const Hospedajes = () => {
                     type="text"
                     placeholder="Ciudad"
                     onChange={(e) => setFiltroCiudad(e.target.value)}
-                    className="border rounded-md px-3 py-2"
+                    className="border rounded-md px-3 py-2 bg-blanco"
                 />
                 <input
                     type="text"
                     placeholder="País"
                     onChange={(e) => setFiltroPais(e.target.value)}
-                    className="border rounded-md px-3 py-2"
+                    className="border rounded-md px-3 py-2 bg-blanco"
                 />
                 <select
                     onChange={(e) => setFiltroTipoZona(e.target.value)}
-                    className="border rounded-md px-3 py-2"
+                    className="border rounded-md px-3 py-2 bg-blanco"
                 >
                     <option value="">Zona</option>
                     <option value="CIUDAD">Ciudad</option>
@@ -174,7 +174,7 @@ const Hospedajes = () => {
                     type="number"
                     placeholder="Capacidad mínima"
                     onChange={(e) => setFiltroCapacidad(Number(e.target.value))}
-                    className="border rounded-md px-3 py-2"
+                    className="border rounded-md px-3 py-2 bg-blanco"
                 />
 
             </div>
@@ -184,7 +184,7 @@ const Hospedajes = () => {
             <div className="flex justify-center mb-4">
                 <Link
                     to="/hospedajes/crear"
-                    className="bg-principal text-white py-2 px-4 rounded-md hover:bg-principal-hover transition"
+                    className="bg-secundario text-white py-2 px-4 rounded-md hover:bg-principal-hover transition"
                 >
                     Crea tu hospedaje
                 </Link>

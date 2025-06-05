@@ -149,7 +149,7 @@ export function NavigationMenuDemo() {
       >
         <div>
           <a href="/">
-            <img className=" min-w-24 md:min-w-32 max-w-24 md:max-w-32" src="https://i.ibb.co/rKGbXzxS/logo-Hospeda-amarillo.png" alt="logo-Hospeda-amarillo" />
+            <img className=" min-w-24 md:min-w-32 max-w-24 md:max-w-32" src="https://i.ibb.co/XkKPrxRK/logo-Hospeda-blanco.png" alt="logo-Hospeda-amarillo" />
           </a>
         </div>
 

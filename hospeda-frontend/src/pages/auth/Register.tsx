@@ -48,14 +48,14 @@ function Register() {
         }
     }
     return (
-        <main className=" flex flex-col items-center justify-center min-h-screen p-4">
+        <main className=" flex bg-gradient-to-bl from-negro to-principal flex-col items-center justify-center min-h-screen p-4">
             <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
             >
-                <form onSubmit={handleSubmit} className="flex flex-col gap-3  p-4 w-full max-w-md mx-auto border-2 border-gray-300 rounded">
-                    <h2 className="text-xl font-bold mb-4">Registro</h2>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-3 bg-negro  p-8 w-full max-w-md mx-auto border-2 shadow-[0_20px_50px_rgba(RGB(_255,_255,_255)_0.7)] border-gray-300 rounded-xl">
+                    <h2 className="text-xl font-bold mb-4 py-2 text-principal border-b-1 border-principal">Registro</h2>
                     <input
                         type="email"
                         name="email"
@@ -63,7 +63,7 @@ function Register() {
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        className="p-2 border rounded"
+                        className="p-2 border-b text-blanco bg-negro"
                     />
                     <input
                         type="text"
@@ -72,7 +72,7 @@ function Register() {
                         value={formData.nombre}
                         onChange={handleChange}
                         required
-                        className="p-2 border rounded"
+                        className="p-2 border-b text-blanco bg-negro"
                     />
                     <input
                         type="text"
@@ -81,7 +81,7 @@ function Register() {
                         value={formData.apellidos}
                         onChange={handleChange}
                         required
-                        className="p-2 border rounded"
+                        className="p-2 border-b text-blanco bg-negro"
                     />
                     <input
                         type="password"
@@ -90,7 +90,7 @@ function Register() {
                         value={formData.password}
                         onChange={handleChange}
                         required
-                        className="p-2 border rounded"
+                        className="p-2 border-b text-blanco bg-negro"
                     />
                     <input
                         type="password"
@@ -99,17 +99,17 @@ function Register() {
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         required
-                        className="p-2 border rounded"
+                        className="p-2 border-b text-blanco bg-negro mb-4"
                     />
                     <button
                         type="submit"
-                        className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                        className="bg-principal text-negro p-2 rounded hover:bg-principal-hover"
                     >
                         Registrarse
                     </button>
                     <div className="flex justify-center items-center gap-2">
-                        <span>Ya tienes una cuenta?</span>
-                        <a className="text-blue-500 font-bold hover:underline hover:text-blue-700" href="/login">Inicia sesión</a>
+                        <span className="text-blanco">Ya tienes una cuenta?</span>
+                        <a className="text-principal font-bold hover:underline hover:text-principal-hover" href="/login">Inicia sesión</a>
                     </div>
                 </form>
             </motion.div>

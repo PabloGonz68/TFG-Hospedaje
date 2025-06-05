@@ -82,46 +82,59 @@ const VerHospedaje = () => {
     }
 
     return (
-        <div className="flex flex-col gap-4 max-w-3xl mx-auto p-6 bg-white shadow rounded-2xl mt-6">
-            <h1 className="text-3xl font-bold mb-4">{hospedaje.nombre}</h1>
-            <img src={hospedaje.foto} alt="Hospedaje" />
-            <div className="flex gap-4 justify-center items-center">
-                <p className="text-gray-700"><span className="font-medium">Dirección:</span> {hospedaje.direccion}, {hospedaje.codigoPostal}</p>
-                <p className="text-gray-700"><span className="font-medium">Ciudad:</span> {hospedaje.ciudad}, {hospedaje.pais}</p>
-            </div>
-            <div className="flex gap-4 justify-center items-center">
-                <p className="text-gray-700"><span className="font-medium">Capacidad:</span> {hospedaje.capacidad} personas</p>
-                <p className="text-gray-700"><span className="font-medium">Zona:</span> {hospedaje.tipoZona}</p>
-            </div>
-            <div>
-                <label htmlFor="descripcion">Descripción:</label>
-                <div className="bg-gray-100  p-4 rounded-lg">
-                    <p className="text-gray-700">{hospedaje.descripcion}</p>
+        <main>
+
+            <div className="flex flex-col gap-4  max-w-3xl mx-auto shadow-[8px_7px_17px_4px_rgba(0,_0,_0,_0.15)]  bg-negro rounded-2xl mt-6">
+                <div>
+                    <img className="rounded-t-2xl" src={hospedaje.foto} alt="Hospedaje" />
+                </div>
+                <div className="p-6 flex flex-col gap-5 text-blanco">
+
+                    <div className="flex justify-between items-center">
+                        <h1 className="text-3xl font-bold">{hospedaje.nombre}</h1>
+                        {idNum !== null && hospedaje.id_anfitrion === usuarioIdNum ? (
+                            <div className="flex  mt-4">
+                                <button
+                                    onClick={() => handleClickEditar(idNum)}
+                                    className="bg-principal text-negro py-2 px-4 rounded-md hover:bg-principal-hover transition"
+                                >
+                                    Editar
+                                </button>
+                            </div>
+                        ) : (
+                            id && <ReservaModal hospedajeId={id} />
+                        )}
+                    </div>
+
+
+                    <div className="flex gap-4 justify-start items-center">
+                        <p className="text-gray-300"><span className="font-medium text-blanco">Dirección:</span> {hospedaje.direccion}, {hospedaje.codigoPostal}</p>
+                        <p className="text-gray-300"><span className="font-medium text-blanco">Ciudad:</span> {hospedaje.ciudad}, {hospedaje.pais}</p>
+                    </div>
+                    <div className="flex gap-4 justify-start items-center">
+                        <p className="text-gray-300"><span className="font-medium text-blanco">Capacidad:</span> {hospedaje.capacidad} personas</p>
+                        <p className="text-gray-300"><span className="font-medium text-blanco">Zona:</span> {hospedaje.tipoZona}</p>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <label htmlFor="descripcion" className="font-semibold text-blanco">Descripción:</label>
+                        <div className="bg-gray-100  p-4 rounded-lg">
+                            <p className="text-gray-700">{hospedaje.descripcion}</p>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col w-full">
+                        <div className="flex flex-col gap-2">
+                            <label className="font-semibold text-blanco" htmlFor="ubicacion">Ubicación:</label>
+                            <Map direccion={hospedaje.ubicacion} />
+                        </div>
+
+                    </div>
+
+
+
                 </div>
             </div>
-
-            <div className="flex flex-col w-full">
-                <div className="flex flex-col gap-4">
-                    <label htmlFor="ubicacion">Ubicación:</label>
-                    <Map direccion={hospedaje.ubicacion} />
-                </div>
-
-            </div>
-
-
-            {idNum !== null && hospedaje.id_anfitrion === usuarioIdNum ? (
-                <div className="flex  mt-4">
-                    <button
-                        onClick={() => handleClickEditar(idNum)}
-                        className="bg-principal text-white py-2 px-4 rounded-md hover:bg-principal-hover transition"
-                    >
-                        Editar
-                    </button>
-                </div>
-            ) : (
-                id && <ReservaModal hospedajeId={id} />
-            )}
-        </div>
+        </main>
     );
 };
 

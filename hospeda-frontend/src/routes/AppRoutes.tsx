@@ -43,7 +43,7 @@ function AppRoutes() {
                 <Route path="/reserva/grupal/:hospedajeId" element={<TopLayout><ReservaGrupalForm /></TopLayout>} />
                 <Route path="/reserva/mis-reservas" element={<TopLayout><VerReservas /></TopLayout>} />
 
-                <Route path="/admin" element={<MainLayout><RutaProtegidaAdmin><PanelControl /></RutaProtegidaAdmin></MainLayout>} />
+                <Route path="/admin" element={<TopLayout><RutaProtegidaAdmin><PanelControl /></RutaProtegidaAdmin></TopLayout>} />
 
 
 

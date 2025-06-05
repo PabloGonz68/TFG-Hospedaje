@@ -14,7 +14,7 @@ function ParallaxSection({
     children,
     className = "",
     parallaxDistance = 100,
-    bgColor = "bg-neutral-50",
+    bgColor = "bg-blanco",
 }: {
     children: React.ReactNode
     className?: string
@@ -70,13 +70,13 @@ export default function HospedaParallax() {
 
 
     return (
-        <div className="bg-white relative scroll-smooth">
+        <div className="bg-principal relative scroll-smooth">
 
             <div className="relative z-10 px-4 sm:px-8 py-8 max-w-6xl mx-auto">
 
 
                 {/* Qué es Hospeda */}
-                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-neutral-100">
+                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-blanco">
                     <motion.div
                         id="que-es"
                         initial={{ opacity: 0, x: 30 }}
@@ -108,7 +108,7 @@ export default function HospedaParallax() {
                 </ParallaxSection>
 
                 {/* Cómo funciona */}
-                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-white">
+                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-blanco">
                     <motion.div
                         id="como-funciona"
                         initial={{ opacity: 0, x: -30 }}
@@ -135,7 +135,7 @@ export default function HospedaParallax() {
                 </ParallaxSection>
 
                 {/* Tickets */}
-                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-neutral-50">
+                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-blanco">
                     <motion.div
                         id="tickets"
                         initial={{ opacity: 0, x: -30 }}
@@ -165,7 +165,7 @@ export default function HospedaParallax() {
                 </ParallaxSection>
 
                 {/* Cómo conseguir tickets */}
-                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-white">
+                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-blanco">
                     <motion.div
                         id="conseguir-tickets"
                         initial={{ opacity: 0, x: -30 }}
@@ -192,7 +192,7 @@ export default function HospedaParallax() {
                 </ParallaxSection>
 
                 {/* Viajar en grupo */}
-                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-neutral-50">
+                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-blanco">
                     <motion.div
                         id="viajar-grupo"
                         initial={{ opacity: 0, x: -30 }}
@@ -222,7 +222,7 @@ export default function HospedaParallax() {
                 </ParallaxSection>
 
                 {/* Gestión de reservas */}
-                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-white">
+                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-blanco">
                     <motion.div
                         id="gestion-reservas"
                         initial={{ opacity: 0, x: -30 }}

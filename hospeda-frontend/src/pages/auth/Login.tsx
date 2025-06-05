@@ -70,7 +70,7 @@ function Login() {
         }
     }
     return (
-        <main className="flex flex-col  gap-5 items-center justify-center h-screen">
+        <main className=" flex bg-gradient-to-br from-negro to-principal flex-col items-center justify-center min-h-screen p-4">
 
             {error && (
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
@@ -84,11 +84,11 @@ function Login() {
             >
 
 
-                <form className="flex flex-col max-w-md mx-auto shadow-md rounded px-8 pt-6 pb-8 mb-4 gap-4 border-2 border-gray-300" onSubmit={handleSubmit}>
-                    <h2 className="text-xl font-bold mb-4">Login</h2>
+                <form className="flex flex-col gap-3 bg-negro  p-8 w-full max-w-md mx-auto border-2 shadow-[0_20px_50px_rgba(RGB(_255,_255,_255)_0.7)] border-gray-300 rounded-xl" onSubmit={handleSubmit}>
+                    <h2 className="text-xl font-bold mb-4 py-2 text-principal border-b-1 border-principal">Login</h2>
                     <div className="flex flex-col gap-2">
                         <input
-                            className="border-b-2 border-gray-300 mb-4"
+                            className="p-2 border-b text-blanco bg-negro"
                             type="email"
                             name="email"
                             value={formData.email}
@@ -97,7 +97,7 @@ function Login() {
                             required
                         />
                         <input
-                            className="border-b-2 border-gray-300 mb-4"
+                            className="p-2 border-b text-blanco bg-negro"
                             type="password"
                             name="password"
                             value={formData.password}
@@ -107,10 +107,10 @@ function Login() {
                         />
                     </div>
 
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Iniciar sesión</button>
+                    <button className="bg-principal text-negro p-2 rounded hover:bg-principal-hover" type="submit">Iniciar sesión</button>
                     <div className="flex gap-2">
-                        <span>¿No tienes una cuenta?</span>
-                        <a className="text-blue-500 font-bold hover:underline hover:text-blue-700" href="/register">Registrate</a>
+                        <span className="text-blanco">¿No tienes una cuenta?</span>
+                        <a className="text-principal font-bold hover:underline hover:text-principal-hover" href="/register">Registrate</a>
                     </div>
                 </form>
             </motion.div>

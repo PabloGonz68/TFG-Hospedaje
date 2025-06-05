@@ -85,9 +85,9 @@ export function GrupoUpdateModal({ grupo, onUpdated }: GrupoUpdateModalProps) {
             <DialogTrigger asChild>
                 <Button variant="outline">Editar grupo</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[425px] text-blanco">
                 <DialogHeader>
-                    <DialogTitle>Editar grupo</DialogTitle>
+                    <DialogTitle><span className="text-principal">Editar grupo</span></DialogTitle>
                     <DialogDescription>Modifica los tickets de los miembros.</DialogDescription>
                 </DialogHeader>
                 <div className="grid grid-cols-4 items-center gap-4">
@@ -118,7 +118,7 @@ export function GrupoUpdateModal({ grupo, onUpdated }: GrupoUpdateModalProps) {
                     ))}
                 </div>
                 <DialogFooter>
-                    <Button onClick={handleGuardar}>Guardar Cambios</Button>
+                    <Button className="bg-principal text-negro" onClick={handleGuardar}>Guardar Cambios</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

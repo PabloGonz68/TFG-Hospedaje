@@ -10,7 +10,7 @@ export const ConfirmToast = ({ message, onConfirm, onCancel }: ConfirmToastProps
     return (
         <div className="flex flex-col gap-2 bg-white border-gray-300 border-2 px-8 py-2 rounded-xl">
             <span className="font-medium">{message}</span>
-            <div className="flex justify-end gap-2">
+            <div className="flex justify-center items-center gap-2">
                 <button
                     onClick={() => {
                         onCancel();
