@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { toast } from 'sonner';
+import { MapPin, Search, Ticket, Trash2, UserPlus, Users } from "lucide-react";
 
 
 const CrearGrupoViaje = () => {
@@ -9,8 +10,9 @@ const CrearGrupoViaje = () => {
 
 
     const [nombreGrupo, setNombreGrupo] = useState("");
-    const [cantidadTicketsCreador, setcantidadTicketsCreador] = useState(0);
+    const [cantidadTicketsCreador, setCantidadTicketsCreador] = useState(0)
     const [emailBusqueda, setEmailBusqueda] = useState("");
+    const [isSearching, setIsSearching] = useState(false)
     const [usuarioEncontrado, setUsuarioEncontrado] = useState<{
         id: number;
         nombre: string;
@@ -26,6 +28,12 @@ const CrearGrupoViaje = () => {
 
 
     const buscarUsuarioPorEmail = async () => {
+        if (!emailBusqueda.trim()) {
+            toast.error("Por favor ingresa un email")
+            return
+        }
+
+        setIsSearching(true)
         try {
             const token = localStorage.getItem("token");
             const response = await fetch(`http://localhost:8080/usuario/email/${emailBusqueda}`, {
@@ -109,116 +117,230 @@ const CrearGrupoViaje = () => {
         }
     }
     const { hospedajeId } = useParams();
-
+    const totalTickets = cantidadTicketsCreador + miembros.reduce((sum, miembro) => sum + miembro.ticketsAportados, 0)
 
     return (
-        <main className="p-4 max-w-xl mx-auto">
-            <h1 className="text-2xl font-bold mb-6">Crear Grupo de Viaje</h1>
-
-            <div className="mb-4">
-                <label className="block mb-1 font-semibold">Nombre del grupo:</label>
-                <input
-                    type="text"
-                    value={nombreGrupo}
-                    onChange={(e) => setNombreGrupo(e.target.value)}
-                    className="w-full border p-2 rounded"
-                />
-            </div>
-            {/* Tickets del creador */}
-            <div className="mb-4">
-                <label className="block mb-1 font-semibold">Tus tickets aportados:</label>
-                <input
-                    type="number"
-                    value={cantidadTicketsCreador}
-                    onChange={(e) => setcantidadTicketsCreador(Number(e.target.value))}
-                    className="w-full border p-2 rounded"
-                    min={0}
-                />
-            </div>
-
-            {/* Buscar usuario */}
-            <div className="mb-4">
-                <label className="block mb-1 font-semibold">Buscar usuario por email:</label>
-                <input
-                    type="text"
-                    value={emailBusqueda}
-                    onChange={(e) => setEmailBusqueda(e.target.value)}
-                    className="w-full border p-2 rounded"
-                />
-                <button
-                    onClick={buscarUsuarioPorEmail}
-                    className="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-                >
-                    Buscar
-                </button>
-            </div>
-
-            {/* Mostrar cuando  usuario encontrado */}
-            {usuarioEncontrado && (
-                <div className="mb-4 p-4 border rounded bg-gray-100">
-                    <p><strong>Usuario:</strong> {usuarioEncontrado.nombre}</p>
-                    <label className="block mt-2 font-semibold">Tickets que aportará:</label>
-                    <input
-                        type="number"
-                        min={1}
-                        onChange={(e) =>
-                            setUsuarioEncontrado({
-                                ...usuarioEncontrado!,
-                                ticketsAportados: Number(e.target.value),
-                            })
-                        }
-                        className="w-full border p-2 rounded"
-                    />
-                    <button
-                        className="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
-                        onClick={() =>
-                            agregarMiembro(usuarioEncontrado.ticketsAportados || 0)
-                        }
-                    >
-                        Añadir al grupo
-                    </button>
+        <div className="min-h-screen bg-[#ffcd40] p-4 md:p-6">
+            <div className="max-w-4xl mx-auto">
+                {/* Header */}
+                <div className="mb-8">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="p-3 bg-[#1d1d1b] rounded-xl">
+                            <Users className="w-6 h-6 text-[#ffcd40]" />
+                        </div>
+                        <div>
+                            <h1 className="text-3xl font-bold text-[#1d1d1b]">Crear Grupo de Viaje</h1>
+                            <p className="text-[#1d1d1b]/80 mt-1">Organiza tu próxima aventura con amigos</p>
+                        </div>
+                    </div>
                 </div>
-            )}
 
-            {/* Lista de miembros */}
-            <div className="mb-4">
-                <h2 className="text-lg font-bold mb-2">Miembros añadidos:</h2>
-                {miembros.length === 0 ? (
-                    <p className="text-gray-600">Aún no hay miembros.</p>
-                ) : (
-                    <ul className="list-disc list-inside">
-                        {miembros.map((m, idx) => (
-                            <li key={idx} className="flex items-center justify-between mb-2">
-                                <span>{m.nombre} — {m.ticketsAportados} tickets</span>
-                                <button
-                                    onClick={() => eliminarMiembro(m.idUsuario)}
-                                    className="ml-4 bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-sm"
-                                >
-                                    Eliminar
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Formulario principal */}
+                    <div className="lg:col-span-2 space-y-6">
+                        {/* Información del grupo */}
+                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10">
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="p-2 bg-[#ffcd40] rounded-lg">
+                                    <MapPin className="w-5 h-5 text-[#1d1d1b]" />
+                                </div>
+                                <h2 className="text-xl font-bold text-[#1d1d1b]">Información del Grupo</h2>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-[#1d1d1b] mb-2">
+                                        Nombre del grupo <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={nombreGrupo}
+                                        onChange={(e) => setNombreGrupo(e.target.value)}
+                                        placeholder="Ej: Aventura en Barcelona 2024"
+                                        className="w-full px-4 py-3 border border-[#1d1d1b]/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1d1d1b] focus:border-transparent"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-[#1d1d1b] mb-2">Tus tickets aportados</label>
+                                    <div className="relative">
+                                        <Ticket className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#1d1d1b]/60 w-5 h-5" />
+                                        <input
+                                            type="number"
+                                            value={cantidadTicketsCreador}
+                                            onChange={(e) => setCantidadTicketsCreador(Number(e.target.value))}
+                                            min={0}
+                                            className="w-full pl-12 pr-4 py-3 border border-[#1d1d1b]/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1d1d1b] focus:border-transparent"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Buscar miembros */}
+                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10">
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="p-2 bg-[#ffcd40] rounded-lg">
+                                    <UserPlus className="w-5 h-5 text-[#1d1d1b]" />
+                                </div>
+                                <h2 className="text-xl font-bold text-[#1d1d1b]">Añadir Miembros</h2>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-[#1d1d1b] mb-2">Buscar usuario por email</label>
+                                    <div className="flex gap-3">
+                                        <div className="relative flex-1">
+                                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#1d1d1b]/60 w-5 h-5" />
+                                            <input
+                                                type="email"
+                                                value={emailBusqueda}
+                                                onChange={(e) => setEmailBusqueda(e.target.value)}
+                                                placeholder="usuario@ejemplo.com"
+                                                className="w-full pl-12 pr-4 py-3 border border-[#1d1d1b]/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1d1d1b] focus:border-transparent"
+                                                onKeyPress={(e) => e.key === "Enter" && buscarUsuarioPorEmail()}
+                                            />
+                                        </div>
+                                        <button
+                                            onClick={buscarUsuarioPorEmail}
+                                            disabled={isSearching}
+                                            className="px-6 py-3 bg-[#1d1d1b] hover:bg-[#2d2d2b] disabled:bg-[#1d1d1b]/50 text-white rounded-xl font-medium transition-colors duration-200"
+                                        >
+                                            {isSearching ? "Buscando..." : "Buscar"}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Usuario encontrado */}
+                                {usuarioEncontrado && (
+                                    <div className="p-4 bg-[#ffcd40]/20 rounded-xl border border-[#ffcd40]/30">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-10 h-10 bg-[#1d1d1b] rounded-full flex items-center justify-center">
+                                                <Users className="w-5 h-5 text-white" />
+                                            </div>
+                                            <div>
+                                                <p className="font-medium text-[#1d1d1b]">{usuarioEncontrado.nombre}</p>
+                                                <p className="text-sm text-[#1d1d1b]/60">Usuario encontrado</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-3">
+                                            <label className="block text-sm font-medium text-[#1d1d1b]">Tickets que aportará</label>
+                                            <div className="relative">
+                                                <Ticket className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#1d1d1b]/60 w-5 h-5" />
+                                                <input
+                                                    type="number"
+                                                    min={1}
+                                                    onChange={(e) =>
+                                                        setUsuarioEncontrado({
+                                                            ...usuarioEncontrado,
+                                                            ticketsAportados: Number(e.target.value),
+                                                        })
+                                                    }
+                                                    className="w-full pl-12 pr-4 py-3 border border-[#1d1d1b]/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1d1d1b] focus:border-transparent"
+                                                />
+                                            </div>
+                                            <button
+                                                onClick={() => agregarMiembro(usuarioEncontrado.ticketsAportados || 0)}
+                                                className="w-full bg-[#1d1d1b] hover:bg-[#2d2d2b] text-white px-4 py-3 rounded-xl font-medium transition-colors duration-200"
+                                            >
+                                                Añadir al grupo
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Panel lateral */}
+                    <div className="space-y-6">
+                        {/* Resumen del grupo */}
+                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10">
+                            <h3 className="text-lg font-bold text-[#1d1d1b] mb-4">Resumen del Grupo</h3>
+
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between p-3 bg-[#ffcd40]/20 rounded-lg">
+                                    <span className="text-sm text-[#1d1d1b]/60">Total miembros</span>
+                                    <span className="font-bold text-[#1d1d1b]">{miembros.length + 1}</span>
+                                </div>
+
+                                <div className="flex items-center justify-between p-3 bg-[#ffcd40]/20 rounded-lg">
+                                    <span className="text-sm text-[#1d1d1b]/60">Total tickets</span>
+                                    <span className="font-bold text-[#1d1d1b]">{totalTickets}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Lista de miembros */}
+                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10">
+                            <h3 className="text-lg font-bold text-[#1d1d1b] mb-4">Miembros del Grupo</h3>
+
+                            <div className="space-y-3">
+                                {/* Creador */}
+                                <div className="flex items-center justify-between p-3 bg-[#ffcd40]/20 rounded-lg">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 bg-[#1d1d1b] rounded-full flex items-center justify-center">
+                                            <Users className="w-4 h-4 text-white" />
+                                        </div>
+                                        <div>
+                                            <p className="font-medium text-[#1d1d1b]">Tú (Creador)</p>
+                                            <p className="text-xs text-[#1d1d1b]/60">{cantidadTicketsCreador} tickets</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Miembros añadidos */}
+                                {miembros.length === 0 ? (
+                                    <div className="text-center py-8">
+                                        <Users className="w-12 h-12 text-[#1d1d1b]/30 mx-auto mb-3" />
+                                        <p className="text-[#1d1d1b]/60 text-sm">Aún no hay miembros</p>
+                                    </div>
+                                ) : (
+                                    miembros.map((miembro, idx) => (
+                                        <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center">
+                                                    <Users className="w-4 h-4 text-white" />
+                                                </div>
+                                                <div>
+                                                    <p className="font-medium text-[#1d1d1b]">{miembro.nombre}</p>
+                                                    <p className="text-xs text-[#1d1d1b]/60">{miembro.ticketsAportados} tickets</p>
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={() => eliminarMiembro(miembro.idUsuario)}
+                                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
+                                                title="Eliminar miembro"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Botón crear grupo */}
+                        <button
+                            onClick={handleCrearGrupo}
+                            disabled={!nombreGrupo.trim()}
+                            className="w-full bg-[#1d1d1b] hover:bg-[#2d2d2b] disabled:bg-[#1d1d1b]/50 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none"
+                        >
+                            Crear Grupo de Viaje
+                        </button>
+                        {hospedajeId && <button
+                            onClick={() => navigate(`/reserva/grupal/${hospedajeId}`)}
+                            disabled={!nombreGrupo.trim()}
+                            className="w-full bg-[#1d1d1b] hover:bg-[#2d2d2b] disabled:bg-[#1d1d1b]/50 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none"
+                        >
+                            ¿Ya tienes un grupo?
+                        </button>}
+
+                    </div>
+                </div>
             </div>
-
-            {/* Crear grupo */}
-            <div className="flex gap-4">
-                <button
-                    onClick={handleCrearGrupo}
-                    className="bg-principal hover:bg-principal-hover text-white px-6 py-2 rounded w-full"
-                >
-                    Crear Grupo de Viaje
-                </button>
-                {hospedajeId && <button
-                    onClick={() => navigate(`/reserva/grupal/${hospedajeId}`)}
-                    className="bg-principal-hover hover:bg-principal  text-white px-4 py-2 rounded  transition"
-                >
-                    ¿Ya tienes un grupo?
-                </button>}
-            </div>
-
-        </main>
+        </div>
 
     )
 

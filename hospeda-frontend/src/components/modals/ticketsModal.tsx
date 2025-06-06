@@ -27,7 +27,7 @@ export function TicketModal({ ticketsCiudad, ticketsPueblo }: TicketDialogProps)
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="bg-negro text-white hover:bg-principal-hover flex items-center gap-2">
+                <Button className="bg-negro  text-white hover:text-negro hover:bg-principal-hover hover:border-2 hover:border-negro flex items-center gap-2">
                     <TicketIcon className="h-4 w-4" />
                     Mis tickets
                 </Button>
@@ -39,7 +39,7 @@ export function TicketModal({ ticketsCiudad, ticketsPueblo }: TicketDialogProps)
                         Aquí puedes ver los tickets que tienes disponibles actualmente.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-4 py-4 text-center text-lg">
+                <div className="grid gap-4 py-4 text-center text-lg text-negro">
                     <div className="bg-blue-100 p-4 rounded-xl shadow">
                         🎫 <strong>Tickets Ciudad:</strong> {ticketsCiudad}
                     </div>
@@ -48,7 +48,7 @@ export function TicketModal({ ticketsCiudad, ticketsPueblo }: TicketDialogProps)
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button className="bg-principal hover:bg-principal-hover " onClick={handleClose} variant="outline">Cerrar</Button>
+                    <Button className="bg-principal text-negro hover:bg-principal-hover " onClick={handleClose} variant="outline">Cerrar</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

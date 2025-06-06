@@ -1,3 +1,4 @@
+import { AlertCircle, Camera, Check, FileText, Home, MapPin, Upload, Users } from "lucide-react";
 import { useState } from "react";
 import { useRef, useEffect } from "react";
 
@@ -15,6 +16,7 @@ const EditHospedaje = () => {
     const { id } = useParams();
     const ubicacionRef = useRef<HTMLInputElement | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isUploading] = useState(false)
 
     useEffect(() => {
         if (!window.google || !ubicacionRef.current) return;
@@ -171,151 +173,293 @@ const EditHospedaje = () => {
     };
 
     return (
-        <div className="max-w-2xl mx-auto p-6 bg-white shadow rounded-2xl mt-6">
-            <h1 className="text-2xl font-bold mb-4 text-center">Editar Hospedaje</h1>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                    type="text"
-                    name="nombre"
-                    placeholder="Nombre"
-                    value={formData.nombre}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
-
-                <input
-                    type="text"
-                    name="direccion"
-                    placeholder="Dirección"
-                    value={formData.direccion}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
-
-                <input
-                    type="text"
-                    name="codigoPostal"
-                    placeholder="Código Postal"
-                    value={formData.codigoPostal}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
-
-                <input
-                    type="text"
-                    name="ciudad"
-                    placeholder="Ciudad"
-                    value={formData.ciudad}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
-
-                <input
-                    type="text"
-                    name="pais"
-                    placeholder="País"
-                    value={formData.pais}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
-
-                <input
-                    type="number"
-                    name="capacidad"
-                    placeholder="Capacidad"
-                    value={formData.capacidad}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-2 border border-gray-300 rounded"
-                    min={1}
-                />
-
-                <select
-                    name="tipoZona"
-                    value={formData.tipoZona}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
-                >
-                    <option value="CIUDAD">Ciudad</option>
-                    <option value="PUEBLO">Pueblo</option>
-                </select>
-
-                <textarea
-                    name="descripcion"
-                    placeholder="Descripción"
-                    value={formData.descripcion}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-2 border border-gray-300 rounded"
-                    rows={4}
-                />
-
-                <input
-                    type="text"
-                    name="ubicacion"
-                    placeholder="Ubicación (busca y selecciona)"
-                    value={formData.ubicacion}
-                    ref={ubicacionRef}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
-
-
-                <div className="flex flex-col w-full">
-                    <label htmlFor="foto">Insertar foto del hospedaje <span className="text-red-500">*</span></label>
-                    {formData.foto ? (
-                        <img
-                            src={formData.foto}
-                            alt="Previsualización"
-                            className="w-full h-48 rounded-lg mt-2 object-cover cursor-pointer hover:opacity-80 transition"
-                            onClick={() => fileInputRef.current?.click()}
-                        />
-                    ) : (
-                        <div
-                            className="w-full h-48 rounded-lg mt-2 bg-gray-300 flex items-center justify-center text-gray-600 cursor-pointer"
-                            onClick={() => fileInputRef.current?.click()}
-                        >
-                            <span className="text-4xl">+</span>
+        <div className="min-h-screen bg-principal p-4 md:p-6">
+            <div className="max-w-4xl mx-auto">
+                {/* Header */}
+                <div className="mb-8">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="p-3 bg-negro rounded-xl">
+                            <Home className="w-6 h-6 text-principal" />
                         </div>
-                    )}
-
-                    <input
-                        ref={fileInputRef}
-                        className="hidden"
-                        type="file"
-                        name="fotoPerfil"
-                        onChange={handleFileChange}
-                    />
-                </div>
-                <div className="flex items-center mt-2">
-                    <input
-                        type="checkbox"
-                        name="visible"
-                        checked={formData.visible}
-                        onChange={(e) => setFormData({ ...formData, visible: e.target.checked })}
-                        className="mr-2"
-                    />
-                    <label htmlFor="visible">Marcar como <span className="font-bold">visible</span></label>
+                        <div>
+                            <h1 className="text-3xl font-bold text-negro">Editar Hospedaje</h1>
+                            <p className="text-negro/80 mt-1">Comparte tu espacio con viajeros de todo el mundo</p>
+                        </div>
+                    </div>
                 </div>
 
+                <form onSubmit={handleSubmit} className="space-y-8">
+                    {/* Información básica */}
+                    <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="p-2 bg-principal rounded-lg">
+                                <FileText className="w-5 h-5 text-negro" />
+                            </div>
+                            <h2 className="text-xl font-bold text-negro">Información Básica</h2>
+                        </div>
 
-                <button
-                    type="submit"
-                    className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition"
-                >
-                    Guardar Cambios
-                </button>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="md:col-span-2">
+                                <label className="block text-sm font-medium text-negro mb-2">
+                                    Nombre del hospedaje <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="nombre"
+                                    placeholder="Ej: Casa acogedora en el centro"
+                                    value={formData.nombre}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full px-4 py-3 border border-negro/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-negro focus:border-transparent"
+                                />
+                            </div>
 
-                {error && <p className="text-red-500 text-sm">{error}</p>}
-                {success && <p className="text-green-500 text-sm">Hospedaje editado con éxito.</p>}
-            </form>
+                            <div>
+                                <label className="block text-sm font-medium text-negro mb-2">
+                                    Capacidad <span className="text-red-500">*</span>
+                                </label>
+                                <div className="relative">
+                                    <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-negro/60 w-5 h-5" />
+                                    <input
+                                        type="number"
+                                        name="capacidad"
+                                        placeholder="Número de personas"
+                                        value={formData.capacidad}
+                                        onChange={handleChange}
+                                        required
+                                        min={1}
+                                        className="w-full pl-12 pr-4 py-3 border border-negro/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-negro focus:border-transparent"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-negro mb-2">
+                                    Tipo de zona <span className="text-red-500">*</span>
+                                </label>
+                                <select
+                                    name="tipoZona"
+                                    value={formData.tipoZona}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-3 border border-negro/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-negro focus:border-transparent"
+                                >
+                                    <option value="CIUDAD">Ciudad</option>
+                                    <option value="PUEBLO">Pueblo</option>
+                                </select>
+                            </div>
+
+                            <div className="md:col-span-2">
+                                <label className="block text-sm font-medium text-negro mb-2">
+                                    Descripción <span className="text-red-500">*</span>
+                                </label>
+                                <textarea
+                                    name="descripcion"
+                                    placeholder="Describe tu hospedaje, sus características especiales, servicios incluidos..."
+                                    value={formData.descripcion}
+                                    onChange={handleChange}
+                                    required
+                                    rows={4}
+                                    className="w-full px-4 py-3 border border-negro/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-negro focus:border-transparent resize-none"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Ubicación */}
+                    <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="p-2 bg-principal rounded-lg">
+                                <MapPin className="w-5 h-5 text-negro" />
+                            </div>
+                            <h2 className="text-xl font-bold text-negro">Ubicación</h2>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="md:col-span-2">
+                                <label className="block text-sm font-medium text-negro mb-2">
+                                    Dirección completa <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="direccion"
+                                    placeholder="Calle, número, etc."
+                                    value={formData.direccion}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full px-4 py-3 border border-negro/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-negro focus:border-transparent"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-negro mb-2">
+                                    Ciudad <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="ciudad"
+                                    placeholder="Ciudad"
+                                    value={formData.ciudad}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full px-4 py-3 border border-negro/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-negro focus:border-transparent"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-negro mb-2">
+                                    Código Postal <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="codigoPostal"
+                                    placeholder="CP"
+                                    value={formData.codigoPostal}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full px-4 py-3 border border-negro/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-negro focus:border-transparent"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-negro mb-2">
+                                    País <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="pais"
+                                    placeholder="País"
+                                    value={formData.pais}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full px-4 py-3 border border-negro/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-negro focus:border-transparent"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-negro mb-2">
+                                    Ubicación en Google Maps <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="ubicacion"
+                                    placeholder="Busca y selecciona tu ubicación"
+                                    value={formData.ubicacion}
+                                    ref={ubicacionRef}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full px-4 py-3 border border-negro/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-negro focus:border-transparent"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Imagen */}
+                    <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="p-2 bg-principal rounded-lg">
+                                <Camera className="w-5 h-5 text-negro" />
+                            </div>
+                            <h2 className="text-xl font-bold text-negro">Imagen Principal</h2>
+                        </div>
+
+                        <div className="space-y-4">
+                            <label className="block text-sm font-medium text-negro">
+                                Foto del hospedaje <span className="text-red-500">*</span>
+                            </label>
+
+                            {formData.foto ? (
+                                <div className="relative">
+                                    <img
+                                        src={formData.foto || "/placeholder.svg"}
+                                        alt="Previsualización"
+                                        className="w-full h-64 rounded-xl object-cover"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => fileInputRef.current?.click()}
+                                        className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-opacity duration-200 rounded-xl flex items-center justify-center"
+                                    >
+                                        <div className="text-white text-center">
+                                            <Camera className="w-8 h-8 mx-auto mb-2" />
+                                            <p className="text-sm font-medium">Cambiar imagen</p>
+                                        </div>
+                                    </button>
+                                </div>
+                            ) : (
+                                <div
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className="w-full h-64 border-2 border-dashed border-negro/30 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-negro/50 hover:bg-principal/5 transition-all duration-200"
+                                >
+                                    {isUploading ? (
+                                        <div className="text-center">
+                                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-negro mx-auto mb-2"></div>
+                                            <p className="text-negro/60">Subiendo imagen...</p>
+                                        </div>
+                                    ) : (
+                                        <div className="text-center">
+                                            <Upload className="w-12 h-12 text-negro/40 mx-auto mb-4" />
+                                            <p className="text-negro font-medium mb-1">Haz clic para subir una imagen</p>
+                                            <p className="text-negro/60 text-sm">PNG, JPG hasta 10MB</p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            <input ref={fileInputRef} className="hidden" type="file" accept="image/*" onChange={handleFileChange} />
+                        </div>
+                    </div>
+
+                    {/* Configuración */}
+                    <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="p-2 bg-principal rounded-lg">
+                                <Check className="w-5 h-5 text-negro" />
+                            </div>
+                            <h2 className="text-xl font-bold text-negro">Configuración</h2>
+                        </div>
+
+                        <div className="flex items-center gap-3 p-4 bg-principal/10 rounded-xl">
+                            <input
+                                type="checkbox"
+                                name="visible"
+                                id="visible"
+                                checked={formData.visible}
+                                onChange={(e) => setFormData({ ...formData, visible: e.target.checked })}
+                                className="w-5 h-5 text-negro bg-white border-negro/20 rounded focus:ring-negro focus:ring-2"
+                            />
+                            <label htmlFor="visible" className="text-negro font-medium">
+                                Hacer visible el hospedaje inmediatamente
+                            </label>
+                        </div>
+                    </div>
+
+
+                    {/* Botón de envío */}
+                    <div className="flex flex-col gap-4">
+                        <button
+                            type="submit"
+                            disabled={isUploading}
+                            className="w-full bg-negro hover:bg-[#2d2d2b] disabled:bg-negro/50 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none"
+                        >
+                            {isUploading ? "Subiendo imagen..." : "Guardar cambios"}
+                        </button>
+
+                        {error && (
+                            <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-xl">
+                                <AlertCircle className="w-5 h-5 text-red-600" />
+                                <p className="text-red-700 font-medium">{error}</p>
+                            </div>
+                        )}
+
+                        {success && (
+                            <div className="flex items-center gap-2 p-4 bg-green-50 border border-green-200 rounded-xl">
+                                <Check className="w-5 h-5 text-green-600" />
+                                <p className="text-green-700 font-medium">Hospedaje creado con éxito</p>
+                            </div>
+                        )}
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

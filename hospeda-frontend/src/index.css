@@ -10,6 +10,7 @@
   --color-secundario-hover: #2563eb;
   --color-negro: #1d1d1b   ;
   --color-blanco: #fffde9   ;
+  --color-blanco-transparente: rgba(255, 250, 221, 0.95);
 }
 
 @custom-variant dark (&:is(.dark *));

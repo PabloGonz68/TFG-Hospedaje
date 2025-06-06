@@ -19,7 +19,7 @@ const ReservaModal: React.FC<ReservaModalProps> = ({ hospedajeId }) => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <button className="mt-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                <button className="mt-6 bg-secundario text-white px-4 py-2 rounded hover:bg-secundario-hover transition">
                     Reservar
                 </button>
             </DialogTrigger>
@@ -35,13 +35,13 @@ const ReservaModal: React.FC<ReservaModalProps> = ({ hospedajeId }) => {
                 <div className="flex justify-center gap-4 mt-4">
                     <button
                         onClick={() => navigate(`/reserva/individual/${hospedajeId}`)}
-                        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+                        className="bg-principal text-negro px-4 py-2 rounded hover:bg-principal-hover transition"
                     >
                         Individual
                     </button>
                     <button
                         onClick={() => navigate(`/grupoViaje/${hospedajeId}`)}
-                        className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition"
+                        className="bg-secundario text-blanco px-4 py-2 rounded hover:bg-secundario-hover transition"
                     >
                         En grupo
                     </button>

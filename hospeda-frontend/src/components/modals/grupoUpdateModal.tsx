@@ -83,7 +83,7 @@ export function GrupoUpdateModal({ grupo, onUpdated }: GrupoUpdateModalProps) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline">Editar grupo</Button>
+                <Button className="flex-1 bg-negro hover:bg-[#2d2d2b] text-white hover:text-blanco px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium" variant="outline">Editar</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] text-blanco">
                 <DialogHeader>

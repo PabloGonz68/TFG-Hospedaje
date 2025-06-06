@@ -46,7 +46,7 @@ export function EstadoModal({ reservaID }: { reservaID: number }) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline">Cambiar Estado</Button>
+                <Button className="bg-negro  text-white hover:text-negro hover:bg-principal-hover hover:border-2 hover:border-negro flex items-center gap-2 w-full" variant="outline">Cambiar Estado</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { GrupoUpdateModal } from "@/components/modals/grupoUpdateModal";
 import { toast } from "sonner";
 import { ConfirmToast } from "@/components/toasts/ConfirmToast";
+import { MapPin, Plus, Users, Calendar, Ticket, Trash2 } from "lucide-react";
 
 type MiembroDTO = {
     id: number;
@@ -103,57 +104,153 @@ const VerGruposViaje = () => {
         ))
     }
 
+    const formatearFecha = (fecha: string) => {
+        return new Date(fecha).toLocaleDateString("es-ES", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        })
+    }
+
+    const calcularTotalTickets = (miembros: any[]) => {
+        return miembros.reduce((total, miembro) => total + miembro.ticketsAportados, 0)
+    }
+
     return (
-        <main className="flex flex-col gap-4 max-w-3xl mx-auto">
-            <h1 className="text-2xl font-bold mb-4">Mis Grupos de Viaje</h1>
-            <button className="bg-secundario hover:bg-secundario-hover text-white py-2 px-4 rounded-xl w-60" onClick={() => window.location.href = "/grupoViaje/"}>Crear nuevo grupo de viaje</button>
+        <main className="flex flex-col gap-4 max-w-5xl mx-auto min-h-screen">
+            <div className="mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 bg-negro rounded-xl">
+                        <MapPin className="w-6 h-6 text-principal" />
+                    </div>
+                    <div>
+                        <h1 className="text-3xl font-bold text-negro">Mis Grupos de Viaje</h1>
+                        <p className="text-negro/80 mt-1">Gestiona y organiza tus aventuras</p>
+                    </div>
+                </div>
+
+                <button
+                    className="inline-flex items-center gap-2 bg-negro hover:bg-[#2d2d2b] text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                    onClick={() => (window.location.href = "/grupoViaje/")}
+                >
+                    <Plus className="w-5 h-5" />
+                    Crear nuevo grupo
+                </button>
+            </div>
 
             {gruposViaje.length === 0 ? (
-                <div className="h-64 w-full flex items-center justify-center">
-                    <h2 className="text-xl font-semibold">No tienes grupos de viaje aún...</h2>
+                <div className="text-center py-16 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg">
+                    <div className="max-w-md mx-auto">
+                        <div className="w-24 h-24 bg-negro rounded-full flex items-center justify-center mx-auto mb-6">
+                            <Users className="w-12 h-12 text-principal" />
+                        </div>
+                        <h2 className="text-2xl font-semibold text-negro mb-3">No tienes grupos de viaje aún</h2>
+                        <p className="text-negro/70 mb-6">
+                            Crea tu primer grupo y comienza a planificar aventuras increíbles con tus amigos
+                        </p>
+                        <button
+                            className="inline-flex items-center gap-2 bg-negro hover:bg-[#2d2d2b] text-white px-6 py-3 rounded-xl font-medium transition-all duration-200"
+                            onClick={() => (window.location.href = "/grupoViaje/")}
+                        >
+                            <Plus className="w-5 h-5" />
+                            Crear mi primer grupo
+                        </button>
+                    </div>
                 </div>
 
             ) : (
-                <ul className="space-y-4">
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 w-full">
                     {gruposViaje.map((grupo) => (
-                        <li key={grupo.id} className="flex items-start justify-between  border p-4 rounded-xl shadow bg-white">
-                            <div>
-                                <h2 className="text-lg font-semibold">Grupo: {grupo.nombre} (ID: {grupo.id})</h2>
-                                <p>
-                                    <strong>Creado por usuario:</strong>{" "}
-                                    {usuarios[grupo.idCreador]
-                                        ? `${usuarios[grupo.idCreador].nombre} ${usuarios[grupo.idCreador].apellidos}`
-                                        : `Usuario ID: ${grupo.idCreador}`}
-                                </p>
+                        <div key={grupo.id}
+                            className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-negro/10">
 
-                                <h3 className="mt-2 font-semibold">Miembros:</h3>
-                                <ul className="ml-4 list-disc">
-                                    {grupo.miembros.length > 0 ? (
-                                        grupo.miembros.map((miembro) => (
-                                            <li key={miembro.id}>
-                                                {usuarios[miembro.idUsuario]
-                                                    ? `${usuarios[miembro.idUsuario].nombre} ${usuarios[miembro.idUsuario].apellidos}`
-                                                    : `Usuario ID: ${miembro.idUsuario}`}
-                                                {" — "}Tickets: {miembro.ticketsAportados} 🎫
-                                            </li>
-                                        ))
-                                    ) : (
-                                        <li>No hay miembros.</li>
-                                    )}
-                                </ul>
-                            </div>
-                            <div className="flex flex-col gap-4">
-                                <GrupoUpdateModal grupo={grupo} onUpdated={() => fetchGruposViaje()} />
-                                <button
-                                    onClick={() => handleClickEliminar(grupo.id)}
-                                    className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg mt-4">
-                                    Eliminar
-                                </button>
-                            </div>
+                            {/* Header de la card */}
+                            <div className="bg-negro p-6 text-white">
+                                <div className="flex items-start justify-between mb-3">
+                                    <h3 className="text-xl font-bold leading-tight">{grupo.nombre}</h3>
+                                    <span className="text-xs bg-principal text-negro px-2 py-1 rounded-full font-medium">
+                                        ID: {grupo.id}
+                                    </span>
+                                </div>
 
-                        </li>
+                                <div className="flex items-center gap-2 text-sm text-white/80">
+                                    <Calendar className="w-4 h-4" />
+                                    <span>Creado el {formatearFecha(grupo.fechaCreacion)}</span>
+                                </div>
+                            </div>
+                            {/* Contenido */}
+                            <div className="p-6">
+                                {/* Creador */}
+                                <div className="mb-4">
+                                    <p className="text-sm text-negro/60 mb-1">Creado por</p>
+                                    <p className="font-medium text-negro">
+                                        {usuarios[grupo.idCreador]
+                                            ? `${usuarios[grupo.idCreador].nombre} ${usuarios[grupo.idCreador].apellidos}`
+                                            : `Usuario ID: ${grupo.idCreador}`}
+                                    </p>
+                                </div>
+
+                                {/* Stats */}
+                                <div className="grid grid-cols-2 gap-4 mb-4">
+                                    <div className="bg-principal/20 p-3 rounded-lg text-center">
+                                        <div className="flex items-center justify-center gap-1 mb-1">
+                                            <Users className="w-4 h-4 text-negro" />
+                                            <span className="text-lg font-bold text-negro">{grupo.miembros.length}</span>
+                                        </div>
+                                        <p className="text-xs text-negro/60">Miembros</p>
+                                    </div>
+                                    <div className="bg-principal/20 p-3 rounded-lg text-center">
+                                        <div className="flex items-center justify-center gap-1 mb-1">
+                                            <Ticket className="w-4 h-4 text-negro" />
+                                            <span className="text-lg font-bold text-negro">{calcularTotalTickets(grupo.miembros)}</span>
+                                        </div>
+                                        <p className="text-xs text-negro/60">Tickets</p>
+                                    </div>
+                                </div>
+
+                                {/* Miembros */}
+                                <div className="mb-6">
+                                    <h4 className="font-medium text-negro mb-3 flex items-center gap-2">
+                                        <Users className="w-4 h-4" />
+                                        Miembros
+                                    </h4>
+                                    <div className="space-y-2 max-h-32 overflow-y-auto">
+                                        {grupo.miembros.map((miembro) => (
+                                            <div
+                                                key={miembro.id}
+                                                className="flex items-center justify-between bg-principal/20 p-2 rounded-lg"
+                                            >
+                                                <span className="text-sm text-negro font-medium">
+                                                    {usuarios[miembro.idUsuario]
+                                                        ? `${usuarios[miembro.idUsuario].nombre} ${usuarios[miembro.idUsuario].apellidos}`
+                                                        : `Usuario ID: ${miembro.idUsuario}`}
+                                                </span>
+                                                <div className="flex items-center gap-1 text-xs bg-negro text-white px-2 py-1 rounded-full font-medium">
+                                                    <Ticket className="w-3 h-3" />
+                                                    {miembro.ticketsAportados}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+
+                                {/* Acciones */}
+                                <div className="flex gap-2">
+                                    <GrupoUpdateModal grupo={grupo} onUpdated={() => fetchGruposViaje()} />
+
+                                    <button
+                                        className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors duration-200"
+                                        title="Eliminar grupo"
+                                        onClick={() => handleClickEliminar(grupo.id)}
+                                    >
+                                        <Trash2 className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     ))}
-                </ul>
+                </div>
             )}
         </main>
     );
@@ -161,3 +258,5 @@ const VerGruposViaje = () => {
 }
 
 export default VerGruposViaje
+
+

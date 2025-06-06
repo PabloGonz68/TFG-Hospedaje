@@ -73,12 +73,12 @@ export function NavigationMenuDemo() {
         const passedHalfHero = heroRect.bottom < window.innerHeight / 2;
         setScrolled(passedHalfHero);
       } else {
-        const passedHalfScreen = window.scrollY > window.innerHeight / 2;
-        setScrolled(passedHalfScreen);
+        setScrolled(window.scrollY > 100);
       }
     };
 
     window.addEventListener("scroll", handleScroll);
+    handleScroll();
     return () => {
       window.removeEventListener("scroll", handleScroll);
     }
@@ -149,7 +149,7 @@ export function NavigationMenuDemo() {
       >
         <div>
           <a href="/">
-            <img className=" min-w-24 md:min-w-32 max-w-24 md:max-w-32" src="https://i.ibb.co/XkKPrxRK/logo-Hospeda-blanco.png" alt="logo-Hospeda-amarillo" />
+            <img className=" min-w-24 md:min-w-32 max-w-24 md:max-w-32" src={scrolled ? "https://i.ibb.co/rKGbXzxS/logo-Hospeda-amarillo.png" : "https://i.ibb.co/XkKPrxRK/logo-Hospeda-blanco.png"} alt="logo-Hospeda-amarillo" />
           </a>
         </div>
 
@@ -162,7 +162,7 @@ export function NavigationMenuDemo() {
                   <li className="row-span-3">
                     <NavigationMenuLink asChild>
                       <a
-                        className="flex h-full w-full select-none flex-col justify-end items-center md:items-start rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                        className="flex h-full w-full select-none flex-col justify-end items-center md:items-start rounded-md bg-gradient-to-b from-blanco/50 to-secundario p-6 no-underline outline-none focus:shadow-md"
                         href="/"
                       >
                         <img className="w-44" src="https://i.ibb.co/XkKPrxRK/logo-Hospeda-negro.png" alt="Logo Hospeda en negro" />

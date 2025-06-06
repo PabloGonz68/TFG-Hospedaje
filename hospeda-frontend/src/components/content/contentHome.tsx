@@ -76,7 +76,7 @@ export default function HospedaParallax() {
 
 
                 {/* Qué es Hospeda */}
-                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-blanco">
+                <ParallaxSection className="grid md:grid-cols-2 gap-16 items-center rounded-xl shadow-lg bg-blanco">
                     <motion.div
                         id="que-es"
                         initial={{ opacity: 0, x: 30 }}
@@ -108,7 +108,7 @@ export default function HospedaParallax() {
                 </ParallaxSection>
 
                 {/* Cómo funciona */}
-                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-blanco">
+                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-principal">
                     <motion.div
                         id="como-funciona"
                         initial={{ opacity: 0, x: -30 }}
@@ -117,7 +117,7 @@ export default function HospedaParallax() {
                         viewport={{ once: true }}
                         className="scroll-mt-80 flex justify-center order-2 md:order-1"
                     >
-                        <IconCard icon={MapPin} className="text-principal" />
+                        <IconCard icon={MapPin} className="text-secundario" />
                     </motion.div>
                     <motion.div
                         initial={{ opacity: 0, x: 30 }}
@@ -126,8 +126,8 @@ export default function HospedaParallax() {
                         viewport={{ once: true }}
                         className="content-card order-1 md:order-2"
                     >
-                        <h2 className="text-3xl font-semibold text-principal mb-4">¿Cómo funciona?</h2>
-                        <p className="text-lg text-gray-700 leading-relaxed">
+                        <h2 className="text-3xl font-semibold text-secundario mb-4">¿Cómo funciona?</h2>
+                        <p className="text-lg text-negro leading-relaxed bg-blanco p-4 rounded-xl">
                             Explora hospedajes en ciudades y pueblos. Cada noche por persona tiene un coste en tickets, y dependiendo
                             del destino será más o menos costoso. Organiza tu viaje, reserva y listo.
                         </p>
@@ -135,7 +135,7 @@ export default function HospedaParallax() {
                 </ParallaxSection>
 
                 {/* Tickets */}
-                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-blanco">
+                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center rounded-xl shadow-lg bg-blanco">
                     <motion.div
                         id="tickets"
                         initial={{ opacity: 0, x: -30 }}
@@ -165,7 +165,7 @@ export default function HospedaParallax() {
                 </ParallaxSection>
 
                 {/* Cómo conseguir tickets */}
-                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-blanco">
+                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-principal">
                     <motion.div
                         id="conseguir-tickets"
                         initial={{ opacity: 0, x: -30 }}
@@ -174,7 +174,7 @@ export default function HospedaParallax() {
                         viewport={{ once: true }}
                         className="scroll-mt-80 flex justify-center order-2 md:order-1"
                     >
-                        <IconCard icon={CheckCircle} className="text-principal" />
+                        <IconCard icon={CheckCircle} className="text-secundario" />
                     </motion.div>
                     <motion.div
                         initial={{ opacity: 0, x: 30 }}
@@ -183,8 +183,8 @@ export default function HospedaParallax() {
                         viewport={{ once: true }}
                         className="content-card order-1 md:order-2"
                     >
-                        <h2 className="text-3xl font-semibold text-principal mb-4">¿Cómo consigo tickets?</h2>
-                        <p className="text-lg text-gray-700 leading-relaxed">
+                        <h2 className="text-3xl font-semibold text-secundario mb-4">¿Cómo consigo tickets?</h2>
+                        <p className="text-lg text-negro bg-blanco p-4 rounded-xl leading-relaxed">
                             Publica tu hospedaje y permite que otros usuarios se alojen en tu casa. Si tu hospedaje está en una ciudad
                             obtendrás tickets de ciudad, si está en un pueblo, obtendrás de pueblo. ¡Así de fácil!
                         </p>
@@ -192,7 +192,7 @@ export default function HospedaParallax() {
                 </ParallaxSection>
 
                 {/* Viajar en grupo */}
-                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-blanco">
+                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center rounded-xl shadow-lg bg-blanco">
                     <motion.div
                         id="viajar-grupo"
                         initial={{ opacity: 0, x: -30 }}
@@ -222,7 +222,7 @@ export default function HospedaParallax() {
                 </ParallaxSection>
 
                 {/* Gestión de reservas */}
-                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-blanco">
+                <ParallaxSection className="h-fit grid md:grid-cols-2 gap-16 items-center" bgColor="bg-principal">
                     <motion.div
                         id="gestion-reservas"
                         initial={{ opacity: 0, x: -30 }}
@@ -231,7 +231,7 @@ export default function HospedaParallax() {
                         viewport={{ once: true }}
                         className="scroll-mt-80 flex justify-center order-2 md:order-1"
                     >
-                        <IconCard icon={CalendarCheck} className="text-principal" />
+                        <IconCard icon={CalendarCheck} className="text-secundario" />
                     </motion.div>
                     <motion.div
                         initial={{ opacity: 0, x: 30 }}
@@ -240,8 +240,8 @@ export default function HospedaParallax() {
                         viewport={{ once: true }}
                         className="content-card order-1 md:order-2"
                     >
-                        <h2 className="text-3xl font-semibold text-principal mb-4">¿Cómo se gestionan las reservas?</h2>
-                        <p className="text-lg text-gray-700 leading-relaxed">
+                        <h2 className="text-3xl font-semibold text-secundario mb-4">¿Cómo se gestionan las reservas?</h2>
+                        <p className="text-lg text-negro bg-blanco p-4 rounded-xl leading-relaxed">
                             Las reservas llegan al anfitrión, quien podrá aceptarlas, marcarlas como completadas o cancelarlas si es
                             necesario. Todo el proceso es claro y sencillo para ambas partes.
                         </p>
@@ -251,7 +251,7 @@ export default function HospedaParallax() {
 
             {/* Progress Bar */}
             <motion.div
-                className="fixed left-0 right-0 h-1 bg-principal bottom-8 mx-4 rounded-full shadow-lg z-50"
+                className="fixed left-0 right-0 h-1 bg-secundario bottom-8 mx-4 rounded-full shadow-lg z-50"
                 style={{ scaleX, opacity, transformOrigin: "0%" }}
             />
 

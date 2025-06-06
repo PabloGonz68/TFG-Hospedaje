@@ -162,7 +162,7 @@ export function NavigationMenuDemo() {
                   <li className="row-span-3">
                     <NavigationMenuLink asChild>
                       <a
-                        className="flex h-full w-full select-none flex-col justify-end items-center md:items-start rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                        className="flex h-full w-full select-none flex-col justify-end items-center md:items-start rounded-md bg-gradient-to-b from-blanco/50 to-secundario p-6 no-underline outline-none focus:shadow-md"
                         href="/"
                       >
                         <img className="w-44" src="https://i.ibb.co/XkKPrxRK/logo-Hospeda-negro.png" alt="Logo Hospeda en negro" />
