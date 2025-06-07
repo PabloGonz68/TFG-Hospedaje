@@ -120,13 +120,13 @@ const CrearGrupoViaje = () => {
     const totalTickets = cantidadTicketsCreador + miembros.reduce((sum, miembro) => sum + miembro.ticketsAportados, 0)
 
     return (
-        <div className="min-h-screen bg-[#ffcd40] p-4 md:p-6">
+        <div className="min-h-screen bg-principal p-4 md:p-6">
             <div className="max-w-4xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
                     <div className="flex items-center gap-3 mb-4">
                         <div className="p-3 bg-negro rounded-xl">
-                            <Users className="w-6 h-6 text-[#ffcd40]" />
+                            <Users className="w-6 h-6 text-principal" />
                         </div>
                         <div>
                             <h1 className="text-3xl font-bold text-negro">Crear Grupo de Viaje</h1>
@@ -141,7 +141,7 @@ const CrearGrupoViaje = () => {
                         {/* Información del grupo */}
                         <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="p-2 bg-[#ffcd40] rounded-lg">
+                                <div className="p-2 bg-principal rounded-lg">
                                     <MapPin className="w-5 h-5 text-negro" />
                                 </div>
                                 <h2 className="text-xl font-bold text-negro">Información del Grupo</h2>
@@ -180,7 +180,7 @@ const CrearGrupoViaje = () => {
                         {/* Buscar miembros */}
                         <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="p-2 bg-[#ffcd40] rounded-lg">
+                                <div className="p-2 bg-principal rounded-lg">
                                     <UserPlus className="w-5 h-5 text-negro" />
                                 </div>
                                 <h2 className="text-xl font-bold text-negro">Añadir Miembros</h2>
@@ -213,7 +213,7 @@ const CrearGrupoViaje = () => {
 
                                 {/* Usuario encontrado */}
                                 {usuarioEncontrado && (
-                                    <div className="p-4 bg-[#ffcd40]/20 rounded-xl border border-[#ffcd40]/30">
+                                    <div className="p-4 bg-principal/20 rounded-xl border border-principal/30">
                                         <div className="flex items-center gap-3 mb-4">
                                             <div className="w-10 h-10 bg-negro rounded-full flex items-center justify-center">
                                                 <Users className="w-5 h-5 text-white" />
@@ -260,12 +260,12 @@ const CrearGrupoViaje = () => {
                             <h3 className="text-lg font-bold text-negro mb-4">Resumen del Grupo</h3>
 
                             <div className="space-y-4">
-                                <div className="flex items-center justify-between p-3 bg-[#ffcd40]/20 rounded-lg">
+                                <div className="flex items-center justify-between p-3 bg-principal/20 rounded-lg">
                                     <span className="text-sm text-negro/60">Total miembros</span>
                                     <span className="font-bold text-negro">{miembros.length + 1}</span>
                                 </div>
 
-                                <div className="flex items-center justify-between p-3 bg-[#ffcd40]/20 rounded-lg">
+                                <div className="flex items-center justify-between p-3 bg-principal/20 rounded-lg">
                                     <span className="text-sm text-negro/60">Total tickets</span>
                                     <span className="font-bold text-negro">{totalTickets}</span>
                                 </div>
@@ -278,7 +278,7 @@ const CrearGrupoViaje = () => {
 
                             <div className="space-y-3">
                                 {/* Creador */}
-                                <div className="flex items-center justify-between p-3 bg-[#ffcd40]/20 rounded-lg">
+                                <div className="flex items-center justify-between p-3 bg-principal/20 rounded-lg">
                                     <div className="flex items-center gap-3">
                                         <div className="w-8 h-8 bg-negro rounded-full flex items-center justify-center">
                                             <Users className="w-4 h-4 text-white" />

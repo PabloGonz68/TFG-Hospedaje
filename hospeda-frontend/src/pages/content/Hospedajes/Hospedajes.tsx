@@ -1,9 +1,9 @@
 import { ConfirmToast } from "@/components/toasts/ConfirmToast";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { Edit, ExternalLink, Filter, Home, MapPin, Plus, Search, Star, Trash2, Users } from "lucide-react"
-import { motion } from "motion/react";
+import { Edit, ExternalLink, Filter, Home, MapPin, Plus, Search, Trash2, Users } from "lucide-react"
+
 
 interface Hospedaje {
     id: number;
@@ -301,7 +301,7 @@ const Hospedajes = () => {
                                 </button>
                             ) : (
                                 <button
-                                    onClick={() => toast.info("Función de crear hospedaje en desarrollo")}
+                                    onClick={() => navigate('/hospedajes/crear')}
                                     className="inline-flex items-center gap-2 bg-negro hover:bg-[#2d2d2b] text-white px-6 py-3 rounded-xl font-medium transition-all duration-200"
                                 >
                                     <Plus className="w-5 h-5" />
@@ -358,10 +358,7 @@ const Hospedajes = () => {
                                                 <Users className="w-4 h-4 text-negro" />
                                                 <span className="text-sm font-medium text-negro">{hospedaje.capacidad}</span>
                                             </div>
-                                            <div className="flex items-center gap-1">
-                                                <Star className="w-4 h-4 text-yellow-500" />
-                                                <span className="text-sm text-negro/60">4.8</span>
-                                            </div>
+
                                         </div>
 
                                         {/* Descripción */}
@@ -372,7 +369,7 @@ const Hospedajes = () => {
                                             <p className="text-sm text-negro/60 mb-1">Anfitrión</p>
                                             <button
                                                 onClick={() => navigate(`/perfil/${hospedaje.id_anfitrion}`)}
-                                                className="font-medium text-negro hover:text-negro/80 transition-colors"
+                                                className="font-medium cursor-pointer text-negro hover:text-negro/80 transition-colors"
                                             >
                                                 {hospedaje.nombreAnfitrion}
                                             </button>

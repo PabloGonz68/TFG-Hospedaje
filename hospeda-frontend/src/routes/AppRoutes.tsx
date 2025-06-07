@@ -26,7 +26,7 @@ function AppRoutes() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
 
-                <Route path="/perfil" element={<MainLayout><Perfil /></MainLayout>} />
+                <Route path="/perfil" element={<TopLayout><Perfil /></TopLayout>} />
                 <Route path="/perfil/:IdAnfitrion" element={<TopLayout><PerfilUser /></TopLayout>} />
 
                 <Route path="/hospedajes" element={<TopLayout><Hospedajes /></TopLayout>}></Route>

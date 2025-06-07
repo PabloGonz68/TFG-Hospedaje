@@ -14,7 +14,7 @@ export function AccordionTicketType() {
             defaultValue="item-1"
         >
             <AccordionItem value="item-1">
-                <AccordionTrigger className="flex justify-between items-center"><div className="flex items-center justify-center gap-2"><span className="text-2xl">🏙️</span>Tickets de Ciudad</div></AccordionTrigger>
+                <AccordionTrigger className="flex   justify-between items-center"><div className="flex items-center justify-center gap-2"><span className="text-2xl">🏙️</span>Tickets de Ciudad</div></AccordionTrigger>
                 <AccordionContent className="flex flex-col gap-4 text-balance">
                     <p>
                         Los tickets de ciudad permiten reservar hospedajes ubicados en ciudades. Son el tipo de ticket más demandado debido a la alta concentración de usuarios y la disponibilidad de servicios urbanos.
@@ -29,7 +29,7 @@ export function AccordionTicketType() {
             </AccordionItem>
 
             <AccordionItem value="item-2">
-                <AccordionTrigger className="flex justify-between items-center"><div className="flex items-center justify-center gap-2 no-underline"> <span className="text-2xl">🏘️</span>Tickets de Pueblo</div></AccordionTrigger>
+                <AccordionTrigger className="flex  justify-between items-center"><div className="flex items-center justify-center gap-2 no-underline"> <span className="text-2xl">🏘️</span>Tickets de Pueblo</div></AccordionTrigger>
                 <AccordionContent className="flex flex-col gap-4 text-balance">
                     <p>
                         Los tickets de pueblo permiten reservar hospedajes en zonas rurales o pueblos. Estos tickets fomentan el turismo en áreas menos visitadas y ayudan a descentralizar la demanda.

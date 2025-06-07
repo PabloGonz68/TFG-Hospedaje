@@ -186,13 +186,13 @@ const ReservaGrupalForm = () => {
 
 
     return (
-        <main className="min-h-screen bg-[#ffcd40] p-4 md:p-6">
+        <main className="min-h-screen bg-principal p-4 md:p-6">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
                     <div className="flex items-center gap-3 mb-4">
                         <div className="p-3 bg-negro rounded-xl">
-                            <Calendar className="w-6 h-6 text-[#ffcd40]" />
+                            <Calendar className="w-6 h-6 text-principal" />
                         </div>
                         <div>
                             <h1 className="text-3xl font-bold text-negro">Reserva Grupal</h1>
@@ -208,7 +208,7 @@ const ReservaGrupalForm = () => {
                             {hospedaje && (
                                 <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
                                     <div className="flex items-center gap-3 mb-4">
-                                        <div className="p-2 bg-[#ffcd40] rounded-lg">
+                                        <div className="p-2 bg-principal rounded-lg">
                                             <Home className="w-5 h-5 text-negro" />
                                         </div>
                                         <h2 className="text-xl font-bold text-negro">Hospedaje Seleccionado</h2>
@@ -237,23 +237,23 @@ const ReservaGrupalForm = () => {
                                 </div>
                             )}
                             {/* Selección de grupo */}
-                            <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10">
+                            <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
                                 <div className="flex items-center gap-3 mb-6">
-                                    <div className="p-2 bg-[#ffcd40] rounded-lg">
-                                        <Users className="w-5 h-5 text-[#1d1d1b]" />
+                                    <div className="p-2 bg-principal rounded-lg">
+                                        <Users className="w-5 h-5 text-negro" />
                                     </div>
-                                    <h2 className="text-xl font-bold text-[#1d1d1b]">Seleccionar Grupo</h2>
+                                    <h2 className="text-xl font-bold text-negro">Seleccionar Grupo</h2>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-[#1d1d1b] mb-2">
+                                    <label className="block text-sm font-medium text-negro mb-2">
                                         Grupo de viaje <span className="text-red-500">*</span>
                                     </label>
                                     <select
                                         name="idGrupo"
                                         onChange={handleGrupoChange}
                                         required
-                                        className="w-full px-4 py-3 border border-[#1d1d1b]/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1d1d1b] focus:border-transparent"
+                                        className="w-full px-4 py-3 border border-negro/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-negro focus:border-transparent"
                                     >
                                         <option value="">Selecciona un grupo</option>
                                         {grupos.map((grupo) => (
@@ -265,25 +265,25 @@ const ReservaGrupalForm = () => {
                                 </div>
 
                                 {grupoSeleccionado && (
-                                    <div className="mt-4 p-4 bg-[#ffcd40]/20 rounded-xl">
+                                    <div className="mt-4 p-4 bg-principal/20 rounded-xl">
                                         <div className="flex items-center gap-2 mb-2">
                                             <Check className="w-5 h-5 text-green-600" />
-                                            <span className="font-medium text-[#1d1d1b]">Grupo seleccionado: {grupoSeleccionado.nombre}</span>
+                                            <span className="font-medium text-negro">Grupo seleccionado: {grupoSeleccionado.nombre}</span>
                                         </div>
                                         {grupoSeleccionado.miembros && (
-                                            <p className="text-sm text-[#1d1d1b]/60">
+                                            <p className="text-sm text-negro/60">
                                                 {grupoSeleccionado.miembros.length} miembros • {calcularTotalTickets()} tickets totales
                                             </p>
                                         )}
                                     </div>
                                 )}
                             </div>
-                            <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10">
+                            <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
                                 <div className="flex items-center gap-3 mb-6">
-                                    <div className="p-2 bg-[#ffcd40] rounded-lg">
-                                        <Users className="w-5 h-5 text-[#1d1d1b]" />
+                                    <div className="p-2 bg-principal rounded-lg">
+                                        <Users className="w-5 h-5 text-negro" />
                                     </div>
-                                    <h2 className="text-xl font-bold text-[#1d1d1b]">Seleccionar Grupo</h2>
+                                    <h2 className="text-xl font-bold text-negro">Seleccionar Grupo</h2>
                                 </div>
                                 <div className="flex justify-center flex-wrap gap-6">
                                     <ReservaCalendar
@@ -303,7 +303,7 @@ const ReservaGrupalForm = () => {
                                 <button
                                     type="submit"
                                     disabled={isLoading || !form.idGrupo || !startDate || !endDate}
-                                    className="w-full bg-[#1d1d1b] hover:bg-[#2d2d2b] disabled:bg-[#1d1d1b]/50 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none"
+                                    className="w-full bg-negro hover:bg-[#2d2d2b] disabled:bg-negro/50 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none"
                                 >
                                     {isLoading ? "Creando reserva..." : "Crear Reserva Grupal"}
                                 </button>
@@ -316,50 +316,50 @@ const ReservaGrupalForm = () => {
                     {/* Panel lateral - Resumen */}
                     <div className="space-y-6">
                         {/* Resumen de la reserva */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10">
-                            <h3 className="text-lg font-bold text-[#1d1d1b] mb-4">Resumen de la Reserva</h3>
+                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
+                            <h3 className="text-lg font-bold text-negro mb-4">Resumen de la Reserva</h3>
 
                             <div className="space-y-4">
                                 {hospedaje && (
-                                    <div className="flex items-center justify-between p-3 bg-[#ffcd40]/20 rounded-lg">
-                                        <span className="text-sm text-[#1d1d1b]/60">Hospedaje</span>
-                                        <span className="font-medium text-[#1d1d1b] text-right text-sm">{hospedaje.nombre}</span>
+                                    <div className="flex items-center justify-between p-3 bg-principal/20 rounded-lg">
+                                        <span className="text-sm text-negro/60">Hospedaje</span>
+                                        <span className="font-medium text-negro text-right text-sm">{hospedaje.nombre}</span>
                                     </div>
                                 )}
 
                                 {grupoSeleccionado && (
-                                    <div className="flex items-center justify-between p-3 bg-[#ffcd40]/20 rounded-lg">
-                                        <span className="text-sm text-[#1d1d1b]/60">Grupo</span>
-                                        <span className="font-medium text-[#1d1d1b]">{grupoSeleccionado.nombre}</span>
+                                    <div className="flex items-center justify-between p-3 bg-principal/20 rounded-lg">
+                                        <span className="text-sm text-negro/60">Grupo</span>
+                                        <span className="font-medium text-negro">{grupoSeleccionado.nombre}</span>
                                     </div>
                                 )}
 
                                 {grupoSeleccionado?.miembros && (
-                                    <div className="flex items-center justify-between p-3 bg-[#ffcd40]/20 rounded-lg">
-                                        <span className="text-sm text-[#1d1d1b]/60">Miembros</span>
-                                        <span className="font-bold text-[#1d1d1b]">{grupoSeleccionado.miembros.length}</span>
+                                    <div className="flex items-center justify-between p-3 bg-principal/20 rounded-lg">
+                                        <span className="text-sm text-negro/60">Miembros</span>
+                                        <span className="font-bold text-negro">{grupoSeleccionado.miembros.length}</span>
                                     </div>
                                 )}
 
                                 {startDate && endDate && (
-                                    <div className="flex items-center justify-between p-3 bg-[#ffcd40]/20 rounded-lg">
-                                        <span className="text-sm text-[#1d1d1b]/60">Duración</span>
-                                        <span className="font-bold text-[#1d1d1b]">
+                                    <div className="flex items-center justify-between p-3 bg-principal/20 rounded-lg">
+                                        <span className="text-sm text-negro/60">Duración</span>
+                                        <span className="font-bold text-negro">
                                             {calcularDias()} {calcularDias() === 1 ? "día" : "días"}
                                         </span>
                                     </div>
                                 )}
 
                                 {grupoSeleccionado?.miembros && (
-                                    <div className="mt-2 text-sm  text-[#1d1d1b] space-y-4">
-                                        <div className="flex items-center gap-2 p-3  bg-[#ffcd40]/20 rounded-lg">
-                                            <Ticket className="w-4 h-4 text-[#1d1d1b]" />
+                                    <div className="mt-2 text-sm  text-negro space-y-4">
+                                        <div className="flex items-center gap-2 p-3  bg-principal/20 rounded-lg">
+                                            <Ticket className="w-4 h-4 text-negro" />
                                             <span>
                                                 <strong>Tickets aportados:</strong> {calcularTotalTickets()}
                                             </span>
                                         </div>
-                                        <div className="flex items-center gap-2 mt-1 p-3  bg-[#ffcd40]/20 rounded-lg">
-                                            <AlertCircle className="w-4 h-4 text-[#1d1d1b]" />
+                                        <div className="flex items-center gap-2 mt-1 p-3  bg-principal/20 rounded-lg">
+                                            <AlertCircle className="w-4 h-4 text-negro" />
                                             <span>
                                                 <strong>Tickets necesarios:</strong> {calcularTicketsNecesarios()}{" "}
                                                 <br />(equivalentes en ciudad)

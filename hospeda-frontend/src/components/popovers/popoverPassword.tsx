@@ -10,6 +10,8 @@ import { useState } from "react";
 
 import { toast } from "sonner";
 import { ConfirmToast } from "../toasts/ConfirmToast";
+import { Lock } from "lucide-react";
+
 
 
 
@@ -80,7 +82,7 @@ export function PopoverPassword() {
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <Button variant="outline">Cambiar contraseña</Button>
+                <Button className=" flex px-4 py-6 rounded-xl font-medium text-md gap-2 justify-start items-center bg-secundario w-full  text-white hover:text-negro hover:bg-secundario-hover" variant="outline"><Lock className="h-4 w-4" />Cambiar contraseña</Button>
             </PopoverTrigger>
             <PopoverContent className="w-96">
                 <div className="grid gap-4">
@@ -127,7 +129,7 @@ export function PopoverPassword() {
                                 }
                             />
                         </div>
-                        <Button className="mt-4" onClick={handleClickCambiarContrasena}>
+                        <Button className="mt-4 bg-principal text-negro px-4 py-2 rounded hover:bg-principal-hover transition" onClick={handleClickCambiarContrasena}>
                             Confirmar cambio
                         </Button>
                     </div>

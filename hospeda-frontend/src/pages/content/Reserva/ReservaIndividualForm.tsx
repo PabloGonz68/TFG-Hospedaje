@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ReservaCalendar from "@/components/calendars/reservaCalendar";
 import { toast } from "sonner";
-import { AlertCircle, Calendar, Home, MapPin, Ticket, Users } from "lucide-react";
+import { AlertCircle, Calendar, Home, MapPin, Users } from "lucide-react";
 
 type Hospedaje = {
     id: number;
@@ -114,13 +114,13 @@ const ReservaIndividualForm = () => {
     };
 
     return (
-        <main className="min-h-screen bg-[#ffcd40] p-4 md:p-6">
+        <main className="min-h-screen bg-principal p-4 md:p-6">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
                     <div className="flex items-center gap-3 mb-4">
                         <div className="p-3 bg-negro rounded-xl">
-                            <Calendar className="w-6 h-6 text-[#ffcd40]" />
+                            <Calendar className="w-6 h-6 text-principal" />
                         </div>
                         <div>
                             <h1 className="text-3xl font-bold text-negro">Reserva Individual</h1>
@@ -135,7 +135,7 @@ const ReservaIndividualForm = () => {
                             {hospedaje && (
                                 <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
                                     <div className="flex items-center gap-3 mb-4">
-                                        <div className="p-2 bg-[#ffcd40] rounded-lg">
+                                        <div className="p-2 bg-principal rounded-lg">
                                             <Home className="w-5 h-5 text-negro" />
                                         </div>
                                         <h2 className="text-xl font-bold text-negro">Hospedaje Seleccionado</h2>
@@ -163,12 +163,12 @@ const ReservaIndividualForm = () => {
                                     </div>
                                 </div>
                             )}
-                            <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10">
+                            <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
                                 <div className="flex items-center gap-3 mb-6">
-                                    <div className="p-2 bg-[#ffcd40] rounded-lg">
-                                        <Calendar className="w-5 h-5 text-[#1d1d1b]" />
+                                    <div className="p-2 bg-principal rounded-lg">
+                                        <Calendar className="w-5 h-5 text-negro" />
                                     </div>
-                                    <h2 className="text-xl font-bold text-[#1d1d1b]">Selecciona las fechas</h2>
+                                    <h2 className="text-xl font-bold text-negro">Selecciona las fechas</h2>
                                 </div>
                                 <div className="flex justify-center flex-wrap gap-6">
                                     <ReservaCalendar
@@ -188,7 +188,7 @@ const ReservaIndividualForm = () => {
                                 <button
                                     type="submit"
                                     disabled={isLoading || !startDate || !endDate}
-                                    className="w-full bg-[#1d1d1b] hover:bg-[#2d2d2b] disabled:bg-[#1d1d1b]/50 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none"
+                                    className="w-full bg-negro hover:bg-[#2d2d2b] disabled:bg-negro/50 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none"
                                 >
                                     {isLoading ? "Creando reserva..." : "Crear Reserva Grupal"}
                                 </button>
@@ -199,28 +199,28 @@ const ReservaIndividualForm = () => {
                     {/* Panel lateral - Resumen */}
                     <div className="space-y-6">
                         {/* Resumen de la reserva */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10">
-                            <h3 className="text-lg font-bold text-[#1d1d1b] mb-4">Resumen de la Reserva</h3>
+                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
+                            <h3 className="text-lg font-bold text-negro mb-4">Resumen de la Reserva</h3>
 
                             <div className="space-y-4">
                                 {hospedaje && (
-                                    <div className="flex items-center justify-between p-3 bg-[#ffcd40]/20 rounded-lg">
-                                        <span className="text-sm text-[#1d1d1b]/60">Hospedaje</span>
-                                        <span className="font-medium text-[#1d1d1b] text-right text-sm">{hospedaje.nombre}</span>
+                                    <div className="flex items-center justify-between p-3 bg-principal/20 rounded-lg">
+                                        <span className="text-sm text-negro/60">Hospedaje</span>
+                                        <span className="font-medium text-negro text-right text-sm">{hospedaje.nombre}</span>
                                     </div>
                                 )}
                                 {startDate && endDate && (
-                                    <div className="flex items-center justify-between p-3 bg-[#ffcd40]/20 rounded-lg">
-                                        <span className="text-sm text-[#1d1d1b]/60">Duración</span>
-                                        <span className="font-bold text-[#1d1d1b]">
+                                    <div className="flex items-center justify-between p-3 bg-principal/20 rounded-lg">
+                                        <span className="text-sm text-negro/60">Duración</span>
+                                        <span className="font-bold text-negro">
                                             {calcularDias()} {calcularDias() === 1 ? "día" : "días"}
                                         </span>
                                     </div>
                                 )}
 
 
-                                <div className="flex items-center gap-2 mt-1 p-3  bg-[#ffcd40]/20 rounded-lg">
-                                    <AlertCircle className="w-4 h-4 text-[#1d1d1b]" />
+                                <div className="flex items-center gap-2 mt-1 p-3  bg-principal/20 rounded-lg">
+                                    <AlertCircle className="w-4 h-4 text-negro" />
                                     <span>
                                         <strong>Tickets necesarios:</strong> {calcularDias()}{" "}
                                         <br />(equivalentes en ciudad)
