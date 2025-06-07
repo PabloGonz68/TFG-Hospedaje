@@ -125,12 +125,12 @@ const CrearGrupoViaje = () => {
                 {/* Header */}
                 <div className="mb-8">
                     <div className="flex items-center gap-3 mb-4">
-                        <div className="p-3 bg-[#1d1d1b] rounded-xl">
+                        <div className="p-3 bg-negro rounded-xl">
                             <Users className="w-6 h-6 text-[#ffcd40]" />
                         </div>
                         <div>
-                            <h1 className="text-3xl font-bold text-[#1d1d1b]">Crear Grupo de Viaje</h1>
-                            <p className="text-[#1d1d1b]/80 mt-1">Organiza tu próxima aventura con amigos</p>
+                            <h1 className="text-3xl font-bold text-negro">Crear Grupo de Viaje</h1>
+                            <p className="text-negro/80 mt-1">Organiza tu próxima aventura con amigos</p>
                         </div>
                     </div>
                 </div>
@@ -139,17 +139,17 @@ const CrearGrupoViaje = () => {
                     {/* Formulario principal */}
                     <div className="lg:col-span-2 space-y-6">
                         {/* Información del grupo */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10">
+                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
                             <div className="flex items-center gap-3 mb-6">
                                 <div className="p-2 bg-[#ffcd40] rounded-lg">
-                                    <MapPin className="w-5 h-5 text-[#1d1d1b]" />
+                                    <MapPin className="w-5 h-5 text-negro" />
                                 </div>
-                                <h2 className="text-xl font-bold text-[#1d1d1b]">Información del Grupo</h2>
+                                <h2 className="text-xl font-bold text-negro">Información del Grupo</h2>
                             </div>
 
                             <div className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-[#1d1d1b] mb-2">
+                                    <label className="block text-sm font-medium text-negro mb-2">
                                         Nombre del grupo <span className="text-red-500">*</span>
                                     </label>
                                     <input
@@ -157,20 +157,20 @@ const CrearGrupoViaje = () => {
                                         value={nombreGrupo}
                                         onChange={(e) => setNombreGrupo(e.target.value)}
                                         placeholder="Ej: Aventura en Barcelona 2024"
-                                        className="w-full px-4 py-3 border border-[#1d1d1b]/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1d1d1b] focus:border-transparent"
+                                        className="w-full px-4 py-3 border border-negro/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-negro focus:border-transparent"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-[#1d1d1b] mb-2">Tus tickets aportados</label>
+                                    <label className="block text-sm font-medium text-negro mb-2">Tus tickets aportados</label>
                                     <div className="relative">
-                                        <Ticket className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#1d1d1b]/60 w-5 h-5" />
+                                        <Ticket className="absolute left-3 top-1/2 transform -translate-y-1/2 text-negro/60 w-5 h-5" />
                                         <input
                                             type="number"
                                             value={cantidadTicketsCreador}
                                             onChange={(e) => setCantidadTicketsCreador(Number(e.target.value))}
                                             min={0}
-                                            className="w-full pl-12 pr-4 py-3 border border-[#1d1d1b]/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1d1d1b] focus:border-transparent"
+                                            className="w-full pl-12 pr-4 py-3 border border-negro/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-negro focus:border-transparent"
                                         />
                                     </div>
                                 </div>
@@ -178,33 +178,33 @@ const CrearGrupoViaje = () => {
                         </div>
 
                         {/* Buscar miembros */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10">
+                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
                             <div className="flex items-center gap-3 mb-6">
                                 <div className="p-2 bg-[#ffcd40] rounded-lg">
-                                    <UserPlus className="w-5 h-5 text-[#1d1d1b]" />
+                                    <UserPlus className="w-5 h-5 text-negro" />
                                 </div>
-                                <h2 className="text-xl font-bold text-[#1d1d1b]">Añadir Miembros</h2>
+                                <h2 className="text-xl font-bold text-negro">Añadir Miembros</h2>
                             </div>
 
                             <div className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-[#1d1d1b] mb-2">Buscar usuario por email</label>
+                                    <label className="block text-sm font-medium text-negro mb-2">Buscar usuario por email</label>
                                     <div className="flex gap-3">
                                         <div className="relative flex-1">
-                                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#1d1d1b]/60 w-5 h-5" />
+                                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-negro/60 w-5 h-5" />
                                             <input
                                                 type="email"
                                                 value={emailBusqueda}
                                                 onChange={(e) => setEmailBusqueda(e.target.value)}
                                                 placeholder="usuario@ejemplo.com"
-                                                className="w-full pl-12 pr-4 py-3 border border-[#1d1d1b]/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1d1d1b] focus:border-transparent"
+                                                className="w-full pl-12 pr-4 py-3 border border-negro/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-negro focus:border-transparent"
                                                 onKeyPress={(e) => e.key === "Enter" && buscarUsuarioPorEmail()}
                                             />
                                         </div>
                                         <button
                                             onClick={buscarUsuarioPorEmail}
                                             disabled={isSearching}
-                                            className="px-6 py-3 bg-[#1d1d1b] hover:bg-[#2d2d2b] disabled:bg-[#1d1d1b]/50 text-white rounded-xl font-medium transition-colors duration-200"
+                                            className="px-6 py-3 bg-negro hover:bg-[#2d2d2b] disabled:bg-negro/50 text-white rounded-xl font-medium transition-colors duration-200"
                                         >
                                             {isSearching ? "Buscando..." : "Buscar"}
                                         </button>
@@ -215,19 +215,19 @@ const CrearGrupoViaje = () => {
                                 {usuarioEncontrado && (
                                     <div className="p-4 bg-[#ffcd40]/20 rounded-xl border border-[#ffcd40]/30">
                                         <div className="flex items-center gap-3 mb-4">
-                                            <div className="w-10 h-10 bg-[#1d1d1b] rounded-full flex items-center justify-center">
+                                            <div className="w-10 h-10 bg-negro rounded-full flex items-center justify-center">
                                                 <Users className="w-5 h-5 text-white" />
                                             </div>
                                             <div>
-                                                <p className="font-medium text-[#1d1d1b]">{usuarioEncontrado.nombre}</p>
-                                                <p className="text-sm text-[#1d1d1b]/60">Usuario encontrado</p>
+                                                <p className="font-medium text-negro">{usuarioEncontrado.nombre}</p>
+                                                <p className="text-sm text-negro/60">Usuario encontrado</p>
                                             </div>
                                         </div>
 
                                         <div className="space-y-3">
-                                            <label className="block text-sm font-medium text-[#1d1d1b]">Tickets que aportará</label>
+                                            <label className="block text-sm font-medium text-negro">Tickets que aportará</label>
                                             <div className="relative">
-                                                <Ticket className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#1d1d1b]/60 w-5 h-5" />
+                                                <Ticket className="absolute left-3 top-1/2 transform -translate-y-1/2 text-negro/60 w-5 h-5" />
                                                 <input
                                                     type="number"
                                                     min={1}
@@ -237,12 +237,12 @@ const CrearGrupoViaje = () => {
                                                             ticketsAportados: Number(e.target.value),
                                                         })
                                                     }
-                                                    className="w-full pl-12 pr-4 py-3 border border-[#1d1d1b]/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1d1d1b] focus:border-transparent"
+                                                    className="w-full pl-12 pr-4 py-3 border border-negro/20 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-negro focus:border-transparent"
                                                 />
                                             </div>
                                             <button
                                                 onClick={() => agregarMiembro(usuarioEncontrado.ticketsAportados || 0)}
-                                                className="w-full bg-[#1d1d1b] hover:bg-[#2d2d2b] text-white px-4 py-3 rounded-xl font-medium transition-colors duration-200"
+                                                className="w-full bg-negro hover:bg-[#2d2d2b] text-white px-4 py-3 rounded-xl font-medium transition-colors duration-200"
                                             >
                                                 Añadir al grupo
                                             </button>
@@ -256,36 +256,36 @@ const CrearGrupoViaje = () => {
                     {/* Panel lateral */}
                     <div className="space-y-6">
                         {/* Resumen del grupo */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10">
-                            <h3 className="text-lg font-bold text-[#1d1d1b] mb-4">Resumen del Grupo</h3>
+                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
+                            <h3 className="text-lg font-bold text-negro mb-4">Resumen del Grupo</h3>
 
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between p-3 bg-[#ffcd40]/20 rounded-lg">
-                                    <span className="text-sm text-[#1d1d1b]/60">Total miembros</span>
-                                    <span className="font-bold text-[#1d1d1b]">{miembros.length + 1}</span>
+                                    <span className="text-sm text-negro/60">Total miembros</span>
+                                    <span className="font-bold text-negro">{miembros.length + 1}</span>
                                 </div>
 
                                 <div className="flex items-center justify-between p-3 bg-[#ffcd40]/20 rounded-lg">
-                                    <span className="text-sm text-[#1d1d1b]/60">Total tickets</span>
-                                    <span className="font-bold text-[#1d1d1b]">{totalTickets}</span>
+                                    <span className="text-sm text-negro/60">Total tickets</span>
+                                    <span className="font-bold text-negro">{totalTickets}</span>
                                 </div>
                             </div>
                         </div>
 
                         {/* Lista de miembros */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10">
-                            <h3 className="text-lg font-bold text-[#1d1d1b] mb-4">Miembros del Grupo</h3>
+                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
+                            <h3 className="text-lg font-bold text-negro mb-4">Miembros del Grupo</h3>
 
                             <div className="space-y-3">
                                 {/* Creador */}
                                 <div className="flex items-center justify-between p-3 bg-[#ffcd40]/20 rounded-lg">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 bg-[#1d1d1b] rounded-full flex items-center justify-center">
+                                        <div className="w-8 h-8 bg-negro rounded-full flex items-center justify-center">
                                             <Users className="w-4 h-4 text-white" />
                                         </div>
                                         <div>
-                                            <p className="font-medium text-[#1d1d1b]">Tú (Creador)</p>
-                                            <p className="text-xs text-[#1d1d1b]/60">{cantidadTicketsCreador} tickets</p>
+                                            <p className="font-medium text-negro">Tú (Creador)</p>
+                                            <p className="text-xs text-negro/60">{cantidadTicketsCreador} tickets</p>
                                         </div>
                                     </div>
                                 </div>
@@ -293,8 +293,8 @@ const CrearGrupoViaje = () => {
                                 {/* Miembros añadidos */}
                                 {miembros.length === 0 ? (
                                     <div className="text-center py-8">
-                                        <Users className="w-12 h-12 text-[#1d1d1b]/30 mx-auto mb-3" />
-                                        <p className="text-[#1d1d1b]/60 text-sm">Aún no hay miembros</p>
+                                        <Users className="w-12 h-12 text-negro/30 mx-auto mb-3" />
+                                        <p className="text-negro/60 text-sm">Aún no hay miembros</p>
                                     </div>
                                 ) : (
                                     miembros.map((miembro, idx) => (
@@ -304,8 +304,8 @@ const CrearGrupoViaje = () => {
                                                     <Users className="w-4 h-4 text-white" />
                                                 </div>
                                                 <div>
-                                                    <p className="font-medium text-[#1d1d1b]">{miembro.nombre}</p>
-                                                    <p className="text-xs text-[#1d1d1b]/60">{miembro.ticketsAportados} tickets</p>
+                                                    <p className="font-medium text-negro">{miembro.nombre}</p>
+                                                    <p className="text-xs text-negro/60">{miembro.ticketsAportados} tickets</p>
                                                 </div>
                                             </div>
                                             <button
@@ -325,14 +325,14 @@ const CrearGrupoViaje = () => {
                         <button
                             onClick={handleCrearGrupo}
                             disabled={!nombreGrupo.trim()}
-                            className="w-full bg-[#1d1d1b] hover:bg-[#2d2d2b] disabled:bg-[#1d1d1b]/50 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none"
+                            className="w-full bg-negro hover:bg-[#2d2d2b] disabled:bg-negro/50 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none"
                         >
                             Crear Grupo de Viaje
                         </button>
                         {hospedajeId && <button
                             onClick={() => navigate(`/reserva/grupal/${hospedajeId}`)}
-                            disabled={!nombreGrupo.trim()}
-                            className="w-full bg-[#1d1d1b] hover:bg-[#2d2d2b] disabled:bg-[#1d1d1b]/50 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none"
+
+                            className="w-full bg-negro hover:bg-[#2d2d2b] disabled:bg-negro/50 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none"
                         >
                             ¿Ya tienes un grupo?
                         </button>}

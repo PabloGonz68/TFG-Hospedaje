@@ -371,7 +371,7 @@ const Hospedajes = () => {
                                         <div className="mb-4 p-3 bg-principal/10 rounded-lg">
                                             <p className="text-sm text-negro/60 mb-1">Anfitrión</p>
                                             <button
-                                                onClick={() => toast.info("Función de perfil en desarrollo")}
+                                                onClick={() => navigate(`/perfil/${hospedaje.id_anfitrion}`)}
                                                 className="font-medium text-negro hover:text-negro/80 transition-colors"
                                             >
                                                 {hospedaje.nombreAnfitrion}

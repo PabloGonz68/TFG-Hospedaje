@@ -1,5 +1,6 @@
+import { Calendar, ExternalLink, Home, Mail, MapPin, User, Users } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+
 
 interface Hospedaje {
     id: number;
@@ -23,14 +24,22 @@ const PerfilUser = () => {
         nombre: "",
         apellidos: "",
         email: "",
-        fotoPerfil: ""
+        fotoPerfil: "",
+        fechaRegistro: ""
     });
     const [hospedajes, setHospedajes] = useState<Hospedaje[]>([]);
 
     const { IdAnfitrion } = useParams();
     const idNum = IdAnfitrion ? parseInt(IdAnfitrion) : null;
 
+    const navigate = useNavigate();
 
+    const formatearFecha = (fecha: string) => {
+        return new Date(fecha).toLocaleDateString("es-ES", {
+            year: "numeric",
+            month: "long",
+        })
+    }
 
 
 
@@ -53,7 +62,8 @@ const PerfilUser = () => {
                         nombre: userData.nombre,
                         apellidos: userData.apellidos,
                         fotoPerfil: userData.fotoPerfil,
-                        email: userData.email
+                        email: userData.email,
+                        fechaRegistro: userData.fechaRegistro
                     });
                     console.log("Datos del usuario:", userData);
 
@@ -94,173 +104,231 @@ const PerfilUser = () => {
         fetchHospedajes();
     }, [user.email]);
 
-    const zonaSelector = (zona: 'CIUDAD' | 'PUEBLO') => {
+
+    const getZonaConfig = (zona: "CIUDAD" | "PUEBLO") => {
         switch (zona) {
-            case 'CIUDAD':
-                return 'text-blue-600';
-            case 'PUEBLO':
-                return 'text-green-600';
+            case "CIUDAD":
+                return {
+                    color: "text-blue-700",
+                    bg: "bg-blue-100",
+                    label: "Ciudad",
+                }
+            case "PUEBLO":
+                return {
+                    color: "text-green-700",
+                    bg: "bg-green-100",
+                    label: "Pueblo",
+                }
             default:
-                return 'text-gray-800';
+                return {
+                    color: "text-gray-700",
+                    bg: "bg-gray-100",
+                    label: zona,
+                }
         }
     }
     return (
-        <>
-            <main className="flex max-w-screen overflow-hidden">
-                {/* Form fijo a la izquierda */}
-                <form className="border border-gray-300 rounded-tr-lg p-4 px-8 w-80 fixed left-0 top-28 bottom-0 overflow-auto bg-white">
-                    <h2 className="text-2xl font-bold mb-4">Perfil</h2>
+        <div className="min-h-screen bg-[#ffcd40]">
+            <div className="max-w-7xl mx-auto p-4 md:p-6">
+                {/* Header */}
+                <div className="mb-8">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="p-3 bg-[#1d1d1b] rounded-xl">
+                            <User className="w-6 h-6 text-[#ffcd40]" />
+                        </div>
+                        <div>
+                            <h1 className="text-3xl font-bold text-[#1d1d1b]">Perfil del Anfitrión</h1>
+                            <p className="text-[#1d1d1b]/80 mt-1">Conoce más sobre este anfitrión y sus hospedajes</p>
+                        </div>
+                    </div>
+                </div>
 
-                    <article className="flex flex-col gap-4">
-                        <section className="flex flex-col gap-10 items-center justify-center">
-                            <div className="flex flex-col">
-                                {user.fotoPerfil ? (
-                                    <img
-                                        src={user.fotoPerfil}
-                                        alt="Previsualización"
-                                        className="w-32 h-32 rounded-full mt-2 aspect-square object-cover cursor-pointer hover:opacity-80 transition"
-                                    />
-                                ) : (
-                                    <div className="w-32 h-32 rounded-full mt-2 bg-gray-300 flex items-center justify-center text-gray-600 cursor-pointer">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                    {/* Sidebar - Información del usuario */}
+                    <div className="lg:col-span-1">
+                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10 sticky top-6">
+                            {/* Foto de perfil */}
+                            <div className="text-center mb-6">
+                                <div className="relative inline-block">
+                                    {user.fotoPerfil ? (
+                                        <img
+                                            src={user.fotoPerfil || "/placeholder.svg"}
+                                            alt={`${user.nombre} ${user.apellidos}`}
+                                            className="w-24 h-24 rounded-full object-cover border-4 border-[#ffcd40]"
+                                        />
+                                    ) : (
                                         <img
                                             src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                                                user?.nombre || 'Usuario'
-                                            )}&background=random`}
-                                            className="w-32 h-32 rounded-full mt-2 aspect-square object-cover cursor-pointer hover:opacity-80 transition"
-                                            alt=""
+                                                user?.nombre || "Usuario",
+                                            )}&background=1d1d1b&color=ffcd40&size=96`}
+                                            className="w-24 h-24 rounded-full border-4 border-[#ffcd40]"
+                                            alt="Avatar"
                                         />
+                                    )}
+                                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white"></div>
+                                </div>
+                                <h2 className="text-xl font-bold text-[#1d1d1b] mt-3">
+                                    {user.nombre} {user.apellidos}
+                                </h2>
+                                <p className="text-[#1d1d1b]/60 text-sm">Anfitrión verificado</p>
+                            </div>
+
+                            {/* Estadísticas */}
+                            <div className="space-y-4 mb-6">
+
+
+                                <div className="flex items-center gap-3 p-3 bg-[#ffcd40]/20 rounded-lg">
+                                    <Home className="w-5 h-5 text-[#1d1d1b]" />
+                                    <div>
+                                        <p className="font-bold text-[#1d1d1b]">{hospedajes.length}</p>
+                                        <p className="text-xs text-[#1d1d1b]/60">Hospedajes</p>
                                     </div>
-                                )}
+                                </div>
 
-                                <input className="hidden" type="file" name="fotoPerfil" disabled />
-                            </div>
-                            <div className="flex flex-col gap-4">
-                                <div className="flex flex-col">
-                                    <label htmlFor="name">Nombre</label>
-                                    <input
-                                        className="border border-gray-300 p-2 rounded w-full bg-gray-100 text-gray-800"
-                                        type="text"
-                                        name="nombre"
-                                        value={user.nombre}
-                                        disabled
-                                    />
-                                </div>
-                                <div className="flex flex-col">
-                                    <label htmlFor="apellidos">Apellidos</label>
-                                    <input
-                                        className="border border-gray-300 p-2 rounded w-full bg-gray-100 text-gray-800"
-                                        type="text"
-                                        name="apellidos"
-                                        value={user.apellidos}
-                                        disabled
-                                    />
-                                </div>
-                                <div className="flex flex-col">
-                                    <label htmlFor="email">Correo Electrónico</label>
-                                    <input
-                                        type="email"
-                                        className="border border-gray-300 p-2 rounded w-full bg-gray-100 text-gray-800"
-                                        value={user.email}
-                                        disabled
-                                    />
+                                <div className="flex items-center gap-3 p-3 bg-[#ffcd40]/20 rounded-lg">
+                                    <Calendar className="w-5 h-5 text-[#1d1d1b]" />
+                                    <div>
+                                        <p className="font-bold text-[#1d1d1b]">{formatearFecha(user.fechaRegistro || "")}</p>
+                                        <p className="text-xs text-[#1d1d1b]/60">Miembro desde</p>
+                                    </div>
                                 </div>
                             </div>
-                        </section>
-                    </article>
-                </form>
 
-                {/* Sección de hospedajes a la derecha con scroll horizontal */}
-                <section className="ml-80 flex-1 overflow-y-auto py-6 px-8">
-                    <h1 className="text-3xl font-bold mb-6 text-center">Hospedajes de {user?.nombre}</h1>
-                    {hospedajes.length === 0 ? (
-                        <div className="h-64 w-full flex items-center justify-center">
-                            <h2 className="text-xl font-semibold">No hay hospedajes disponibles todavia...</h2>
-                        </div>
-                    ) : (
-                        <div className="flex flex-col space-y-6">
-                            {hospedajes.map((h) => (
-                                <Link
-                                    to={`/hospedaje/${h.id}`}
-                                    key={h.id}
-                                    className="bg-white shadow-md rounded-2xl p-5 border border-gray-300 w-full hover:shadow-lg transition flex-shrink-0 block"
+                            {/* Información de contacto */}
+                            <div className="space-y-3">
+                                <h3 className="font-medium text-[#1d1d1b] flex items-center gap-2">
+                                    <Mail className="w-4 h-4" />
+                                    Contacto
+                                </h3>
+                                <div className="p-3 bg-gray-50 rounded-lg">
+                                    <p className="text-sm text-[#1d1d1b]/80 break-all">{user.email}</p>
+                                </div>
+                            </div>
+
+
+
+                            {/* Botón de contacto */}
+                            <div className="mt-6">
+                                <button
+                                    onClick={() =>
+                                        window.location.href = `mailto:${user.email}?subject=Interesado%20en%20tu%20hospedaje&body=Hola%20${user.nombre},%0A%0AEstoy%20interesado%20en%20tu%20hospedaje...`
+                                    }
+
+                                    className="w-full bg-[#1d1d1b] hover:bg-[#2d2d2b] text-white px-4 py-3 rounded-xl font-medium transition-colors duration-200"
                                 >
-                                    <section className="flex sm:flex-col lg:flex-row gap-4">
-                                        <div className="lg:w-1/3 h-full">
-                                            <img
-                                                src={h.foto}
-                                                className="w-full rounded-lg h-74 aspect-square object-cover mb-4"
-                                                alt={h.nombre}
-                                            />
-                                        </div>
-                                        <div className="lg:w-2/3">
-                                            <h2 className="text-lg md:text-xl  font-semibold mb-2">{h.nombre}</h2>
-                                            <p className="text-gray-700 text-xs md:text-md">
-                                                <span className="font-medium">Dirección:</span> {h.direccion}, {h.codigoPostal}
-                                            </p>
-                                            <p className="text-gray-700 text-xs md:text-md">
-                                                <span className="font-medium">Ciudad:</span> {h.ciudad}, {h.pais}
-                                            </p>
-                                            {h.capacidad > 1 ? (
-                                                <p className="text-gray-700 text-xs md:text-md">
-                                                    <span className="font-medium">Capacidad:</span> {h.capacidad} personas
-                                                </p>
-                                            ) : (
-                                                <p className="text-gray-700 text-xs md:text-md">
-                                                    <span className="font-medium">Capacidad:</span> {h.capacidad} persona
-                                                </p>
-                                            )}
-                                            <p className="text-gray-700 text-xs md:text-md">
-                                                <span className="font-medium">
-                                                    Zona: <span className={zonaSelector(h.tipoZona)}>{h.tipoZona}</span>
-                                                </span>
-                                            </p>
-                                            <p className="text-gray-600 mt-2 truncate w-full">{h.descripcion}</p>
+                                    Contactar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
-                                            <div className="flex flex-col z-20 mt-3">
-                                                {/* Botón perfil anfitrión */}
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        e.stopPropagation(); // evita que dispare el Link padre
-                                                        window.location.href = `/perfil/${h.id_anfitrion}`;
-                                                    }}
-                                                    className="text-gray-700 sm:text-sm font-medium hover:underline text-left"
-                                                    type="button"
-                                                >
-                                                    Anfitrión:{' '}
-                                                    <span className="text-principal font-semibold">{h.nombreAnfitrion}</span>
-                                                </button>
+                    {/* Contenido principal - Hospedajes */}
+                    <div className="lg:col-span-3">
+                        <div className="mb-6">
+                            <h2 className="text-2xl font-bold text-[#1d1d1b] mb-2">
+                                Hospedajes de {user.nombre} ({hospedajes.length})
+                            </h2>
+                            <p className="text-[#1d1d1b]/70">Descubre los espacios únicos que ofrece este anfitrión</p>
+                        </div>
 
-                                                {/* Botón Google Maps */}
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        e.stopPropagation();
-                                                        window.open(
-                                                            `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                                                                `${h.direccion}, ${h.ciudad}, ${h.pais}`
-                                                            )}`,
-                                                            '_blank',
-                                                            'noopener noreferrer'
-                                                        );
-                                                    }}
-                                                    className="text-blue-600 hover:underline mt-3 text-left"
-                                                    type="button"
-                                                >
-                                                    Ver en Google Maps
-                                                </button>
+                        {hospedajes.length === 0 ? (
+                            <div className="text-center py-16 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg">
+                                <div className="max-w-md mx-auto">
+                                    <div className="w-24 h-24 bg-[#1d1d1b] rounded-full flex items-center justify-center mx-auto mb-6">
+                                        <Home className="w-12 h-12 text-[#ffcd40]" />
+                                    </div>
+                                    <h3 className="text-xl font-semibold text-[#1d1d1b] mb-3">No hay hospedajes disponibles</h3>
+                                    <p className="text-[#1d1d1b]/70">Este anfitrión aún no ha publicado ningún hospedaje</p>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
+                                {hospedajes.map((hospedaje) => {
+                                    const zonaConfig = getZonaConfig(hospedaje.tipoZona)
+
+                                    return (
+                                        <div
+                                            key={hospedaje.id}
+                                            className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-[#1d1d1b]/10 group cursor-pointer"
+                                            onClick={() => navigate(`/hospedaje/${hospedaje.id}`)}
+                                        >
+                                            {/* Imagen */}
+                                            <div className="relative overflow-hidden">
+                                                <img
+                                                    src={hospedaje.foto || "/placeholder.svg"}
+                                                    alt={hospedaje.nombre}
+                                                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                                                />
+                                                <div className="absolute top-4 right-4">
+                                                    <div
+                                                        className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${zonaConfig.bg} ${zonaConfig.color}`}
+                                                    >
+                                                        <MapPin className="w-3 h-3" />
+                                                        {zonaConfig.label}
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            {/* Contenido */}
+                                            <div className="p-6">
+                                                {/* Header */}
+                                                <div className="mb-4">
+                                                    <h3 className="text-lg font-bold text-[#1d1d1b] mb-2 line-clamp-1">{hospedaje.nombre}</h3>
+                                                    <div className="flex items-center gap-2 text-sm text-[#1d1d1b]/60 mb-1">
+                                                        <MapPin className="w-4 h-4" />
+                                                        <span className="line-clamp-1">
+                                                            {hospedaje.direccion}, {hospedaje.ciudad}
+                                                        </span>
+                                                    </div>
+                                                    <p className="text-sm text-[#1d1d1b]/60">{hospedaje.pais}</p>
+                                                </div>
+
+                                                {/* Capacidad */}
+                                                <div className="flex items-center gap-2 mb-4">
+                                                    <div className="flex items-center gap-1 bg-[#ffcd40]/20 px-3 py-1 rounded-lg">
+                                                        <Users className="w-4 h-4 text-[#1d1d1b]" />
+                                                        <span className="text-sm font-medium text-[#1d1d1b]">
+                                                            {hospedaje.capacidad} {hospedaje.capacidad === 1 ? "persona" : "personas"}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                {/* Descripción */}
+                                                <p className="text-sm text-[#1d1d1b]/70 mb-4 line-clamp-2">{hospedaje.descripcion}</p>
+
+                                                {/* Acciones */}
+                                                <div className="flex gap-2">
+
+
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            window.open(
+                                                                `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                                                                    `${hospedaje.direccion}, ${hospedaje.ciudad}, ${hospedaje.pais}`,
+                                                                )}`,
+                                                                "_blank",
+                                                            )
+                                                        }}
+                                                        className="p-2 bg-[#ffcd40]/20 hover:bg-[#ffcd40]/30 text-[#1d1d1b] rounded-lg transition-colors duration-200"
+                                                        title="Ver en Google Maps"
+                                                    >
+                                                        <ExternalLink className="w-4 h-4" />
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </section>
-                                </Link>
-                            ))}
-                        </div>
-                    )}
+                                    )
+                                })}
+                            </div>
+                        )}
 
-                </section>
-            </main>
 
-        </>
+                    </div>
+                </div>
+            </div>
+        </div>
     )
 }
 
