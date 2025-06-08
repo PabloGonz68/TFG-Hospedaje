@@ -219,7 +219,7 @@ const UserDataTable = () => {
                             </DropdownMenuItem>
 
                             {String(usuario.id_usuario) !== localStorage.getItem("userId") && (<DropdownMenuItem
-                                className='text-red-600 '
+                                className='text-red-500 '
                                 onClick={() => {
                                     toast.custom((t) => (
                                         <ConfirmToast
@@ -291,14 +291,14 @@ const UserDataTable = () => {
     return (
         <div className="w-full">
             {/* Filtro y selector de columnas */}
-            <div className="flex items-center py-4">
+            <div className="flex items-center py-4 text-blanco">
                 <Input
                     placeholder="Filtrar por email..."
                     value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
                         table.getColumn("email")?.setFilterValue(event.target.value)
                     }
-                    className="max-w-sm"
+                    className="max-w-sm bg-negro"
                 />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -327,7 +327,7 @@ const UserDataTable = () => {
             {/* Tabla */}
             <div className="rounded-md border">
                 <Table>
-                    <TableHeader>
+                    <TableHeader className='bg-negro'>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
@@ -340,7 +340,7 @@ const UserDataTable = () => {
                             </TableRow>
                         ))}
                     </TableHeader>
-                    <TableBody>
+                    <TableBody className='bg-white'>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow

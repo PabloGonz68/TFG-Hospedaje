@@ -138,7 +138,7 @@ const PerfilUser = () => {
                             <User className="w-6 h-6 text-principal" />
                         </div>
                         <div>
-                            <h1 className="text-3xl font-bold text-negro">Perfil del Anfitrión</h1>
+                            <h1 className="text-3xl font-bold text-negro">Perfil de {user.nombre}</h1>
                             <p className="text-negro/80 mt-1">Conoce más sobre este anfitrión y sus hospedajes</p>
                         </div>
                     </div>

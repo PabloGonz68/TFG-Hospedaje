@@ -315,7 +315,7 @@ const VerHospedaje = () => {
                     <div className="space-y-6">
                         {/* Card de reserva */}
                         {!esPropio && (
-                            <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10 sticky top-6">
+                            <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10 sticky top-36">
                                 <div className="text-center mb-6">
                                     <h3 className="text-xl font-bold text-[#1d1d1b] mb-2">Reservar este hospedaje</h3>
                                     <p className="text-[#1d1d1b]/60 text-sm">Elige tu opción de reserva</p>
@@ -395,24 +395,7 @@ const VerHospedaje = () => {
                             </div>
                         )}
 
-                        {/* Políticas */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10">
-                            <h3 className="font-bold text-[#1d1d1b] mb-4">Información importante</h3>
-                            <div className="space-y-3 text-sm text-[#1d1d1b]/70">
-                                <div>
-                                    <span className="font-medium text-[#1d1d1b]">Check-in:</span> 15:00 - 22:00
-                                </div>
-                                <div>
-                                    <span className="font-medium text-[#1d1d1b]">Check-out:</span> Hasta las 11:00
-                                </div>
-                                <div>
-                                    <span className="font-medium text-[#1d1d1b]">Cancelación:</span> Contactar con anfitrión
-                                </div>
-                                <div>
-                                    <span className="font-medium text-[#1d1d1b]">Mascotas:</span> Consultar disponibilidad
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>

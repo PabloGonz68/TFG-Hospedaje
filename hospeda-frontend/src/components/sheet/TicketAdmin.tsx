@@ -4,6 +4,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { toast } from "sonner"
+import { TicketIcon } from "lucide-react"
 
 interface Ticket {
     id_ticket: number;
@@ -104,11 +105,18 @@ export const SheetTicketsUsuario = ({ open, onClose, idUsuario }: Props) => {
         <Sheet open={open} onOpenChange={onClose}>
             <SheetContent>
                 <SheetHeader>
-                    <SheetTitle>Tickets del usuario</SheetTitle>
+                    <div className="flex items-center gap-2">
+
+
+                        <div className="flex p-2 items-center bg-principal rounded-xl">
+                            <TicketIcon className="w-6 h-6 text-negro" />
+                        </div>
+                        <SheetTitle>Tickets del usuario</SheetTitle>
+                    </div>
                 </SheetHeader>
-                <div className="my-4 flex gap-2">
-                    <Button onClick={() => crearTicket("CIUDAD")}>Añadir ticket CIUDAD</Button>
-                    <Button onClick={() => crearTicket("PUEBLO")}>Añadir ticket PUEBLO</Button>
+                <div className="my-4 flex justify-center gap-2">
+                    <Button className="bg-principal hover:bg-principal-hover text-negro hover:text-blanco" onClick={() => crearTicket("CIUDAD")}>Añadir ticket CIUDAD</Button>
+                    <Button className="bg-secundario hover:bg-secundario-hover text-negro hover:text-blanco" onClick={() => crearTicket("PUEBLO")}>Añadir ticket PUEBLO</Button>
                 </div>
                 <Table className="p-10">
                     <TableHeader>
@@ -119,7 +127,7 @@ export const SheetTicketsUsuario = ({ open, onClose, idUsuario }: Props) => {
                             <TableHead>Acciones</TableHead>
                         </TableRow>
                     </TableHeader>
-                    <TableBody>
+                    <TableBody className="text-blanco">
                         {tickets.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="text-center text-muted-foreground">

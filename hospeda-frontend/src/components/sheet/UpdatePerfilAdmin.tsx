@@ -12,6 +12,7 @@ import {
     SheetTitle,
 } from "@/components/ui/sheet"
 import { toast } from "sonner"
+import { Edit } from "lucide-react"
 
 export type Usuario = {
     id_usuario: string
@@ -104,34 +105,46 @@ export function SheetAdminUser({
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent>
+            <SheetContent className="text-blanco">
                 <SheetHeader>
-                    <SheetTitle>Editar perfil</SheetTitle>
-                    <SheetDescription>
-                        Modifica los datos del usuario aquí. Haz click en guardar cuando
-                        termines.
-                    </SheetDescription>
+                    <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-2">
+                            <div className="flex p-2 items-center bg-principal rounded-xl">
+                                <Edit className="w-6 h-6 text-negro" />
+                            </div>
+                            <SheetTitle className="text-principal">Editar perfil</SheetTitle>
+                        </div>
+
+                        <div>
+
+                            <SheetDescription className="text-blanco">
+                                Modifica los datos del usuario aquí. Haz click en guardar cuando
+                                termines.
+                            </SheetDescription>
+                        </div>
+                    </div>
+
                 </SheetHeader>
                 {usuario ? (
                     <form onSubmit={handleSubmit} className="grid flex-1 auto-rows-min gap-6 px-4">
                         <div className="grid gap-3">
-                            <Label htmlFor="nombre">Nombre</Label>
+                            <Label className="text-principal" htmlFor="nombre">Nombre</Label>
                             <Input id="nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
                         </div>
                         <div className="grid gap-3">
-                            <Label htmlFor="apellidos">Apellidos</Label>
+                            <Label className="text-principal" htmlFor="apellidos">Apellidos</Label>
                             <Input id="apellidos" value={apellidos} onChange={(e) => setApellidos(e.target.value)} required />
                         </div>
                         <div className="grid gap-3">
-                            <Label htmlFor="email">Email</Label>
+                            <Label className="text-principal" htmlFor="email">Email</Label>
                             <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                         </div>
                         <div className="grid gap-3">
-                            <Label htmlFor="fotoPerfil">Foto de perfil (URL)</Label>
+                            <Label className="text-principal" htmlFor="fotoPerfil">Foto de perfil (URL)</Label>
                             <Input id="fotoPerfil" value={fotoPerfil} onChange={(e) => setFotoPerfil(e.target.value)} />
                         </div>
                         <div className="grid gap-3">
-                            <Label htmlFor="rol">Rol</Label>
+                            <Label className="text-principal" htmlFor="rol">Rol</Label>
                             <select
                                 id="rol"
                                 className="border rounded px-2 py-1"
@@ -139,12 +152,12 @@ export function SheetAdminUser({
                                 onChange={(e) => setRol(e.target.value as "USER" | "ADMIN")}
                                 required
                             >
-                                <option value="USER">USER</option>
-                                <option value="ADMIN">ADMIN</option>
+                                <option className="text-principal bg-negro" value="USER">USER</option>
+                                <option className="text-principal bg-negro" value="ADMIN">ADMIN</option>
                             </select>
                         </div>
                         <div className="grid gap-3">
-                            <Label htmlFor="password">Contraseña</Label>
+                            <Label className="text-principal" htmlFor="password">Contraseña</Label>
                             <Input
                                 id="password"
                                 type="password"
@@ -154,7 +167,7 @@ export function SheetAdminUser({
                             />
                         </div>
                         <SheetFooter>
-                            <Button type="submit">Guardar cambios</Button>
+                            <Button className="bg-principal text-negro hover:bg-principal-hover " type="submit">Guardar cambios</Button>
                             <SheetClose asChild>
                                 <Button variant="outline">Cerrar</Button>
                             </SheetClose>
