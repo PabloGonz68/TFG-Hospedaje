@@ -10,16 +10,16 @@ const Footer = () => {
                 <div className="flex flex-col justify-center items-center md:items-start">
                     <div className="flex flex-col items-center md:items-start w-3xs">
                         <a href="/" className="w-48 relative group">
-                            <img
+                            {/*<img
                                 src="https://i.ibb.co/1YjMczHJ/logo-Hospeda-blanco.png"
                                 alt="Logo Hospeda Hover"
 
                                 className="max-w-50 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                            />
+                            />*/}
                             <img
                                 src="https://i.ibb.co/rKGbXzxS/logo-Hospeda-amarillo.png"
                                 alt="Logo Hospeda"
-                                className="max-w-50  transition-opacity duration-900 group-hover:opacity-0"
+                                className="max-w-50   transition-all duration-900 hover:scale-110 group-hover:opacity-1000"
 
                             />
                         </a>
@@ -41,8 +41,8 @@ const Footer = () => {
                     </div>
                 </div>
                 {/* Navegación */}
-                <div className="flex flex-col items-center md:items-start">
-                    <h3 className="text-md font-semibold mb-4 bg-principal text-negro rounded-lg  p-2 w-fit  text-shadow-sm">Explorar</h3>
+                <div className="flex flex-col items-center md:items-start group">
+                    <h3 className="text-md transition-all duration-300 group-hover:translate-y-2 font-semibold mb-4 bg-principal text-negro rounded-lg  p-2 w-fit  text-shadow-sm">Explorar</h3>
                     <ul className="space-y-1 text-sm text-center md:text-left">
                         <li><a href="/hospedajes" className="hover:underline">Hospedajes</a></li>
                         <li><a href="/grupoViaje/mis-grupos" className="hover:underline">Grupos de Viajes</a></li>
@@ -52,8 +52,8 @@ const Footer = () => {
                 </div>
 
                 {/* Legal y ayuda */}
-                <div className="flex flex-col items-center md:items-start">
-                    <h3 className="text-md  font-semibold mb-4 bg-principal text-negro rounded-lg  p-2 w-fit  text-shadow-sm">Soporte</h3>
+                <div className="flex flex-col items-center md:items-start group">
+                    <h3 className="text-md transition-all duration-300 group-hover:translate-y-2  font-semibold mb-4 bg-principal text-negro rounded-lg  p-2 w-fit  text-shadow-sm">Soporte</h3>
                     <ul className="space-y-1 text-sm text-center md:text-left">
                         <li><a href="#" className="hover:underline">Centro de ayuda</a></li>
                         <li><a href="#" className="hover:underline">Términos y condiciones</a></li>
@@ -63,8 +63,8 @@ const Footer = () => {
                 </div>
 
                 {/* Contacto */}
-                <div className="flex flex-col items-center md:items-start">
-                    <h3 className="text-md font-semibold mb-4 bg-principal text-negro rounded-lg  p-2 w-fit  text-shadow-sm">Contáctanos</h3>
+                <div className="flex flex-col items-center md:items-start group">
+                    <h3 className="text-md transition-all duration-300 group-hover:translate-y-2 font-semibold mb-4 bg-principal text-negro rounded-lg  p-2 w-fit  text-shadow-sm">Contáctanos</h3>
                     <ul className="space-y-1 text-sm text-center md:text-left">
                         <li className="flex items-center gap-2">
                             <Mail size={16} /> <span>hola@hospeda.com</span>

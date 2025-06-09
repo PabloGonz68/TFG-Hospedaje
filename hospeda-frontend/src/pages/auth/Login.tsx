@@ -4,6 +4,7 @@ import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { motion } from "motion/react"
 import { toast } from 'sonner';
+import { Fingerprint } from "lucide-react";
 
 
 function Login() {
@@ -85,7 +86,12 @@ function Login() {
 
 
                 <form className="flex flex-col gap-3 bg-negro  p-8 w-full max-w-md mx-auto border-2 shadow-[0_20px_50px_rgba(RGB(_255,_255,_255)_0.7)] border-gray-300 rounded-xl" onSubmit={handleSubmit}>
-                    <h2 className="text-xl font-bold mb-4 py-2 text-principal border-b-1 border-principal">Login</h2>
+                    <div className="flex items-center gap-3 mb-6 border-b-2 border-principal pb-4">
+                        <div className="p-2 bg-principal rounded-lg">
+                            <Fingerprint className="w-5 h-5 text-negro" />
+                        </div>
+                        <h2 className="text-xl font-bold text-principal">Iniciar sesión</h2>
+                    </div>
                     <div className="flex flex-col gap-2">
                         <input
                             className="p-2 border-b text-blanco bg-negro"

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react"
 import { toast } from 'sonner';
-
+import { Users } from "lucide-react"
 function Register() {
     const [formData, SetFormData] = useState({
         email: "",
@@ -55,7 +55,12 @@ function Register() {
                 transition={{ duration: 0.5, ease: "easeOut" }}
             >
                 <form onSubmit={handleSubmit} className="flex flex-col gap-3 bg-negro  p-8 w-full max-w-md mx-auto border-2 shadow-[0_20px_50px_rgba(RGB(_255,_255,_255)_0.7)] border-gray-300 rounded-xl">
-                    <h2 className="text-xl font-bold mb-4 py-2 text-principal border-b-1 border-principal">Registro</h2>
+                    <div className="flex items-center gap-3 mb-6 border-b-2 border-principal pb-4">
+                        <div className="p-2 bg-principal rounded-lg">
+                            <Users className="w-5 h-5 text-negro" />
+                        </div>
+                        <h2 className="text-xl font-bold text-principal">Registro</h2>
+                    </div>
                     <input
                         type="email"
                         name="email"

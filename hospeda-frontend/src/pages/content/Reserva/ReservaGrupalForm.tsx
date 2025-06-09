@@ -278,12 +278,13 @@ const ReservaGrupalForm = () => {
                                     </div>
                                 )}
                             </div>
+                            {/* Selección de fecha */}
                             <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
                                 <div className="flex items-center gap-3 mb-6">
                                     <div className="p-2 bg-principal rounded-lg">
-                                        <Users className="w-5 h-5 text-negro" />
+                                        <Calendar className="w-5 h-5 text-negro" />
                                     </div>
-                                    <h2 className="text-xl font-bold text-negro">Seleccionar Grupo</h2>
+                                    <h2 className="text-xl font-bold text-negro">Seleccionar Fechas</h2>
                                 </div>
                                 <div className="flex justify-center flex-wrap gap-6">
                                     <ReservaCalendar

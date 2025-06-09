@@ -143,7 +143,7 @@ export function NavigationMenuDemo() {
         className={cn(
           "transition-all duration-300 flex items-center",
           scrolled
-            ? "bg-negro/60 backdrop-blur-md mt-5 rounded-3xl px-2 md:px-5 lg:px-35 py-2 max-w-full gap-10  md:gap-20 lg:gap-30"
+            ? "bg-negro/60 backdrop-blur-md mt-5 rounded-3xl px-2 md:px-5 lg:px-40 py-2 max-w-full gap-10  md:gap-20 lg:gap-30"
             : "py-4 w-full gap-10 justify-center sm:justify-between px-10 lg:px-30"
         )}
       >
@@ -213,7 +213,7 @@ export function NavigationMenuDemo() {
 
 
 
-        <div className="hidden lg:flex items-center">
+        <div className="hidden xl:flex items-center">
           {isAuthenticated ? (
             <div className="flex justify-center items-center w-[120px] gap-2">
               <TicketModal ticketsCiudad={ticketsCiudad} ticketsPueblo={ticketsPueblo} />
@@ -253,7 +253,7 @@ export function NavigationMenuDemo() {
 
         </div>
         {/* Botón hamburguesa visible solo en pantallas pequeñas */}
-        <label className="flex flex-col gap-2 w-8 cursor-pointer lg:hidden relative z-50">
+        <label className="flex flex-col gap-2 w-8 cursor-pointer xl:hidden relative z-50">
           <input id="menu-toggle" type="checkbox" className="peer hidden" />
           <div className="rounded-2xl h-[3px] w-1/2 bg-black duration-500 peer-checked:rotate-[225deg] origin-right peer-checked:-translate-x-[12px] peer-checked:-translate-y-[1px]" />
           <div className="rounded-2xl h-[3px] w-full bg-black duration-500 peer-checked:-rotate-45" />
@@ -263,7 +263,7 @@ export function NavigationMenuDemo() {
           <div className="peer-checked:flex hidden absolute top-10 right-0 bg-white text-black flex-col gap-4 rounded-xl shadow-md w-60">
             {isAuthenticated ? (
               <div className="flex flex-col gap-4">
-                <div className="flex items-center justify-center bg-gray-500 text-principal p-2 rounded-t-lg">
+                <div className="flex items-center justify-center bg-negro text-principal p-2 rounded-t-lg">
                   <h2 className="text-lg font-semibold">Acciones</h2>
                 </div>
                 <div className="flex flex-col gap-2 p-4">
@@ -297,7 +297,7 @@ export function NavigationMenuDemo() {
               </div>
             ) : (
               <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-center bg-principal text-white p-2 rounded-t-lg">
+                <div className="flex items-center justify-center bg-principal text-negro p-2 rounded-t-lg">
                   <h2 className="text-lg font-semibold">Acceso</h2>
                 </div>
                 <div className="flex flex-col gap-2 p-4">
