@@ -1,9 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Map from "../../../components/shared/map";
-import ReservaModal from "@/components/modals/reservaModal";
 import { toast } from 'sonner';
-import { ArrowLeft, Calendar, Edit, ExternalLink, Home, MapPin, Shield, User, Users } from "lucide-react";
+import { ArrowLeft, Calendar, Edit, ExternalLink, Home, MapPin, User, Users } from "lucide-react";
 
 
 interface Hospedaje {
@@ -36,6 +35,7 @@ const VerHospedaje = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const idNum = id ? parseInt(id) : null;
+    console.log("ID recibido:", idNum);
     console.log("ID recibido por useParams:", id);
     const token = localStorage.getItem("token");
     const usuarioId = localStorage.getItem("userId");

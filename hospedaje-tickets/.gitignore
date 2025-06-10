@@ -39,3 +39,4 @@ out/
 *.pem
 application.properties
 .env
+*.yml

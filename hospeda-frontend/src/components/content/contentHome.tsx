@@ -24,6 +24,7 @@ function ParallaxSection({
     const ref = useRef(null)
     const { scrollYProgress } = useScroll({ target: ref })
     const y = useParallax(scrollYProgress, parallaxDistance)
+    console.log(y)
     const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8])
 
 
