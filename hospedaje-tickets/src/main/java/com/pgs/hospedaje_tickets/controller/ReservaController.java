@@ -25,7 +25,7 @@ public class ReservaController {
     }
 
     @PostMapping("/con-grupo")
-    public ResponseEntity<?> createReserva(@RequestBody CrearReservaConGrupoDTO dto) {
+    public ResponseEntity<?> createReservaGrupo(@RequestBody CrearReservaConGrupoDTO dto) {
         ReservaDTO reservaDTO = reservaService.createReservaConGrupo(dto);
         return new ResponseEntity<>(reservaDTO, HttpStatus.CREATED);
     }

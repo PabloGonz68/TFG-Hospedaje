@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Map from "../../../components/shared/map";
 import { toast } from 'sonner';
-import { ArrowLeft, Calendar, Edit, ExternalLink, Home, MapPin, User, Users } from "lucide-react";
+import { ArrowLeft, Calendar, Edit, ExternalLink, Home, MapPin, Users } from "lucide-react";
 
 
 interface Hospedaje {
@@ -380,10 +380,7 @@ const VerHospedaje = () => {
                                         <Calendar className="w-4 h-4" />
                                         <span>Anfitrión desde {formatearFecha(anfitrion.fechaRegistro)}</span>
                                     </div>
-                                    <div className="flex items-center gap-2 text-sm text-[#1d1d1b]/60">
-                                        <User className="w-4 h-4" />
-                                        <span>Responde en menos de 1 hora</span>
-                                    </div>
+
                                 </div>
 
                                 <button

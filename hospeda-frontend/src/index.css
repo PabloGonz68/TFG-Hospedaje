@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
+
+
 
 @theme {
   --color-principal: #ffcd40;
@@ -11,6 +14,10 @@
   --color-negro: #1d1d1b   ;
   --color-blanco: #fffde9   ;
   --color-blanco-transparente: rgba(255, 250, 221, 0.95);
+}
+
+@theme{
+  --font-poppins: 'Poppins', sans-serif;
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -124,7 +131,7 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 font-poppins ;
   }
   body {
     @apply bg-principal;

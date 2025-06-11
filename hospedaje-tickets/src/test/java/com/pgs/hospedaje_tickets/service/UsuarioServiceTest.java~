@@ -1,0 +1,93 @@
+package com.pgs.hospedaje_tickets.service;
+
+import com.pgs.hospedaje_tickets.error.exceptions.BadRequestException;
+import com.pgs.hospedaje_tickets.error.exceptions.ResourceNotFoundException;
+import com.pgs.hospedaje_tickets.model.Usuario;
+import com.pgs.hospedaje_tickets.dto.User.UsuarioDTO;
+import com.pgs.hospedaje_tickets.repository.UsuarioRepository;
+import com.pgs.hospedaje_tickets.service.UsuarioService;
+import com.pgs.hospedaje_tickets.utils.Mapper;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class UsuarioServiceTest {
+
+    @Mock
+    private UsuarioRepository usuarioRepository;
+
+    @Mock
+    private Mapper mapper;
+
+    @InjectMocks
+    private UsuarioService usuarioService;
+
+    // 1. getUserById - caso válido
+    @Test
+    void getUserById_valido_retornaUsuarioDTO() {
+        Long id = 1L;
+        Usuario usuario = new Usuario();
+        usuario.setId_usuario(id);
+        usuario.setNombre("Pablo");
+
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId_usuario(id);
+        usuarioDTO.setNombre("Pablo");
+
+        when(usuarioRepository.findById(id)).thenReturn(Optional.of(usuario));
+        when(mapper.toUsuarioDTO(usuario)).thenReturn(usuarioDTO);
+
+        UsuarioDTO resultado = usuarioService.getUserById(id.toString());
+
+        assertNotNull(resultado);
+        assertEquals(id, resultado.getId_usuario());
+        assertEquals("Pablo", resultado.getNombre());
+    }
+
+    // 2. getUserById - id inválido (no puede parsear a Long)
+    @Test
+    void getUserById_idInvalido_lanzaBadRequestException() {
+        String invalidId = "abc";
+
+        BadRequestException ex = assertThrows(BadRequestException.class, () -> {
+            usuarioService.getUserById(invalidId);
+        });
+
+        assertEquals("El id de usuario es inválido.", ex.getMessage());
+    }
+
+    // 3. getUserByEmail - usuario encontrado
+    @Test
+    void getUserByEmail_usuarioEncontrado_retornaUsuario() {
+        String email = "pablo@example.com";
+        Usuario usuario = new Usuario();
+        usuario.setEmail(email);
+        usuario.setNombre("Pablo");
+
+        when(usuarioRepository.findByEmail(email)).thenReturn(Optional.of(usuario));
+
+        Usuario resultado = usuarioService.getUserByEmail(email);
+
+        assertNotNull(resultado);
+        assertEquals(email, resultado.getEmail());
+    }
+
+    // 4. getUserByEmail - usuario no encontrado (lanza excepción)
+    @Test
+    void getUserByEmail_usuarioNoEncontrado_lanzaResourceNotFoundException() {
+        String email = "noexiste@example.com";
+
+        when(usuarioRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () -> {
+            usuarioService.getUserByEmail(email);
+        });
+
+        assertEquals("Usuario no encontrado.", ex.getMessage());
+    }
+}

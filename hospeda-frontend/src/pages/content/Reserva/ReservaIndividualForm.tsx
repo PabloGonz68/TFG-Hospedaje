@@ -190,7 +190,7 @@ const ReservaIndividualForm = () => {
                                     disabled={isLoading || !startDate || !endDate}
                                     className="w-full bg-negro hover:bg-[#2d2d2b] disabled:bg-negro/50 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none"
                                 >
-                                    {isLoading ? "Creando reserva..." : "Crear Reserva Grupal"}
+                                    {isLoading ? "Creando reserva..." : "Crear Reserva"}
                                 </button>
                             </div>
                         </form>
