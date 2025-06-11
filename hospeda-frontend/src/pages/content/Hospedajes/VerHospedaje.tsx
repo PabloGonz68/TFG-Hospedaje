@@ -158,10 +158,10 @@ const VerHospedaje = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#ffcd40] flex items-center justify-center">
+            <div className="min-h-screen bg-principal flex items-center justify-center">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1d1d1b] mx-auto mb-4"></div>
-                    <p className="text-[#1d1d1b] font-medium">Cargando hospedaje...</p>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-negro mx-auto mb-4"></div>
+                    <p className="text-negro font-medium">Cargando hospedaje...</p>
                 </div>
             </div>
         )
@@ -169,13 +169,13 @@ const VerHospedaje = () => {
 
     if (error) {
         return (
-            <div className="min-h-screen bg-[#ffcd40] flex items-center justify-center">
+            <div className="min-h-screen bg-principal flex items-center justify-center">
                 <div className="text-center">
                     <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <Home className="w-12 h-12 text-red-600" />
                     </div>
-                    <h2 className="text-2xl font-bold text-[#1d1d1b] mb-2">Error al cargar</h2>
-                    <p className="text-[#1d1d1b]/70">{error}</p>
+                    <h2 className="text-2xl font-bold text-negro mb-2">Error al cargar</h2>
+                    <p className="text-negro/70">{error}</p>
                 </div>
             </div>
         )
@@ -183,13 +183,13 @@ const VerHospedaje = () => {
 
     if (!hospedaje) {
         return (
-            <div className="min-h-screen bg-[#ffcd40] flex items-center justify-center">
+            <div className="min-h-screen bg-principal flex items-center justify-center">
                 <div className="text-center">
                     <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <Home className="w-12 h-12 text-gray-600" />
                     </div>
-                    <h2 className="text-2xl font-bold text-[#1d1d1b] mb-2">Hospedaje no encontrado</h2>
-                    <p className="text-[#1d1d1b]/70">El hospedaje que buscas no existe o ha sido eliminado</p>
+                    <h2 className="text-2xl font-bold text-negro mb-2">Hospedaje no encontrado</h2>
+                    <p className="text-negro/70">El hospedaje que buscas no existe o ha sido eliminado</p>
                 </div>
             </div>
         )
@@ -199,13 +199,13 @@ const VerHospedaje = () => {
     const esPropio = hospedaje.id_anfitrion === usuarioIdNum
 
     return (
-        <div className="min-h-screen bg-[#ffcd40]">
+        <div className="min-h-screen bg-principal">
             <div className="max-w-6xl mx-auto p-4 md:p-6">
                 {/* Header con navegación */}
                 <div className="flex items-center justify-between mb-6">
                     <button
                         onClick={() => window.history.back()}
-                        className="flex items-center gap-2 text-[#1d1d1b] hover:text-[#1d1d1b]/80 transition-colors"
+                        className="flex items-center gap-2 text-negro hover:text-negro/80 transition-colors"
                     >
                         <ArrowLeft className="w-5 h-5" />
                         <span className="font-medium">Volver</span>
@@ -235,20 +235,20 @@ const VerHospedaje = () => {
                         </div>
 
                         {/* Información principal */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10">
+                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
                             <div className="flex items-start justify-between mb-4">
                                 <div>
-                                    <h1 className="text-3xl font-bold text-[#1d1d1b] mb-2">{hospedaje.nombre}</h1>
-                                    <div className="flex items-center gap-2 text-[#1d1d1b]/60 mb-2">
+                                    <h1 className="text-3xl font-bold text-negro mb-2">{hospedaje.nombre}</h1>
+                                    <div className="flex items-center gap-2 text-negro/60 mb-2">
                                         <MapPin className="w-4 h-4" />
                                         <span>
                                             {hospedaje.direccion}, {hospedaje.ciudad}, {hospedaje.pais}
                                         </span>
                                     </div>
                                     <div className="flex items-center gap-4">
-                                        <div className="flex items-center gap-1 bg-[#ffcd40]/20 px-3 py-1 rounded-lg">
-                                            <Users className="w-4 h-4 text-[#1d1d1b]" />
-                                            <span className="text-sm font-medium text-[#1d1d1b]">
+                                        <div className="flex items-center gap-1 bg-principal/20 px-3 py-1 rounded-lg">
+                                            <Users className="w-4 h-4 text-negro" />
+                                            <span className="text-sm font-medium text-negro">
                                                 {hospedaje.capacidad} {hospedaje.capacidad === 1 ? "persona" : "personas"}
                                             </span>
                                         </div>
@@ -258,7 +258,7 @@ const VerHospedaje = () => {
                                 {esPropio && (
                                     <button
                                         onClick={() => handleClickEditar(hospedaje.id)}
-                                        className="flex items-center gap-2 bg-[#1d1d1b] hover:bg-[#2d2d2b] text-white px-4 py-2 rounded-lg transition-colors duration-200"
+                                        className="flex items-center gap-2 bg-negro hover:bg-[#2d2d2b] text-white px-4 py-2 rounded-lg transition-colors duration-200"
                                     >
                                         <Edit className="w-4 h-4" />
                                         Editar
@@ -268,18 +268,18 @@ const VerHospedaje = () => {
 
                             {/* Descripción */}
                             <div>
-                                <h3 className="font-bold text-[#1d1d1b] mb-3">Descripción</h3>
-                                <p className="text-[#1d1d1b]/80 leading-relaxed">{hospedaje.descripcion}</p>
+                                <h3 className="font-bold text-negro mb-3">Descripción</h3>
+                                <p className="text-negro/80 leading-relaxed">{hospedaje.descripcion}</p>
                             </div>
                         </div>
 
                         {/* Ubicación */}
-                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10">
+                        <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
                             <div className="flex items-center justify-between mb-4">
                                 <div>
                                     <div className="p-2 bg-principal rounded-lg flex items-center gap-2">
                                         <MapPin className="w-5 h-5 text-negro" />
-                                        <h3 className="font-bold text-[#1d1d1b]">Ubicación</h3>
+                                        <h3 className="font-bold text-negro">Ubicación</h3>
                                     </div>
 
                                 </div>
@@ -315,29 +315,29 @@ const VerHospedaje = () => {
                     <div className="space-y-6">
                         {/* Card de reserva */}
                         {!esPropio && (
-                            <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10 sticky top-36">
+                            <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10 sticky top-36">
                                 <div className="text-center mb-6">
-                                    <h3 className="text-xl font-bold text-[#1d1d1b] mb-2">Reservar este hospedaje</h3>
-                                    <p className="text-[#1d1d1b]/60 text-sm">Elige tu opción de reserva</p>
+                                    <h3 className="text-xl font-bold text-negro mb-2">Reservar este hospedaje</h3>
+                                    <p className="text-negro/60 text-sm">Elige tu opción de reserva</p>
                                 </div>
 
                                 <div className="space-y-4">
                                     <button
                                         onClick={() => navigate(`/reserva/individual/${hospedaje.id}`)}
-                                        className="w-full bg-[#1d1d1b] hover:bg-[#2d2d2b] text-white px-6 py-3 rounded-xl font-bold transition-colors duration-200"
+                                        className="w-full bg-negro hover:bg-[#2d2d2b] text-white px-6 py-3 rounded-xl font-bold transition-colors duration-200"
                                     >
                                         Reservar ahora
                                     </button>
 
                                     <button
                                         onClick={() => navigate(`/reserva/grupal/${hospedaje.id}`)}
-                                        className="w-full border border-[#1d1d1b] text-[#1d1d1b] hover:bg-[#1d1d1b] hover:text-white px-6 py-3 rounded-xl font-medium transition-colors duration-200"
+                                        className="w-full border border-negro text-negro hover:bg-negro hover:text-white px-6 py-3 rounded-xl font-medium transition-colors duration-200"
                                     >
                                         Reserva grupal
                                     </button>
 
                                     <div className="text-center">
-                                        <p className="text-xs text-[#1d1d1b]/60">Contacta con el anfitrión para más detalles</p>
+                                        <p className="text-xs text-negro/60">Contacta con el anfitrión para más detalles</p>
                                     </div>
                                 </div>
                             </div>
@@ -345,8 +345,8 @@ const VerHospedaje = () => {
 
                         {/* Información del anfitrión */}
                         {anfitrion && (
-                            <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#1d1d1b]/10">
-                                <h3 className="font-bold text-[#1d1d1b] mb-4">Tu anfitrión</h3>
+                            <div className="bg-white rounded-2xl shadow-lg p-6 border border-negro/10">
+                                <h3 className="font-bold text-negro mb-4">Tu anfitrión</h3>
 
                                 <div className="flex items-center gap-4 mb-4">
                                     {anfitrion.fotoPerfil ? (
@@ -366,7 +366,7 @@ const VerHospedaje = () => {
                                     )}
                                     <div>
                                         <div className="flex items-center gap-2">
-                                            <h4 className="font-bold text-[#1d1d1b]">
+                                            <h4 className="font-bold text-negro">
                                                 {anfitrion.nombre} {anfitrion.apellidos}
                                             </h4>
 
@@ -376,7 +376,7 @@ const VerHospedaje = () => {
                                 </div>
 
                                 <div className="space-y-3 mb-4">
-                                    <div className="flex items-center gap-2 text-sm text-[#1d1d1b]/60">
+                                    <div className="flex items-center gap-2 text-sm text-negro/60">
                                         <Calendar className="w-4 h-4" />
                                         <span>Anfitrión desde {formatearFecha(anfitrion.fechaRegistro)}</span>
                                     </div>
@@ -385,7 +385,7 @@ const VerHospedaje = () => {
 
                                 <button
                                     onClick={() => navigate(`/perfil/${anfitrion.id}`)}
-                                    className="w-full border border-[#1d1d1b] text-[#1d1d1b] hover:bg-[#1d1d1b] hover:text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+                                    className="w-full border border-negro text-negro hover:bg-negro hover:text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
                                 >
                                     Contactar anfitrión
                                 </button>
